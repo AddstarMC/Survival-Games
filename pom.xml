@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>survivalgames</artifactId>
-	<version>0.6.0</version>
+	<version>0.6.0-b${env.BUILD_NUMBER}</version>
 	<name>SurvivalGames</name>
 	
 	<properties>
@@ -23,6 +23,10 @@
 		<repository>
 			<id>sk89q-repo</id>
 			<url>http://maven.sk89q.com/repo</url>
+		</repository>
+		<repository>
+			<id>addstar-repo</id>
+			<url>http://maven.addstar.com.au/artifactory/ext-release-local</url>
 		</repository>
 	</repositories>
 	
