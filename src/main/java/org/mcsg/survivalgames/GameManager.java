@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game.GameMode;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.stats.StatsManager;
+import org.mcsg.survivalgames.util.Kit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.Selection;
@@ -24,6 +27,7 @@ public class GameManager {
 	private ArrayList < Game > games = new ArrayList < Game > ();
 	private SurvivalGames p;
 	public static HashMap < Integer, HashSet < Block >> openedChest = new HashMap < Integer, HashSet < Block >> ();
+	private ArrayList<Kit>kits = new ArrayList<Kit>();
 	private HashSet<Player>kitsel = new HashSet<Player>();
 	MessageManager msgmgr = MessageManager.getInstance();
 
@@ -38,6 +42,7 @@ public class GameManager {
 	public void setup(SurvivalGames plugin) {
 		p = plugin;
 		LoadGames();
+		LoadKits();
 		for (Game g: getGames()) {
 			openedChest.put(g.getID(), new HashSet < Block > ());
 		}
@@ -49,6 +54,14 @@ public class GameManager {
 
 	public void reloadGames() {
 		LoadGames();
+	}
+
+
+	public void LoadKits(){
+		Set<String> kits1 = SettingsManager.getInstance().getKits().getConfigurationSection("kits").getKeys(false);
+		for(String s:kits1){
+			kits.add(new Kit(s));
+		}
 	}
 
 	public void LoadGames() {
@@ -149,6 +162,20 @@ public class GameManager {
 		kitsel.add(p);
 	}
 
+	@SuppressWarnings("deprecation")
+	public void selectKit(Player p, int i) {
+		p.getInventory().clear();
+		ArrayList<Kit>kits = getKits(p);
+		if(i <= kits.size()){
+			Kit k = getKits(p).get(i);
+			if(k!=null){
+				p.getInventory().setContents(k.getContents().toArray(new ItemStack[0]));
+			}
+		}
+		p.updateInventory();
+
+	}
+
 	public int getGameCount() {
 		return games.size();
 	}
@@ -191,6 +218,16 @@ public class GameManager {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<Kit> getKits(Player p){
+		ArrayList<Kit>k = new ArrayList<Kit>();
+		for(Kit kit: kits){
+			if(kit.canUse(p)){
+				k.add(kit);
+			}
+		}
+		return k;
 	}
 
 	//TODO: Actually make this countdown correctly

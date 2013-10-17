@@ -10,7 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.api.PlayerJoinArenaEvent;
@@ -18,6 +20,8 @@ import org.mcsg.survivalgames.api.PlayerKilledEvent;
 import org.mcsg.survivalgames.hooks.HookManager;
 import org.mcsg.survivalgames.logging.QueueManager;
 import org.mcsg.survivalgames.stats.StatsManager;
+import org.mcsg.survivalgames.util.ItemReader;
+import org.mcsg.survivalgames.util.Kit;
 
 //Data container for a game
 
@@ -240,6 +244,7 @@ public class Game {
 
 						hookvars.put("activeplayers", activePlayers.size()+"");
 						LobbyManager.getInstance().updateWall(gameID);
+						showMenu(p);
 						HookManager.getInstance().runHook("GAME_POST_ADDPLAYER", "activePlayers-"+activePlayers.size());
 
 						if(spawnCount == activePlayers.size()){
@@ -286,7 +291,51 @@ public class Game {
 		LobbyManager.getInstance().updateWall(gameID);
 		return false;
 	}
-	
+
+
+	public void showMenu(Player p){
+		GameManager.getInstance().openKitMenu(p);
+		Inventory i = Bukkit.getServer().createInventory(p, 90, ChatColor.RED+""+ChatColor.BOLD+"Kit Selection");
+
+		int a = 0;
+		int b = 0;
+
+
+		ArrayList<Kit>kits = GameManager.getInstance().getKits(p);
+		SurvivalGames.debug(kits+"");
+		if(kits == null || kits.size() == 0 || !SettingsManager.getInstance().getKits().getBoolean("enabled")){
+			GameManager.getInstance().leaveKitMenu(p);
+			return;
+		}
+
+		for(Kit k: kits){
+			ItemStack i1 = k.getIcon();
+			ItemMeta im = i1.getItemMeta();
+
+			debug(k.getName()+" "+i1+" "+im);
+
+			im.setDisplayName(ChatColor.GOLD+""+ChatColor.BOLD+k.getName());
+			i1.setItemMeta(im);
+			i.setItem((9 * a) + b, i1);
+			a = 2;
+
+			for(ItemStack s2:k.getContents()){
+				if(s2 != null){
+					i.setItem((9 * a) + b, s2);
+					a++;
+				}
+			}
+
+			a = 0;
+			b++;
+		}
+		p.openInventory(i);
+		debug("Showing menu");
+	}
+
+
+
+
 	public void removeFromQueue(Player p) {
 		queue.remove(p);
 	}
@@ -301,6 +350,7 @@ public class Game {
 	 * 
 	 * 
 	 */
+
 
 	ArrayList < Player > voted = new ArrayList < Player > ();
 
@@ -516,7 +566,7 @@ public class Game {
 									"player-"+(SurvivalGames.auth.contains(p.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") + p.getName(),
 									"killer-"+((killer != null)?(SurvivalGames.auth.contains(killer.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") 
 											+ killer.getName():"Unknown"),
-											"item-"+((killer!=null) ? killer.getItemInHand().getType() : "Unknown Item"));
+											"item-"+((killer!=null)?ItemReader.getFriendlyItemName(killer.getItemInHand().getType()) : "Unknown Item"));
 							if(killer != null && p != null)
 								sm.addKill(killer, p, gameID);
 							pk = new PlayerKilledEvent(p, this, killer, p.getLastDamageCause().getCause());
