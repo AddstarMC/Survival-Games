@@ -21,9 +21,13 @@ public class ItemReader {
 		encids =  new HashMap<String, Enchantment>();
 		
 		for(Enchantment e:Enchantment.values()){
-			encids.put(e.toString().toLowerCase().replace("_", ""), e);
+			String name = e.getName().toLowerCase().replace("_", "");
+			//SurvivalGames.debug("Ench: " + name + " / " + e);
+			encids.put(name, e);
 		}
 		
+        encids.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
+        encids.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
 		
 		encids.put("sharpness", Enchantment.DAMAGE_ALL);
 		encids.put("dmg", Enchantment.DAMAGE_ALL);
@@ -38,7 +42,7 @@ public class ItemReader {
 			loadIds();
 		}
 		String split[] = str.split(",");
-		SurvivalGames.debug("ItemReader: reading : "+Arrays.toString(split));
+		//SurvivalGames.debug("ItemReader: reading : "+Arrays.toString(split));
 		for(int a = 0; a < split.length; a++){
 			split[a] = split[a].toLowerCase().trim();
 		}
@@ -54,7 +58,7 @@ public class ItemReader {
 			ItemStack i =  new ItemStack(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Short.parseShort(split[2]));
 			String encs[] = split[3].split(" ");
 			for(String enc: encs){
-				System.out.println(enc);
+				//System.out.println(enc);
 				String e[] = enc.split(":");
 				i.addUnsafeEnchantment(encids.get(e[0]), Integer.parseInt(e[1]));
 			}
