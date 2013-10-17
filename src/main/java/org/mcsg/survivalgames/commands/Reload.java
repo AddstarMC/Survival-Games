@@ -25,7 +25,6 @@ public class Reload implements SubCommand{
 
 			}
 			if(args[0].equalsIgnoreCase("settings")){
-				SettingsManager.getInstance().reloadChest();
 				SettingsManager.getInstance().reloadKits();
 				SettingsManager.getInstance().reloadMessages();
 				SettingsManager.getInstance().reloadSpawns();

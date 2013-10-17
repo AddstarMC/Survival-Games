@@ -19,6 +19,7 @@ import org.mcsg.survivalgames.commands.Enable;
 import org.mcsg.survivalgames.commands.Flag;
 import org.mcsg.survivalgames.commands.ForceStart;
 import org.mcsg.survivalgames.commands.Join;
+import org.mcsg.survivalgames.commands.Kit;
 import org.mcsg.survivalgames.commands.Leave;
 import org.mcsg.survivalgames.commands.LeaveQueue;
 import org.mcsg.survivalgames.commands.ListArenas;
@@ -78,7 +79,7 @@ public class CommandHandler implements CommandExecutor {
 		commands.put("flag", new Flag());
 		commands.put("tp", new Teleport());
 		commands.put("reload", new Reload());
-		
+		commands.put("kit", new Kit());		
 	}
 
 	private void loadHelpInfo() {
@@ -90,6 +91,7 @@ public class CommandHandler implements CommandExecutor {
 		helpinfo.put("leavequeue", CommandGroup.Player);
 		helpinfo.put("list", CommandGroup.Player);
 		helpinfo.put("listarenas", CommandGroup.Player);
+		helpinfo.put("kit", CommandGroup.Player);
 		
 		// staff commands
 		helpinfo.put("disable", CommandGroup.Staff);
