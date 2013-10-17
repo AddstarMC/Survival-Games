@@ -295,14 +295,13 @@ public class Game {
 
 	public void showMenu(Player p){
 		GameManager.getInstance().openKitMenu(p);
-		Inventory i = Bukkit.getServer().createInventory(p, 90, ChatColor.RED+""+ChatColor.BOLD+"Kit Selection");
+		Inventory i = Bukkit.getServer().createInventory(p, 45, ChatColor.RED+""+ChatColor.BOLD+"Please select a kit:");
 
 		int a = 0;
 		int b = 0;
 
 
 		ArrayList<Kit>kits = GameManager.getInstance().getKits(p);
-		SurvivalGames.debug(kits+"");
 		if(kits == null || kits.size() == 0 || !SettingsManager.getInstance().getKits().getBoolean("enabled")){
 			GameManager.getInstance().leaveKitMenu(p);
 			return;
@@ -311,8 +310,6 @@ public class Game {
 		for(Kit k: kits){
 			ItemStack i1 = k.getIcon();
 			ItemMeta im = i1.getItemMeta();
-
-			debug(k.getName()+" "+i1+" "+im);
 
 			im.setDisplayName(ChatColor.GOLD+""+ChatColor.BOLD+k.getName());
 			i1.setItemMeta(im);
@@ -330,10 +327,8 @@ public class Game {
 			b++;
 		}
 		p.openInventory(i);
-		debug("Showing menu");
+		debug("Showing kit menu for: " + p.getName());
 	}
-
-
 
 
 	public void removeFromQueue(Player p) {
