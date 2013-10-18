@@ -909,20 +909,21 @@ public class Game {
 			int now = (int) (new Date().getTime() / 1000);
 			long length = config.getInt("deathmatch.time") * 60;
 			long remaining = (length - (now - (startTime / 1000)));
-			SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
+			//SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
 
-			if ((remaining % 60) == 0) { 
-				msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
+			// Every 3 minutes or every minute in the last 3 minutes
+			if (((remaining % 180) == 0) || (((remaining % 60) == 0) && (remaining >= 180))) {
+				if (remaining > 0) {
+					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
+				}
 			}
 			
 			// Death match time!!
 			if (remaining >= 1) return;
 			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
-			if (tasks.remove((Integer) dmTaskID)) {
-				SurvivalGames.$("Task removed from list");
-			} else {
-				SurvivalGames.$("Task NOT removed!");
+			if (!tasks.remove((Integer) dmTaskID)) {
+				SurvivalGames.$("WARNING: DeathMatch task NOT removed!");
 			}
 			
 			for(Player p: activePlayers){
@@ -934,14 +935,14 @@ public class Game {
 					}
 				}
 			}
-			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable(){
-				public void run(){
-					for(Player p: activePlayers){
+			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+				public void run() {
+					for(Player p: activePlayers) {
 						p.getLocation().getWorld().strikeLightning(p.getLocation());
 						p.damage(4);
 					}
 				}
-			}, config.getInt("deathmatch.killtime") * 20 * 60));
+			}, config.getInt("deathmatch.killtime") * 20));
 		}
 	}
 
