@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.mcsg.survivalgames.Game;
+import org.mcsg.survivalgames.Game.GameMode;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SurvivalGames;
 
@@ -22,7 +23,7 @@ public class DeathEvent implements Listener {
 
 		Game game = GameManager.getInstance().getGame(gameid);
 
-		if (game.isProtectionOn()) {
+		if (game.isProtectionOn() || game.getMode() == GameMode.WAITING || game.getMode() == GameMode.STARTING) {
 			event.setCancelled(true);
 			return;
 		}
