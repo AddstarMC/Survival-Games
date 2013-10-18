@@ -912,7 +912,7 @@ public class Game {
 			//SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
 
 			// Every 3 minutes or every minute in the last 3 minutes
-			if (((remaining % 180) == 0) || (((remaining % 60) == 0) && (remaining >= 180))) {
+			if (((remaining % 180) == 0) || (((remaining % 60) == 0) && (remaining <= 180))) {
 				if (remaining > 0) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
 				}
@@ -935,14 +935,14 @@ public class Game {
 					}
 				}
 			}
-			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run() {
 					for(Player p: activePlayers) {
 						p.getLocation().getWorld().strikeLightning(p.getLocation());
 						p.damage(4);
 					}
 				}
-			}, config.getInt("deathmatch.killtime") * 20));
+			}, 10 * 20L, config.getInt("deathmatch.killtime") * 20));
 		}
 	}
 
