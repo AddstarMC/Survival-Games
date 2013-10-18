@@ -54,6 +54,7 @@ public class Game {
 	private int vote = 0;
 	private boolean disabled = false;
 	private int endgameTaskID = 0;
+	private int dmTaskID = 0;
 	private boolean endgameRunning = false;
 	private double rbpercent = 0;
 	private String rbstatus = "";
@@ -433,8 +434,8 @@ public class Game {
 				}, config.getInt("grace-period") * 20);
 			}
 			if(config.getBoolean("deathmatch.enabled")){
-				tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), 
-						new DeathMatchTimer(), 60*20L, 20L));
+				dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 60*20L, 20L);
+				tasks.add(dmTaskID);
 			}
 		}
 
@@ -902,15 +903,22 @@ public class Game {
 		}
 	}
 
-	class DeathMatchTimer implements Runnable{
+	class DeathMatchTimer implements Runnable {
 		public void run() {
 			int now = (int) (new Date().getTime() / 1000);
-			long length = config.getInt("deathmatch.time");
+			long length = config.getInt("deathmatch.time") * 60;
 			long remaining = (length - (now - (startTime / 1000)));
 			SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
-			return; 
 			
-			/*
+			if (remaining <= 1150) return;
+			Bukkit.getScheduler().cancelTask(dmTaskID);
+			for (Integer x : tasks) {
+				if (x == dmTaskID) {
+					tasks.remove(x);
+					continue;
+				}
+			}
+			
 			for(Player p: activePlayers){
 				for(int a = 0; a < spawns.size(); a++){
 					if(spawns.get(a) == p){
@@ -928,7 +936,6 @@ public class Game {
 					}
 				}
 			}, config.getInt("deathmatch.killtime") * 20 * 60));
-			*/
 		}
 	}
 
