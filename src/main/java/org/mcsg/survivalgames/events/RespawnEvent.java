@@ -14,7 +14,6 @@ public class RespawnEvent implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onRespawn(PlayerRespawnEvent event) {
 		Player p = event.getPlayer();
-		SurvivalGames.$("RESPAWN EVENT!");
 		if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
 			SurvivalGames.$(" >>>RESPAWN WITHIN SG ARENA");
 			Location loc = SettingsManager.getInstance().getLobbySpawn();

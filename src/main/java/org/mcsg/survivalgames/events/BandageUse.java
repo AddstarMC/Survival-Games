@@ -18,7 +18,9 @@ public class BandageUse implements Listener {
 			if (p.getItemInHand().getType() == Material.PAPER) {
 				if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
 					p.getInventory().removeItem(new ItemStack(Material.PAPER, 1));
-					p.setHealth(e.getPlayer().getHealth() + 10);
+					double newhealth = e.getPlayer().getHealth() + 10;
+					if (newhealth > 20) newhealth = 20;
+					p.setHealth(newhealth);
 					p.sendMessage(ChatColor.GREEN + "You used a bandage to heal yourself.");
 				}
 			}
