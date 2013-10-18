@@ -9,7 +9,7 @@ import org.mcsg.survivalgames.LobbyManager;
 
 public class KeepLobbyLoadedEvent implements Listener{
     
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void onChunkUnload(ChunkUnloadEvent e){
         LobbyManager.getInstance();
 		if(LobbyManager.lobbychunks.contains(e.getChunk())){

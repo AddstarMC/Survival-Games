@@ -21,7 +21,7 @@ public class BreakEvent implements Listener {
         allowedBreak.addAll( SettingsManager.getInstance().getConfig().getIntegerList("block.break.whitelist"));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockBreak(BlockBreakEvent event) {
         Player p = event.getPlayer();
         int pid = GameManager.getInstance().getPlayerGameId(p);

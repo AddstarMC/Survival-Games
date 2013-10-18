@@ -2,21 +2,25 @@ package org.mcsg.survivalgames.events;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.mcsg.survivalgames.GameManager;
 
 public class BandageUse implements Listener {
-
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void onBandageUse(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if (e.getPlayer().getItemInHand() == new ItemStack(Material.PAPER)) {
-				e.getPlayer().getInventory().removeItem(new ItemStack(Material.PAPER, 1));
-				e.getPlayer().setHealth(e.getPlayer().getHealth() + 10);
-				e.getPlayer().sendMessage(ChatColor.GREEN + "You used a bandage and got 5 hearts.");
+			if (p.getItemInHand() == new ItemStack(Material.PAPER)) {
+				if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
+					p.getInventory().removeItem(new ItemStack(Material.PAPER, 1));
+					p.setHealth(e.getPlayer().getHealth() + 10);
+					p.sendMessage(ChatColor.GREEN + "You used a bandage and got 5 hearts.");
+				}
 			}
 		}
 	}

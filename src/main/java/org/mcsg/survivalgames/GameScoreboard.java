@@ -146,4 +146,16 @@ public class GameScoreboard {
 		this.sidebarObjective.setDisplayName(ChatColor.GOLD + gameName + " (" + noofPlayers + "/" + maxPlayers + ")");
 	}
 
+	/**
+	 * Increase a player's score on the scoreboard
+	 * 
+	 * @param player	The player to increase the score of
+	 */
+	public void incScore(final Player player) {
+		// Set the players score to zero, then increase it
+		Score score = this.sidebarObjective.getScore(player);
+		if (score != null) {
+			score.setScore(score.getScore() + 1);
+		}
+	}
 }

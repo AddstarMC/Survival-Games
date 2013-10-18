@@ -17,11 +17,8 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 
-
-
 public class SpectatorEvents implements Listener {
-    
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         if (GameManager.getInstance().isSpectator(player)) {
@@ -29,7 +26,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockDamage(BlockDamageEvent event) {
         Player player = event.getPlayer();
         if (GameManager.getInstance().isSpectator(player)) {
@@ -37,7 +34,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         if (GameManager.getInstance().isSpectator(player)) {
@@ -45,7 +42,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onPlayerClickEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         try{
@@ -81,9 +78,8 @@ public class SpectatorEvents implements Listener {
         }
         catch(Exception e){e.printStackTrace();}
     }
-
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onSignChange(PlayerPickupItemEvent event) {
         Player player = event.getPlayer();
         if (GameManager.getInstance().isSpectator(player)) {
@@ -91,7 +87,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         Player player = null;
         if (event.getDamager() instanceof Player) {
@@ -103,7 +99,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onEntityDamage(EntityDamageEvent event) {
         Player player = null;
         if (event.getEntity() instanceof Player) {
@@ -114,17 +110,5 @@ public class SpectatorEvents implements Listener {
             event.setCancelled(true);
         }
     }
-    
-   /* @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTarget(EntityTargetEvent event) {
-        Player player = null;
-        if (event.getTarget() instanceof Player) {
-            player = (Player)event.getTarget();
-        }
-        else return;
-        if (GameManager.getInstance().isSpectator(player)) {
-            event.setCancelled(true);
-        }
-    }*/
 }
 

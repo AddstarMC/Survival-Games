@@ -11,7 +11,7 @@ import org.mcsg.survivalgames.SettingsManager;
 
 public class CommandCatch implements Listener{
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         String m = event.getMessage();
 

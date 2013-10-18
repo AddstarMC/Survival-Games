@@ -7,10 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.mcsg.survivalgames.GameManager;
 
-
 public class TeleportEvent implements Listener{
-
-    @EventHandler
+    @EventHandler(ignoreCancelled=true)
     public void playerTeleport(PlayerTeleportEvent event){
         Player p = event.getPlayer();
         int id = GameManager.getInstance().getPlayerGameId(p);

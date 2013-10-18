@@ -9,8 +9,8 @@ import org.mcsg.survivalgames.GameManager;
 
 public class KitEvents implements Listener  {
 
-	@EventHandler
-	public void itemClick( 	InventoryClickEvent e){
+	@EventHandler(ignoreCancelled=true)
+	public void itemClick(InventoryClickEvent e){
 		if(e.getWhoClicked() instanceof Player){
 			Player p = (Player)e.getWhoClicked();
 			if(GameManager.getInstance().isInKitMenu(p)){
@@ -22,7 +22,7 @@ public class KitEvents implements Listener  {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled=true)
 	public void InvClose(InventoryCloseEvent e){
 		GameManager.getInstance().leaveKitMenu((Player)e.getPlayer());
 	}

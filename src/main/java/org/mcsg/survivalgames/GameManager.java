@@ -192,7 +192,7 @@ public class GameManager {
 
 	public void removePlayer(Player p, boolean b) {
 		Game game = getGame(getPlayerGameId(p));
-		game.removePlayer(p, b);
+		game.playerLeave(p, b);
 	}
 
 	public void removeSpectator(Player p) {

@@ -24,7 +24,7 @@ import org.mcsg.survivalgames.lobbysigns.LobbySignWinner;
 
 public class LobbyBoardEvents implements Listener {
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onPlayerInteract(PlayerInteractEvent event) {
 		
 		// We only care about clicking blocks
@@ -47,7 +47,7 @@ public class LobbyBoardEvents implements Listener {
 		sign.execute(event.getPlayer());		
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onSignChange(SignChangeEvent event) {
 		final Player player = event.getPlayer();
 
@@ -126,7 +126,7 @@ public class LobbyBoardEvents implements Listener {
 		newLobbySign.postCreationFixup();
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockBreak(BlockBreakEvent event) {
 		
 		Block block = event.getBlock();

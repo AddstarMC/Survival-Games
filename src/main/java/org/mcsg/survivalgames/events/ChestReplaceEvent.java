@@ -26,7 +26,7 @@ public class ChestReplaceEvent implements Listener{
 
 	private Random rand = new Random();
 	
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void ChestListener(PlayerInteractEvent e){
     	if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
     		BlockState clicked = e.getClickedBlock().getState();

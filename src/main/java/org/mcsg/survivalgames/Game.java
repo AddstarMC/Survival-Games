@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -233,12 +235,13 @@ public class Game {
 						p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 
 						p.teleport(SettingsManager.getInstance().getLobbySpawn());
-						saveInv(p);clearInv(p);	
 						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
 
-						p.setHealth(p.getMaxHealth());p.setFoodLevel(20);clearInv(p);
+						p.setHealth(p.getMaxHealth());
+						p.setFoodLevel(20);
 
-						activePlayers.add(p);sm.addPlayer(p, gameID);
+						activePlayers.add(p);
+						sm.addPlayer(p, gameID);
 						
 						scoreBoard.addPlayer(p);
 
@@ -500,26 +503,20 @@ public class Game {
 	 * 
 	 */
 
-	public void removePlayer(Player p, boolean b) {
-		p.teleport(SettingsManager.getInstance().getLobbySpawn());
-		///$("Teleporting to lobby");
-		if (mode == GameMode.INGAME) {
-			killPlayer(p, b);
-		} else {
-			sm.removePlayer(p, gameID);
-			//	if (!b) p.teleport(SettingsManager.getInstance().getLobbySpawn());
-			scoreBoard.removePlayer(p);
-			restoreInv(p);
-			activePlayers.remove(p);
-			inactivePlayers.remove(p);
-			for (Object in : spawns.keySet().toArray()) {
-				if (spawns.get(in) == p) spawns.remove(in);
-			}
-			LobbyManager.getInstance().updateWall(gameID);
+	public void playerLeave(Player p, boolean teleport) {
+		msgFall(PrefixType.INFO, "game.playerleavegame", "player-" + p.getName());
+		if (teleport) {
+			p.teleport(SettingsManager.getInstance().getLobbySpawn());
+		}
+		sm.removePlayer(p, gameID);
+		scoreBoard.removePlayer(p);
+		activePlayers.remove(p);
+		inactivePlayers.remove(p);
+		for (Object in : spawns.keySet().toArray()) {
+			if (spawns.get(in) == p) spawns.remove(in);
 		}
 
 		HookManager.getInstance().runHook("PLAYER_REMOVED", "player-"+p.getName());
-
 		LobbyManager.getInstance().updateWall(gameID);
 	}
 
@@ -527,104 +524,99 @@ public class Game {
 	 * 
 	 * ################################################
 	 * 
-	 * 				KILL PLAYER
+	 * 			   HANDLE PLAYER DEATH
+	 * 
+	 *  PLAYERS DIE A REAL DEATH WHICH IS HANDLED HERE 
 	 * 
 	 * ################################################
 	 * 
 	 * 
 	 */
-	public void killPlayer(Player p, boolean left) {
-		try{
-			clearInv(p);
-			if (!left) {
-				p.teleport(SettingsManager.getInstance().getLobbySpawn());
-			}
-			sm.playerDied(p, activePlayers.size(), gameID, new Date().getTime() - startTime);
-
-			if (!activePlayers.contains(p)) return;
-			else restoreInv(p);
-			
-			scoreBoard.removePlayer(p);
-
-			activePlayers.remove(p);
-			inactivePlayers.add(p);
-			PlayerKilledEvent pk = null;
-			if (left) {
-				msgFall(PrefixType.INFO, "game.playerleavegame","player-"+p.getName() );
-			} else {
-				if (mode != GameMode.WAITING && p.getLastDamageCause() != null && p.getLastDamageCause().getCause() != null) {
-					switch (p.getLastDamageCause().getCause()) {
-					case ENTITY_ATTACK:
-						if(p.getLastDamageCause().getEntityType() == EntityType.PLAYER){
-							Player killer = p.getKiller();
-							msgFall(PrefixType.INFO, "death."+p.getLastDamageCause().getEntityType(),
-									"player-"+(SurvivalGames.auth.contains(p.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") + p.getName(),
-									"killer-"+((killer != null)?(SurvivalGames.auth.contains(killer.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") 
-											+ killer.getName():"Unknown"),
-											"item-"+((killer!=null)?ItemReader.getFriendlyItemName(killer.getItemInHand().getType()) : "Unknown Item"));
-							if(killer != null && p != null)
-								sm.addKill(killer, p, gameID);
-							pk = new PlayerKilledEvent(p, this, killer, p.getLastDamageCause().getCause());
-						}
-						else{
-							msgFall(PrefixType.INFO, "death."+p.getLastDamageCause().getEntityType(), "player-"
-									+(SurvivalGames.auth.contains(p.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") 
-									+ p.getName(), "killer-"+p.getLastDamageCause().getEntityType());
-							pk = new PlayerKilledEvent(p, this, null, p.getLastDamageCause().getCause());
-
-						}
-						break;
-					default:
-						msgFall(PrefixType.INFO, "death."+p.getLastDamageCause().getCause().name(), 
-								"player-"+(SurvivalGames.auth.contains(p.getName()) ? ChatColor.DARK_RED + "" + ChatColor.BOLD : "") + p.getName(), 
-								"killer-"+p.getLastDamageCause().getCause());
-						pk = new PlayerKilledEvent(p, this, null, p.getLastDamageCause().getCause());
-
-						break;
-					}
-					Bukkit.getServer().getPluginManager().callEvent(pk);
-
-					if (getActivePlayers() > 1) {
-						for (Player pl: getAllPlayers()) {
-							msgmgr.sendMessage(PrefixType.INFO, ChatColor.DARK_AQUA + "There are " + ChatColor.YELLOW + "" 
-									+ getActivePlayers() + ChatColor.DARK_AQUA + " players remaining!", pl);
-						}
-					}
-				}
-
-			}
-
-			for (Player pe: activePlayers) {
-				Location l = pe.getLocation();
-				l.setY(l.getWorld().getMaxHeight());
-				l.getWorld().strikeLightningEffect(l);
-			}
-
-			if (getActivePlayers() <= config.getInt("endgame.players") && config.getBoolean("endgame.fire-lighting.enabled") && !endgameRunning) {
-
-				tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(),
-						new EndgameManager(),
-						0,
-						config.getInt("endgame.fire-lighting.interval") * 20));
-			}
-
-			if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
-				playerWin(p);
-				endGame();
-			}
-			LobbyManager.getInstance().updateWall(gameID);
-			
-		}catch (Exception e){
-			SurvivalGames.$("???????????????????????");
-			e.printStackTrace();
-			SurvivalGames.$("ID"+gameID);
-			SurvivalGames.$(left+"");
-			SurvivalGames.$(activePlayers.size()+"");
-			SurvivalGames.$(activePlayers.toString());
-			SurvivalGames.$(p.getName());
-			SurvivalGames.$(p.getLastDamageCause().getCause().name());
+	public void playerDeath(PlayerDeathEvent e) {
+		Player p = e.getEntity();
+		if (!activePlayers.contains(p)) return;
+		
+		sm.playerDied(p, activePlayers.size(), gameID, new Date().getTime() - startTime);
+		scoreBoard.removePlayer(p);
+		activePlayers.remove(p);
+		inactivePlayers.add(p);
+		for (Object in : spawns.keySet().toArray()) {
+			if (spawns.get(in) == p) spawns.remove(in);
 		}
+
+		PlayerKilledEvent pk = null;
+		if (mode != GameMode.WAITING && p.getLastDamageCause() != null && p.getLastDamageCause().getCause() != null) {
+			DamageCause cause = p.getLastDamageCause().getCause();
+			switch (cause) {
+			case ENTITY_ATTACK:
+				if(p.getLastDamageCause().getEntityType() == EntityType.PLAYER){
+					EntityType enttype = p.getLastDamageCause().getEntityType();
+					Player killer = p.getKiller();
+					String killername = "Unknown";
+					
+					if (killer != null) {
+						killername = killer.getName();
+					}
+					
+					String itemname = "Unknown Item";
+					if (killer != null) {
+						itemname = ItemReader.getFriendlyItemName(killer.getItemInHand().getType());
+					}
+
+					msgFall(PrefixType.INFO, "death."+enttype, "player-"+p.getName(), "killer-"+killername, "item-"+itemname);
+							
+					if (killer != null && p != null) {
+						sm.addKill(killer, p, gameID);
+						scoreBoard.incScore(killer);
+					}
+					pk = new PlayerKilledEvent(p, this, killer, cause);
+				}
+				else {
+					msgFall(PrefixType.INFO, "death." + p.getLastDamageCause().getEntityType(),
+							"player-" + p.getName(),
+							"killer-" + p.getLastDamageCause().getEntityType());
+					pk = new PlayerKilledEvent(p, this, null, cause);
+				}
+				break;
+			default:
+				msgFall(PrefixType.INFO, "death." + cause.name(), 
+						"player-" + p.getName(), 
+						"killer-" + cause);
+				pk = new PlayerKilledEvent(p, this, null, cause);
+
+				break;
+			}
+			Bukkit.getServer().getPluginManager().callEvent(pk);
+
+			if (getActivePlayers() > 1) {
+				for (Player pl: getAllPlayers()) {
+					msgmgr.sendMessage(PrefixType.INFO, ChatColor.DARK_AQUA + "There are " + ChatColor.YELLOW + "" 
+							+ getActivePlayers() + ChatColor.DARK_AQUA + " players remaining!", pl);
+				}
+			}
+		}
+
+		for (Player pe: activePlayers) {
+			Location l = pe.getLocation();
+			l.setY(l.getWorld().getMaxHeight());
+			l.getWorld().strikeLightningEffect(l);
+		}
+
+		if (getActivePlayers() <= config.getInt("endgame.players") && config.getBoolean("endgame.fire-lighting.enabled") && !endgameRunning) {
+
+			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(),
+					new EndgameManager(),
+					0,
+					config.getInt("endgame.fire-lighting.interval") * 20));
+		}
+
+		if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
+			playerWin(p);
+			endGame();
+		}
+		LobbyManager.getInstance().updateWall(gameID);
 	}
+
 
 	/*
 	 * 
@@ -641,7 +633,7 @@ public class Game {
 		Player win = activePlayers.get(0);
 		// clearInv(p);
 		win.teleport(SettingsManager.getInstance().getLobbySpawn());
-		restoreInv(win);
+		//restoreInv(win);
 		scoreBoard.removePlayer(p);
 		msgmgr.broadcastFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName());
 
@@ -693,7 +685,7 @@ public class Game {
 
 				Player p = activePlayers.get(a);
 				msgmgr.sendMessage(PrefixType.WARNING, "Game disabled!", p);
-				removePlayer(p, false);
+				playerLeave(p, true);
 			} catch (Exception e) {}
 
 		}
@@ -755,6 +747,7 @@ public class Game {
 		LobbyManager.getInstance().updateWall(gameID);
 	}
 
+	/*
 	public void saveInv(Player p) {
 		ItemStack[][] store = new ItemStack[2][1];
 
@@ -764,11 +757,13 @@ public class Game {
 		inv_store.put(p, store);
 
 	}
+	*/
 
+	/*
 	public void restoreInvOffline(String p) {
 		restoreInv(Bukkit.getPlayer(p));
 	}
-
+	*/
 
 	/*
 	 * 
@@ -790,8 +785,6 @@ public class Game {
 			return;
 		}
 
-		saveInv(p);
-		clearInv(p);
 		p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, 1).add(0, 10, 0));
 
 		HookManager.getInstance().runHook("PLAYER_SPECTATE", "player-"+p.getName());
@@ -818,7 +811,7 @@ public class Game {
 				pl.showPlayer(p);
 			}
 		}
-		restoreInv(p);
+		//restoreInv(p);
 		p.setAllowFlight(false);
 		p.setFlying(false);
 		p.setFallDistance(0);
@@ -847,6 +840,7 @@ public class Game {
 		return nextspec;
 	}
 
+	/*
 	@SuppressWarnings("deprecation")
 	public void restoreInv(Player p) {
 		try {
@@ -855,10 +849,13 @@ public class Game {
 			p.getInventory().setArmorContents(inv_store.get(p)[1]);
 			inv_store.remove(p);
 			p.updateInventory();
-		} catch (Exception e) { /*p.sendMessage(ChatColor.RED+"Inentory failed to restore or nothing was in it.");*/
+		} catch (Exception e) {
+			//p.sendMessage(ChatColor.RED+"Inentory failed to restore or nothing was in it.");
 		}
 	}
+	*/
 
+	/*
 	@SuppressWarnings("deprecation")
 	public void clearInv(Player p) {
 		ItemStack[] inv = p.getInventory().getContents();
@@ -872,10 +869,8 @@ public class Game {
 		}
 		p.getInventory().setArmorContents(inv);
 		p.updateInventory();
-
 	}
-
-
+	*/
 
 	class NightChecker implements Runnable {
 		boolean reset = false;
@@ -903,7 +898,6 @@ public class Game {
 
 		}
 	}
-
 
 	class DeathMatch implements Runnable{
 		public void run(){

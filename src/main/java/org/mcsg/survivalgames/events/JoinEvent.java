@@ -24,9 +24,8 @@ public class JoinEvent implements Listener {
         
         if(GameManager.getInstance().getBlockGameId(p.getLocation()) != -1){
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-                public void run(){
+                public void run() {
                     p.teleport(SettingsManager.getInstance().getLobbySpawn());
-
                 }
             }, 5L);
         }

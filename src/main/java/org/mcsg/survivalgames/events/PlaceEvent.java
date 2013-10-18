@@ -1,6 +1,5 @@
 package org.mcsg.survivalgames.events;
 
-
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
@@ -12,8 +11,6 @@ import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
 
-
-
 public class PlaceEvent implements Listener {
 
     public  ArrayList<Integer> allowedPlace = new ArrayList<Integer>();
@@ -22,7 +19,7 @@ public class PlaceEvent implements Listener {
         allowedPlace.addAll( SettingsManager.getInstance().getConfig().getIntegerList("block.place.whitelist"));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player p = event.getPlayer();
         int id  = GameManager.getInstance().getPlayerGameId(p);
@@ -36,7 +33,6 @@ public class PlaceEvent implements Listener {
             }
             return;
         }
-
 
         Game g = GameManager.getInstance().getGame(id);
         if(g.isPlayerinactive(p)){

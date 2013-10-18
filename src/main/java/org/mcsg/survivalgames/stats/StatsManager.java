@@ -21,7 +21,6 @@ import org.mcsg.survivalgames.util.DatabaseManager;
 
 public class StatsManager {
 
-
     private static StatsManager instance = new StatsManager();
     
     private ArrayList<PreparedStatement> queue = new ArrayList<PreparedStatement>();
@@ -99,9 +98,6 @@ public class StatsManager {
     public void playerWin(Player p, int arenaid, long time){
         arenas.get(arenaid).get(p).win(time);
     }
-
-
-
 
     public void addKill(Player p, Player killed, int arenaid){
         PlayerStatsSession s = arenas.get(arenaid).get(p);
