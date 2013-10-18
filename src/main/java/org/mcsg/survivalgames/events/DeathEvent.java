@@ -36,6 +36,7 @@ public class DeathEvent implements Listener {
 
 		//Game game = GameManager.getInstance().getGame(gameid);
 		GameManager.getInstance().getGame(gameid).playerDeath(event);
+		event.setDeathMessage(null);
 	}
 
 }
