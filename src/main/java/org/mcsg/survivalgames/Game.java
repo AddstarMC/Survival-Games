@@ -910,8 +910,13 @@ public class Game {
 			long length = config.getInt("deathmatch.time") * 60;
 			long remaining = (length - (now - (startTime / 1000)));
 			SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
+
+			if ((remaining % 60) == 0) { 
+				msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
+			}
 			
-			if (remaining >= 1150) return;
+			// Death match time!!
+			if (remaining >= 1) return;
 			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
 			if (tasks.remove((Integer) dmTaskID)) {
