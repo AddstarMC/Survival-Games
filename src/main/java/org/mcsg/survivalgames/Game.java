@@ -533,7 +533,7 @@ public class Game {
 	 * 
 	 */
 	public void playerDeath(PlayerDeathEvent e) {
-		Player p = e.getEntity();
+		final Player p = e.getEntity();
 		if (!activePlayers.contains(p)) return;
 		
 		sm.playerDied(p, activePlayers.size(), gameID, new Date().getTime() - startTime);
@@ -611,8 +611,12 @@ public class Game {
 		}
 
 		if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
-			playerWin(p);
-			endGame();
+			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable(){
+				public void run(){
+					playerWin(p);
+					endGame();
+				}
+			}, 5L));
 		}
 		LobbyManager.getInstance().updateWall(gameID);
 	}
