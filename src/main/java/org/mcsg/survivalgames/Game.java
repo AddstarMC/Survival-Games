@@ -433,8 +433,9 @@ public class Game {
 					}
 				}, config.getInt("grace-period") * 20);
 			}
-			if(config.getBoolean("deathmatch.enabled")){
-				dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 60*20L, 20L);
+			if(config.getBoolean("deathmatch.enabled")) {
+				SurvivalGames.$("Launching deathmatch timer...");
+				dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 40L, 20L);
 				tasks.add(dmTaskID);
 			}
 		}
