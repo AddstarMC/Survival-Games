@@ -10,7 +10,7 @@
 						"a pretty",
 						"broken sword"
 					],
-					"Damage": 100
+					"Damage": 70
 				},
 				{
 					"Material": "LEATHER_BOOTS",
@@ -24,15 +24,16 @@
 			],
 			"chance": 0.5
 		},
+
 		{
 			"items": [
 				{
 					"Material": "DIAMOND_SWORD",
-					"Name": "But Fucker"
+					"Name": "Sharp Pointy Thing"
+					"Damage": 100
 				}
 			],
 			"chance": 0.01
 		}
 	]
 }
-
