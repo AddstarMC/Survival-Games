@@ -50,7 +50,6 @@ public class Game {
 	private FileConfiguration config;
 	private FileConfiguration system;
 	private HashMap < Integer, Player > spawns = new HashMap < Integer, Player > ();
-	private HashMap < Player, ItemStack[][] > inv_store = new HashMap < Player, ItemStack[][] > ();
 	private int spawnCount = 0;
 	private int vote = 0;
 	private boolean disabled = false;
@@ -434,8 +433,8 @@ public class Game {
 				}, config.getInt("grace-period") * 20);
 			}
 			if(config.getBoolean("deathmatch.enabled")){
-				tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), 
-						new DeathMatch(), config.getInt("deathmatch.time") * 20 * 60));
+				tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), 
+						new DeathMatchTimer(), 60*20L, 20L));
 			}
 		}
 
@@ -903,12 +902,20 @@ public class Game {
 		}
 	}
 
-	class DeathMatch implements Runnable{
-		public void run(){
+	class DeathMatchTimer implements Runnable{
+		public void run() {
+			int now = (int) (new Date().getTime() / 1000);
+			long length = config.getInt("deathmatch.time");
+			long remaining = (length - (now - (startTime / 1000)));
+			SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
+			return; 
+			
+			/*
 			for(Player p: activePlayers){
 				for(int a = 0; a < spawns.size(); a++){
 					if(spawns.get(a) == p){
 						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
+						p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");
 						break;
 					}
 				}
@@ -917,9 +924,11 @@ public class Game {
 				public void run(){
 					for(Player p: activePlayers){
 						p.getLocation().getWorld().strikeLightning(p.getLocation());
+						p.damage(4);
 					}
 				}
 			}, config.getInt("deathmatch.killtime") * 20 * 60));
+			*/
 		}
 	}
 

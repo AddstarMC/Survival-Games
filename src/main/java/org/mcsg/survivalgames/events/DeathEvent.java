@@ -38,8 +38,8 @@ public class DeathEvent implements Listener {
 		if (!gm.isPlayerActive(player)) return;
 
 		SurvivalGames.$("Handle death: " + player.getName());
-		gm.getGame(gameid).playerDeath(event);
 		event.setDeathMessage(null);
+		gm.getGame(gameid).playerDeath(event);
 	}
 
 }
