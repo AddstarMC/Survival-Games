@@ -911,13 +911,13 @@ public class Game {
 			long remaining = (length - (now - (startTime / 1000)));
 			SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
 			
-			if (remaining <= 1150) return;
+			if (remaining >= 1150) return;
+			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
-			for (Integer x : tasks) {
-				if (x == dmTaskID) {
-					tasks.remove(x);
-					continue;
-				}
+			if (tasks.remove((Integer) dmTaskID)) {
+				SurvivalGames.$("Task removed from list");
+			} else {
+				SurvivalGames.$("Task NOT removed!");
 			}
 			
 			for(Player p: activePlayers){
