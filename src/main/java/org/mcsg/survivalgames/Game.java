@@ -239,7 +239,8 @@ public class Game {
 
 						p.setHealth(p.getMaxHealth());
 						p.setFoodLevel(20);
-
+						p.getInventory().clear();
+						
 						activePlayers.add(p);
 						sm.addPlayer(p, gameID);
 						
@@ -411,7 +412,6 @@ public class Game {
 			startTime = new Date().getTime();
 			for (Player pl: activePlayers) {
 				pl.setHealth(pl.getMaxHealth());
-				//clearInv(pl);
 				msgmgr.sendFMessage(PrefixType.INFO, "game.goodluck", pl);
 			}
 			if (config.getBoolean("restock-chest")) {
