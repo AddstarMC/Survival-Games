@@ -111,6 +111,7 @@ public class GameScoreboard {
 		// Set the players scoreboard and and them too the team
 		player.setScoreboard(this.scoreboard);
 		this.livingTeam.addPlayer(player);
+		this.deadTeam.addPlayer(player);
 		
 		// Set the players score to zero, then increase it
 		Score score = this.sidebarObjective.getScore(player);
@@ -135,6 +136,7 @@ public class GameScoreboard {
 		
 		// remove the player from the team
 		this.livingTeam.removePlayer(player);
+		this.deadTeam.removePlayer(player);
 		this.scoreboard.resetScores(player);
 		
 		// Restore the players scoreboard
