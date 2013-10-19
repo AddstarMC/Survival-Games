@@ -44,6 +44,7 @@ public class ChestRatioStorage {
 				
 				JSONObject chest = (JSONObject)chestObject;
 				double chance = (Double) chest.get("chance");
+				SurvivalGames.$("Loading chest (" + chance + "):");
 				
 				ArrayList<ItemStack> chestContents = new ArrayList<ItemStack>();
 				JSONArray contents = (JSONArray) chest.get("items");
@@ -103,7 +104,7 @@ public class ChestRatioStorage {
 			dispname = " \"" + meta.getDisplayName() + "\"";
 		}
 
-		SurvivalGames.$("Chest item (" + stackSize + "): " + itemMaterial + dispname);
+		SurvivalGames.$("  Chest item (" + stackSize + "): " + itemMaterial + dispname);
 		
 		if (itemObject.containsKey("Damage")) {
 			Long damageValue = (Long)itemObject.get("Damage");
@@ -112,13 +113,13 @@ public class ChestRatioStorage {
 			short actualDurability = (short) (((float)maxDamage) * (damageValue.floatValue() / 100.0f));
 			item.setDurability(actualDurability);
 			
-			SurvivalGames.$("  Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
+			SurvivalGames.$("    Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
 		}
 		
 		if (itemObject.containsKey("Data")) {
 			Long dataValue = (Long)itemObject.get("Data");
 			item.setDurability(dataValue.shortValue());
-			SurvivalGames.$("  Data: " + dataValue);
+			SurvivalGames.$("    Data: " + dataValue);
 		}		
 		/////////////////////////////////////////
 		
@@ -130,7 +131,7 @@ public class ChestRatioStorage {
 			for (Object loreObject : loreArray) {
 				String loreLine = ChatColor.translateAlternateColorCodes('&', (String)loreObject);
 				lore.add(loreLine);
-				SurvivalGames.$("Lore: " + loreLine);
+				SurvivalGames.$("    Lore: " + loreLine);
 			}
 			
 			if (!lore.isEmpty()) {
@@ -150,7 +151,7 @@ public class ChestRatioStorage {
 				
 				Enchantment enchantment = Enchantment.getByName(enchantmentName);
 				if (enchantment != null && enchantmentLevel != null) {
-					SurvivalGames.$("  Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
+					SurvivalGames.$("    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);
 				}
 			}
