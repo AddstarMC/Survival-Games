@@ -83,8 +83,6 @@ public class ChestRatioStorage {
 			return null;
 		}
 		
-		SurvivalGames.$("Loading Chest Item...");
-		
 		// amount if specified
 		Long stackSize = 1L;
 				
@@ -95,8 +93,17 @@ public class ChestRatioStorage {
 		// Create the item stack.
 		ItemStack item = new ItemStack(itemMaterial, stackSize.intValue());
 		
-		SurvivalGames.$("Material: " + itemMaterial);
-		SurvivalGames.$("Amount: " + stackSize);
+		// Get the meta data so we can update it
+		ItemMeta meta = item.getItemMeta();
+		String dispname = "";
+		
+		// Try and set the items name
+		if (itemObject.containsKey("Name")) {
+			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', (String)itemObject.get("Name")));
+			dispname = " \"" + meta.getDisplayName() + "\"";
+		}
+
+		SurvivalGames.$("Chest item (" + stackSize + "): " + itemMaterial + dispname);
 		
 		if (itemObject.containsKey("Damage")) {
 			Long damageValue = (Long)itemObject.get("Damage");
@@ -105,25 +112,14 @@ public class ChestRatioStorage {
 			short actualDurability = (short) (((float)maxDamage) * (damageValue.floatValue() / 100.0f));
 			item.setDurability(actualDurability);
 			
-			SurvivalGames.$("maxDamage: " + maxDamage);
-			SurvivalGames.$("damageValue: " + damageValue);
-			SurvivalGames.$("actualDurability: " + actualDurability);
+			SurvivalGames.$("  Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
 		}
 		
 		if (itemObject.containsKey("Data")) {
 			Long dataValue = (Long)itemObject.get("Data");
 			item.setDurability(dataValue.shortValue());
-			SurvivalGames.$("Data: " + dataValue);
+			SurvivalGames.$("  Data: " + dataValue);
 		}		
-				
-		// Get the meta data so we can update it
-		ItemMeta meta = item.getItemMeta();
-		
-		// Try and set the items name
-		if (itemObject.containsKey("Name")) {
-			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', (String)itemObject.get("Name")));
-			SurvivalGames.$("Name: " + meta.getDisplayName());
-		}
 		/////////////////////////////////////////
 		
 		// Set the item lore
@@ -154,7 +150,7 @@ public class ChestRatioStorage {
 				
 				Enchantment enchantment = Enchantment.getByName(enchantmentName);
 				if (enchantment != null && enchantmentLevel != null) {
-					SurvivalGames.$("Enchantment: " + enchantmentName + " : Lvl: " + enchantmentLevel);
+					SurvivalGames.$("  Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);
 				}
 			}
