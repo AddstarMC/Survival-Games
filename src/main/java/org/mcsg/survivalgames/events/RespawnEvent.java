@@ -17,7 +17,6 @@ public class RespawnEvent implements Listener {
 		if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
 			SurvivalGames.$(" >>>RESPAWN WITHIN SG ARENA");
 			Location loc = SettingsManager.getInstance().getLobbySpawn();
-			SurvivalGames.$(" >>>Lobby: " + loc);
             event.setRespawnLocation(loc);
 		}
 	}

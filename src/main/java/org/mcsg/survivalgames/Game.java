@@ -241,6 +241,11 @@ public class Game {
 						p.setFoodLevel(20);
 						p.getInventory().clear();
 						
+						p.setFlying(false);
+						p.setAllowFlight(false);
+						p.setWalkSpeed(0.2F);
+						p.setFireTicks(0);
+						
 						activePlayers.add(p);
 						sm.addPlayer(p, gameID);
 						
@@ -504,7 +509,7 @@ public class Game {
 	 * 
 	 */
 
-	public void playerLeave(Player p, boolean teleport) {
+	public void playerLeave(final Player p, boolean teleport) {
 		msgFall(PrefixType.INFO, "game.playerleavegame", "player-" + p.getName());
 		if (teleport) {
 			p.teleport(SettingsManager.getInstance().getLobbySpawn());
@@ -519,6 +524,15 @@ public class Game {
 
 		HookManager.getInstance().runHook("PLAYER_REMOVED", "player-"+p.getName());
 		LobbyManager.getInstance().updateWall(gameID);
+
+		if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
+			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+				public void run(){
+					playerWin(p);
+					endGame();
+				}
+			}, 1L));
+		}
 	}
 
 	/*

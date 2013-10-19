@@ -19,6 +19,7 @@ public class GameScoreboard {
 	private final Scoreboard scoreboard;
 	private Objective sidebarObjective = null;
 	private Team livingTeam = null;
+	private Team deadTeam = null;
 	
 	private HashMap<String, Scoreboard> originalScoreboard = new HashMap<String, Scoreboard>();
 	private ArrayList<String> activePlayers = new ArrayList<String>();
@@ -69,6 +70,12 @@ public class GameScoreboard {
 			this.livingTeam = null;
 		}
 		
+		// Reset the dead team
+		if (this.deadTeam != null) {
+			this.deadTeam.unregister();
+			this.deadTeam = null;
+		}
+		
 		// Create the objective
 		this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy");
 		this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -77,7 +84,13 @@ public class GameScoreboard {
 		this.livingTeam = this.scoreboard.registerNewTeam("Living");
 		this.livingTeam.setAllowFriendlyFire(true);
 		this.livingTeam.setCanSeeFriendlyInvisibles(false);
+		this.livingTeam.setPrefix(ChatColor.GREEN.toString());
 		
+		// Create the dead team
+		this.deadTeam = this.scoreboard.registerNewTeam("Dead");
+		this.deadTeam.setAllowFriendlyFire(true);
+		this.deadTeam.setCanSeeFriendlyInvisibles(false);
+		this.deadTeam.setPrefix(ChatColor.RED.toString());
 	}
 	
 	/**
@@ -95,7 +108,7 @@ public class GameScoreboard {
 		
 		this.activePlayers.add(player.getName());
 		
-		// Set the players scoreboard and andd them too the team
+		// Set the players scoreboard and and them too the team
 		player.setScoreboard(this.scoreboard);
 		this.livingTeam.addPlayer(player);
 		
@@ -130,6 +143,7 @@ public class GameScoreboard {
 			player.setScoreboard(original);
 			this.originalScoreboard.remove(player.getName());
 		}
+
 		this.activePlayers.remove(player.getName());
 				
 		updateSidebarTitle();
