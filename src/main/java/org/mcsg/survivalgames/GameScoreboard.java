@@ -188,27 +188,24 @@ public class GameScoreboard {
 		}
 	}
 	
-	/**
-	 * Move a player to another team
-	 * 
-	 * @param player	The player to move
-	 * @param team		Team to move the player to
-	 */
-	public void setTeam(Player player, String team) {
-		if (team == "living") {
-			this.waitingTeam.removePlayer(player);
-			this.deadTeam.removePlayer(player);
-			this.livingTeam.addPlayer(player);
+	public void playerLiving(Player player) {
+		this.waitingTeam.removePlayer(player);
+		this.deadTeam.removePlayer(player);
+		this.livingTeam.addPlayer(player);
+	}
+
+	public void playerDead(Player player) {
+		this.waitingTeam.removePlayer(player);
+		this.livingTeam.removePlayer(player);
+		this.deadTeam.addPlayer(player);
+		
+		// Restore the players scoreboard
+		Scoreboard original = this.originalScoreboard.get(player.getName());
+		if (original != null) {
+			player.setScoreboard(original);
+			this.originalScoreboard.remove(player.getName());
 		}
-		else if (team == "dead") {
-			this.waitingTeam.removePlayer(player);
-			this.livingTeam.removePlayer(player);
-			this.deadTeam.addPlayer(player);
-		}
-		else {
-			this.livingTeam.removePlayer(player);
-			this.deadTeam.removePlayer(player);
-			this.waitingTeam.addPlayer(player);
-		}
+		this.activePlayers.remove(player.getName());
+		updateSidebarTitle();
 	}
 }

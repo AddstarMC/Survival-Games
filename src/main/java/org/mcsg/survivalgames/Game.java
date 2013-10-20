@@ -377,7 +377,7 @@ public class Game {
 		voted.add(pl);
 		msgFall(PrefixType.INFO, "game.playervote", "player-"+pl.getName());
 		HookManager.getInstance().runHook("PLAYER_VOTE", "player-"+pl.getName());
-		scoreBoard.setTeam(pl, "living");
+		scoreBoard.playerLiving(pl);
 		/*for(Player p: activePlayers){
             p.sendMessage(ChatColor.AQUA+pl.getName()+" Voted to start the game! "+ Math.round((vote +0.0) / ((getActivePlayers() +0.0)*100)) +"/"+((c.getInt("auto-start-vote")+0.0))+"%");
         }*/
@@ -519,6 +519,7 @@ public class Game {
 		scoreBoard.removePlayer(p);
 		activePlayers.remove(p);
 		inactivePlayers.remove(p);
+		voted.remove(p);
 		for (Object in : spawns.keySet().toArray()) {
 			if (spawns.get(in) == p) spawns.remove(in);
 		}
@@ -553,7 +554,7 @@ public class Game {
 		if (!activePlayers.contains(p)) return;
 		
 		sm.playerDied(p, activePlayers.size(), gameID, new Date().getTime() - startTime);
-		scoreBoard.removePlayer(p);
+		scoreBoard.playerDead(p);
 		activePlayers.remove(p);
 		inactivePlayers.add(p);
 		for (Object in : spawns.keySet().toArray()) {
