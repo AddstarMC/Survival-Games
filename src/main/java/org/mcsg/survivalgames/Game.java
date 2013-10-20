@@ -420,6 +420,7 @@ public class Game {
 			for (Player pl: activePlayers) {
 				pl.setHealth(pl.getMaxHealth());
 				msgmgr.sendFMessage(PrefixType.INFO, "game.goodluck", pl);
+				scoreBoard.playerLiving(pl);
 			}
 			if (config.getBoolean("restock-chest")) {
 				SettingsManager.getGameWorld(gameID).setTime(0);
