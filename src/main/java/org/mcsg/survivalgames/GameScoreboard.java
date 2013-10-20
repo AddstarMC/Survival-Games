@@ -103,7 +103,7 @@ public class GameScoreboard {
 		this.deadTeam = this.scoreboard.registerNewTeam("Dead");
 		this.deadTeam.setAllowFriendlyFire(true);
 		this.deadTeam.setCanSeeFriendlyInvisibles(false);
-		this.deadTeam.setPrefix(ChatColor.RED.toString());
+		this.deadTeam.setPrefix(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH.toString());
 	}
 	
 	/**
