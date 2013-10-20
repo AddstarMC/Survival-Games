@@ -18,6 +18,7 @@ public class GameScoreboard {
 	private final int gameID;
 	private final Scoreboard scoreboard;
 	private Objective sidebarObjective = null;
+	private Team waitingTeam = null;
 	private Team livingTeam = null;
 	private Team deadTeam = null;
 	
@@ -64,6 +65,12 @@ public class GameScoreboard {
 			this.sidebarObjective = null;
 		}
 		
+		// Reset the waiting team
+		if (this.waitingTeam != null) {
+			this.waitingTeam.unregister();
+			this.waitingTeam = null;
+		}
+		
 		// Reset the living team
 		if (this.livingTeam != null) {
 			this.livingTeam.unregister();
@@ -80,6 +87,12 @@ public class GameScoreboard {
 		this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy");
 		this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
+		// Create the living team
+		this.waitingTeam = this.scoreboard.registerNewTeam("Waiting");
+		this.waitingTeam.setAllowFriendlyFire(true);
+		this.waitingTeam.setCanSeeFriendlyInvisibles(false);
+		this.waitingTeam.setPrefix(ChatColor.WHITE.toString());
+
 		// Create the living team
 		this.livingTeam = this.scoreboard.registerNewTeam("Living");
 		this.livingTeam.setAllowFriendlyFire(true);
@@ -110,8 +123,7 @@ public class GameScoreboard {
 		
 		// Set the players scoreboard and and them too the team
 		player.setScoreboard(this.scoreboard);
-		this.livingTeam.addPlayer(player);
-		this.deadTeam.addPlayer(player);
+		this.waitingTeam.addPlayer(player);
 		
 		// Set the players score to zero, then increase it
 		Score score = this.sidebarObjective.getScore(player);
@@ -135,6 +147,7 @@ public class GameScoreboard {
 	public void removePlayer(Player player) {
 		
 		// remove the player from the team
+		this.waitingTeam.removePlayer(player);
 		this.livingTeam.removePlayer(player);
 		this.deadTeam.removePlayer(player);
 		this.scoreboard.resetScores(player);
@@ -172,6 +185,30 @@ public class GameScoreboard {
 		Score score = this.sidebarObjective.getScore(player);
 		if (score != null) {
 			score.setScore(score.getScore() + 1);
+		}
+	}
+	
+	/**
+	 * Move a player to another team
+	 * 
+	 * @param player	The player to move
+	 * @param team		Team to move the player to
+	 */
+	public void setTeam(Player player, String team) {
+		if (team == "living") {
+			this.waitingTeam.removePlayer(player);
+			this.deadTeam.removePlayer(player);
+			this.livingTeam.addPlayer(player);
+		}
+		else if (team == "dead") {
+			this.waitingTeam.removePlayer(player);
+			this.livingTeam.removePlayer(player);
+			this.deadTeam.addPlayer(player);
+		}
+		else {
+			this.livingTeam.removePlayer(player);
+			this.deadTeam.removePlayer(player);
+			this.waitingTeam.addPlayer(player);
 		}
 	}
 }

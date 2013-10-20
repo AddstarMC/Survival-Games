@@ -375,8 +375,9 @@ public class Game {
 		}
 		vote++;
 		voted.add(pl);
-		msgmgr.sendFMessage(PrefixType.INFO, "game.playervote", pl, "player-"+pl.getName());
+		msgFall(PrefixType.INFO, "game.playervote", "player-"+pl.getName());
 		HookManager.getInstance().runHook("PLAYER_VOTE", "player-"+pl.getName());
+		scoreBoard.setTeam(pl, "living");
 		/*for(Player p: activePlayers){
             p.sendMessage(ChatColor.AQUA+pl.getName()+" Voted to start the game! "+ Math.round((vote +0.0) / ((getActivePlayers() +0.0)*100)) +"/"+((c.getInt("auto-start-vote")+0.0))+"%");
         }*/
