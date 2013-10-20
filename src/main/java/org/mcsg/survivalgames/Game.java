@@ -240,6 +240,7 @@ public class Game {
 						p.setHealth(p.getMaxHealth());
 						p.setFoodLevel(20);
 						p.getInventory().clear();
+						p.getEquipment().setArmorContents(null);
 						
 						p.setFlying(false);
 						p.setAllowFlight(false);
