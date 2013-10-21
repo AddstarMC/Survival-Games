@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
-import org.mcsg.survivalgames.SurvivalGames;
 
 public class RespawnEvent implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)

@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.mcsg.survivalgames.GameManager;
 
 public class BandageUse implements Listener {
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler
 	public void onBandageUse(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
