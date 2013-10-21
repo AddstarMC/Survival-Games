@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -425,6 +426,11 @@ public class Game {
 			}
 			return;
 		} else {
+			// Remove all entities in the world
+			for (Entity entity : this.arena.getMax().getWorld().getEntities()) {
+				if (entity instanceof Player) continue;
+				entity.remove();
+            }
 			startTime = new Date().getTime();
 			for (Player pl: activePlayers) {
 				pl.setHealth(pl.getMaxHealth());
@@ -690,6 +696,11 @@ public class Game {
 		LobbyManager.getInstance().updateWall(gameID);
 		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gameend", "arena-"+gameID);
 
+		// Remove all entities in the world
+		for (Entity entity : this.arena.getMax().getWorld().getEntities()) {
+			if (entity instanceof Player) continue;
+			entity.remove();
+        }
 	}
 
 	public void endGame() {
