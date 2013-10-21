@@ -254,6 +254,8 @@ public class Game {
 
 						hookvars.put("activeplayers", activePlayers.size()+"");
 						LobbyManager.getInstance().updateWall(gameID);
+						p.getInventory().clear();
+						p.getEquipment().setArmorContents(null);
 						showMenu(p);
 						HookManager.getInstance().runHook("GAME_POST_ADDPLAYER", "activePlayers-"+activePlayers.size());
 
