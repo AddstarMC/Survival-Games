@@ -234,7 +234,7 @@ public class Game {
 						spawns.put(a, p);
 						p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 
-						p.teleport(SettingsManager.getInstance().getLobbySpawn());
+						//p.teleport(SettingsManager.getInstance().getLobbySpawn());
 						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
 
 						p.setHealth(p.getMaxHealth());
