@@ -28,20 +28,24 @@ public class ForceStart implements SubCommand {
 		}
 		else
 			game  = GameManager.getInstance().getPlayerGameId(player);
+		
 		if(game == -1){
 			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.notingame", player);
 			return true;
 		}
-		if(GameManager.getInstance().getGame(game).getActivePlayers() < 2){
+		
+		Game g = GameManager.getInstance().getGame(game);
+		if(g.getActivePlayers() < 2){
 			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.notenoughtplayers", player);
 			return true;
 		}
 
-
-		Game g = GameManager.getInstance().getGame(game);
 		if (g.getMode() != Game.GameMode.WAITING && !player.hasPermission("sg.arena.restart")) {
 			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.alreadyingame", player);
 			return true;
+		}
+		for (Player pl : g.getAllPlayers()) {
+			g.getScoreboard().playerLiving(pl);
 		}
 		g.countdown(seconds);
 

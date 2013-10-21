@@ -388,6 +388,7 @@ public class Game {
 			for (Player p: activePlayers) {
 				//p.sendMessage(ChatColor.LIGHT_PURPLE + "Game Starting in " + c.getInt("auto-start-time"));
 				msgmgr.sendMessage(PrefixType.INFO, "Game starting in " + config.getInt("auto-start-time") + "!", p);
+				scoreBoard.playerLiving(pl);
 			}
 		}
 	}
@@ -999,6 +1000,10 @@ public class Game {
 		all.addAll(activePlayers);
 		all.addAll(inactivePlayers);
 		return all;
+	}
+	
+	public GameScoreboard getScoreboard() {
+		return scoreBoard;
 	}
 
 	public boolean isSpectator(Player p) {
