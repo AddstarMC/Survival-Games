@@ -17,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.api.PlayerJoinArenaEvent;
 import org.mcsg.survivalgames.api.PlayerKilledEvent;
@@ -266,6 +267,11 @@ public class Game {
 								p.getInventory().clear();
 								p.getEquipment().setArmorContents(null);
 								showMenu(p);
+								
+								for (PotionEffect effect : p.getActivePotionEffects()) {
+                                    p.removePotionEffect(effect.getType());
+								}
+
 							}
 						}, 1L);
 						
