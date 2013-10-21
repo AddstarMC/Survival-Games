@@ -264,6 +264,11 @@ public class Game {
 
 						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 							public void run() {
+								p.setFlying(false);
+								p.setAllowFlight(false);
+								p.setWalkSpeed(0.2F);
+								p.setFireTicks(0);
+
 								p.getInventory().clear();
 								p.getEquipment().setArmorContents(null);
 								showMenu(p);
@@ -828,7 +833,7 @@ public class Game {
 
 
 
-	public void addSpectator(Player p) {
+	public void addSpectator(final Player p) {
 		if (mode != GameMode.INGAME) {
 			msgmgr.sendMessage(PrefixType.WARNING, "You can only spectate running games!", p);
 			return;
@@ -842,8 +847,24 @@ public class Game {
 			pl.hidePlayer(p);
 		}
 
-		p.setAllowFlight(true);
-		p.setFlying(true);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+			public void run() {
+				p.setFlying(false);
+				p.setAllowFlight(false);
+				p.setWalkSpeed(0.2F);
+				p.setFireTicks(0);
+
+				p.getInventory().clear();
+				p.getEquipment().setArmorContents(null);
+				showMenu(p);
+				
+				for (PotionEffect effect : p.getActivePotionEffects()) {
+                    p.removePotionEffect(effect.getType());
+				}
+
+			}
+		}, 1L);
+		
 		spectators.add(p.getName());
 		msgmgr.sendMessage(PrefixType.INFO, "You are now spectating! Use /sg spectate again to return to the lobby.", p);
 		msgmgr.sendMessage(PrefixType.INFO, "Right click while holding shift to teleport to the next ingame player, left click to go back.", p);

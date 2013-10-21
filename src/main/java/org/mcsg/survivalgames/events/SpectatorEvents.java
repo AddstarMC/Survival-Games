@@ -46,16 +46,19 @@ public class SpectatorEvents implements Listener {
     public void onPlayerClickEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         try{
-            if(GameManager.getInstance().isSpectator(player) && player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR)||
-                    GameManager.getInstance().isSpectator(player) && player.isSneaking() && (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR)){
+            if(GameManager.getInstance().isSpectator(player) && player.isSneaking() && 
+            		((event.getAction() == Action.RIGHT_CLICK_AIR) || 
+            		(event.getAction() == Action.RIGHT_CLICK_BLOCK) ||
+                    (event.getAction() == Action.LEFT_CLICK_AIR) || 
+                    (event.getAction() == Action.LEFT_CLICK_BLOCK))) {
                 Player[]players = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player)).getPlayers()[0];
                 Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player));
 
                 int i = g.getNextSpec().get(player);
-                if((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR)){
+                if((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
                     i++;
                 }
-                else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_AIR){
+                else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
                     i--;
                 }
                 if(i>players.length-1){
