@@ -42,7 +42,7 @@ public class SpectatorEvents implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerClickEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         try{
