@@ -142,6 +142,9 @@ public class LobbySignManager {
 			else if (signType == LobbySignType.Winner) {
 				sign = new LobbySignWinner(gameId);
 			}
+			else if (signType == LobbySignType.WinnerSign) {
+			    sign = new LobbySignWinnerSign(gameId);
+			}
 			else {
 				SurvivalGames.$(Level.SEVERE, "Invalid sign type! " + file.getName());
 				continue;

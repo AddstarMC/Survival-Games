@@ -21,6 +21,7 @@ import org.mcsg.survivalgames.lobbysigns.LobbySignPlayerList;
 import org.mcsg.survivalgames.lobbysigns.LobbySignPlayers;
 import org.mcsg.survivalgames.lobbysigns.LobbySignState;
 import org.mcsg.survivalgames.lobbysigns.LobbySignWinner;
+import org.mcsg.survivalgames.lobbysigns.LobbySignWinnerSign;
 
 public class LobbyBoardEvents implements Listener {
 	
@@ -104,6 +105,13 @@ public class LobbyBoardEvents implements Listener {
 				newLobbySign = new LobbySignWinner(sign, gameId);
 			}
 		}
+		// Player winner sign
+        else if (createLine.equalsIgnoreCase("[sg-winnersign]")) {
+            validSign = true;
+            if (validGameId) {
+                newLobbySign = new LobbySignWinnerSign(sign, gameId);
+            }
+        }
 		
 		
 		if (validSign && !validGameId) {

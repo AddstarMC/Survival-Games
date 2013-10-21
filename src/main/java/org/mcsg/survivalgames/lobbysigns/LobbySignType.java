@@ -7,6 +7,7 @@ public enum LobbySignType {
 	State,
 	Players,
 	PlayerList,
-	Winner
-
+	Winner,
+	WinnerSign
+	
 }

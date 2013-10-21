@@ -89,5 +89,4 @@ public class LobbySignWinner extends LobbySign {
 		} catch (IOException e) {}
 	}
 
-
 }

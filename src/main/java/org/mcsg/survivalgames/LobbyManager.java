@@ -12,6 +12,7 @@ import org.mcsg.survivalgames.lobbysigns.LobbySign;
 import org.mcsg.survivalgames.lobbysigns.LobbySignManager;
 import org.mcsg.survivalgames.lobbysigns.LobbySignType;
 import org.mcsg.survivalgames.lobbysigns.LobbySignWinner;
+import org.mcsg.survivalgames.lobbysigns.LobbySignWinnerSign;
 
 public class LobbyManager {
 
@@ -55,9 +56,19 @@ public class LobbyManager {
 		
 		List<LobbySign> winnerSign = signManager.getSignsByType(gameID, LobbySignType.Winner);
 		for (LobbySign sign : winnerSign) {
+			
+			if (!(sign instanceof LobbySignWinner))
+				continue;
+			
 			((LobbySignWinner)sign).setWinner(winner.getName());
 			sign.update();
 		}
+
+        List<LobbySign> winnerSigns = signManager.getSignsByType(gameID, LobbySignType.WinnerSign);
+        for (LobbySign sign : winnerSigns) {
+            ((LobbySignWinnerSign)sign).setWinner(winner.getName());
+            sign.update();
+        }
 		
 	}
 }
