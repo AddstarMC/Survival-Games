@@ -11,6 +11,7 @@ import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
 
+@SuppressWarnings("deprecation")
 public class PlaceEvent implements Listener {
 
     public  ArrayList<Integer> allowedPlace = new ArrayList<Integer>();

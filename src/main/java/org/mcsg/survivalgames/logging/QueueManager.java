@@ -20,9 +20,7 @@ import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
 import org.mcsg.survivalgames.SurvivalGames;
 
-
-
-
+@SuppressWarnings("deprecation")
 public class QueueManager {
 
 	private static QueueManager instance = new QueueManager();

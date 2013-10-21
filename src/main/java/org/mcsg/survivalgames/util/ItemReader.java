@@ -1,13 +1,11 @@
 package org.mcsg.survivalgames.util;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.mcsg.survivalgames.SurvivalGames;
 
 public class ItemReader {
 

@@ -22,7 +22,6 @@ public class ThirstManager implements Listener {
 		return instance;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void startThirst() {
 		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(new SurvivalGames(), new Runnable() {
     	public void run() {
@@ -50,7 +49,7 @@ public class ThirstManager implements Listener {
 	@EventHandler
 	public void onPlayerDrinkWater(PlayerInteractEvent e) {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if (e.getPlayer().getItemInHand() == new ItemStack(Material.POTION)) {
+			if (e.getPlayer().getItemInHand().getType() == Material.POTION) {
 				e.getPlayer().getInventory().removeItem(new ItemStack(Material.POTION, 1));
 				addThirst(e.getPlayer(), 5);
 				e.getPlayer().sendMessage(ChatColor.GREEN + "You drank water.");

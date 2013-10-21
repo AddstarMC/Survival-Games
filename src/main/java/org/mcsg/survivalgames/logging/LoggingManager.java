@@ -1,6 +1,5 @@
 package org.mcsg.survivalgames.logging;
 
-
 import java.util.HashMap;
 
 import org.bukkit.block.Block;
@@ -20,8 +19,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 
-
-
+@SuppressWarnings("deprecation")
 public class LoggingManager implements  Listener{
 	public static HashMap<String, Integer>i = new HashMap<String, Integer>();
 
@@ -149,13 +147,6 @@ public class LoggingManager implements  Listener{
 		//    System.out.println(9);
 
 	}
-	/*  @EventHandler(priority = EventPriority.MONITOR)
-    public void blockChanged(BlockFromToEvent e){
-            logBlockDestoryed(e.getBlock());
-
-            System.out.println(78);
-
-    }*/
 
 	public void blockChange(BlockPistonExtendEvent e){
 		if(e.isCancelled())return;
@@ -166,43 +157,6 @@ public class LoggingManager implements  Listener{
 		i.put("BPISTION", i.get("BPISTION")+1);
 
 	}
-
-/*	public void blackChange(PlayerInteractEvent e){
-		if(!SettingsManager.getInstance().getConfig().getBoolean("Random-Chest", true)){
-			if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-			Block clickedBlock = e.getClickedBlock();
-			int gameid = GameManager.getInstance().getPlayerGameId(e.getPlayer());
-			if (gameid == -1) return;
-			GameManager gm = GameManager.getInstance();
-
-
-			if (GameManager.openedChest.get(gameid).contains(clickedBlock))  
-				return;
-
-			if(GameManager.getInstance().getBlockGameId(clickedBlock.getLocation()) != -1){
-
-				Chest c;
-				if ((clickedBlock.getState() instanceof Chest)) {
-					c = (Chest)clickedBlock.getState();
-					QueueManager.getInstance().add(
-							new BlockData( 
-									GameManager.getInstance().getBlockGameId(c.getLocation()),
-									c.getWorld().getName(),
-									0,
-									(byte)0,
-									c.getTypeId(),
-									c.getData().getData(),
-									c.getX(),
-									c.getY(),
-									c.getZ(),
-									c.getBlockInventory().getContents())
-							);
-				}
-			}
-		}
-	}
-*/
 
 	public void logBlockCreated(Block b){
 		if(GameManager.getInstance().getBlockGameId(b.getLocation()) == -1)
