@@ -195,7 +195,7 @@ public class Game {
 	 */
 
 
-	public boolean addPlayer(Player p) {
+	public boolean addPlayer(final Player p) {
 		if(SettingsManager.getInstance().getLobbySpawn() == null){
 			msgmgr.sendFMessage(PrefixType.WARNING, "error.nolobbyspawn", p);
 			return false;
@@ -254,14 +254,20 @@ public class Game {
 
 						hookvars.put("activeplayers", activePlayers.size()+"");
 						LobbyManager.getInstance().updateWall(gameID);
-						p.getInventory().clear();
-						p.getEquipment().setArmorContents(null);
-						showMenu(p);
 						HookManager.getInstance().runHook("GAME_POST_ADDPLAYER", "activePlayers-"+activePlayers.size());
 
 						if(spawnCount == activePlayers.size()){
 							countdown(5);
 						}
+
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+							public void run() {
+								p.getInventory().clear();
+								p.getEquipment().setArmorContents(null);
+								showMenu(p);
+							}
+						}, 1L);
+						
 						break;
 					}
 				}
