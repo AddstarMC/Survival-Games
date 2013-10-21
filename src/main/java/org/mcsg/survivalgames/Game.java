@@ -1056,8 +1056,14 @@ public class Game {
 	}
 
 	public void msgFall(PrefixType type, String msg, String...vars){
-		for(Player p: getAllPlayers()){
+		for(Player p: activePlayers) {
 			msgmgr.sendFMessage(type, msg, p, vars);
+		}
+		for(String ps: spectators) {
+			Player p = Bukkit.getServer().getPlayer(ps);
+			if (p != null) {
+				msgmgr.sendFMessage(type, msg, p, vars);
+			}
 		}
 	}
 
