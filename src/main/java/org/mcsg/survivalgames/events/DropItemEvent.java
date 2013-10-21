@@ -18,9 +18,16 @@ public class DropItemEvent implements Listener {
 		if (!GameManager.getInstance().isPlayerActive(player)) return;
 		Game game = GameManager.getInstance().getGame(gameid);
 
+		// Dont allow waiting players to drop items (dupe exploit)
 		if (game.getMode() == GameMode.WAITING || game.getMode() == GameMode.STARTING) {
 			player.sendMessage(ChatColor.RED + "You cannot drop items before the game has started!");
 			event.setCancelled(true);
 		}
+
+		// Dont allow spectators to drop items (in case they somehow get items)
+		if (GameManager.getInstance().isSpectator(player)) {
+			event.setCancelled(true);
+		}
+		
 	}
 }
