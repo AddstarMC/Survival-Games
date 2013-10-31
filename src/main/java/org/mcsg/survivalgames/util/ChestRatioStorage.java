@@ -80,7 +80,7 @@ public class ChestRatioStorage {
 			itemMaterial = Material.valueOf((String)itemObject.get("Material"));
 			
 		} catch(Exception ex) {
-			SurvivalGames.$(Level.SEVERE, "Item in chest does not have required material parameter!");
+			SurvivalGames.$(Level.SEVERE, "Item \""+ (String)itemObject.get("Material") + "\" does not have required material parameter!");
 			return null;
 		}
 		
