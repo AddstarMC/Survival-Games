@@ -171,10 +171,8 @@ public class ChestRatioStorage {
 		
 		int loopSafty = 200 / chests.size();
 		while (noofItems != 0) {
-			
 			Chest chestToUse = null;
 			while (chestToUse == null) {
-				
 				if (loopSafty <= 0) {
 					chestToUse = chests.get(random.nextInt(chests.size()));
 					break;

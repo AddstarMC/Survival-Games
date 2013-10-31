@@ -61,7 +61,6 @@ public class ChestReplaceEvent implements Listener{
     						// Loop through all the item lists, pick some items and randomly scatter them
     						for (Inventory inv : invs) {
     							inv.setContents(new ItemStack[inv.getContents().length]);
-    							
     							List<ItemStack> chestContents = ChestRatioStorage.getInstance().getItems();
     							
     				            for (ItemStack i : chestContents) {
@@ -73,11 +72,10 @@ public class ChestReplaceEvent implements Listener{
     				                inv.setItem(l, i); 		// Add selected item to this chest
     				            }
     						}
+        					// Record this new chest in the game data
+        					openedChest.add(e.getClickedBlock());
+        					GameManager.openedChest.put(gameid, openedChest);
     					}
-    					
-    					// 
-    					openedChest.add(e.getClickedBlock());
-    					GameManager.openedChest.put(gameid, openedChest);
     				} else {
     					e.setCancelled(true);
     					return;

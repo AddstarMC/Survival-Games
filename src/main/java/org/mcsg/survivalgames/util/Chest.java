@@ -27,7 +27,8 @@ public class Chest {
 	}
 
 	public boolean useThisChest(Random random) {
-		return random.nextInt((int)((1.0 + m_chance) / m_chance)) == 0;
+		int x = (int) ((1.0 + m_chance) / m_chance);		// Convert the float to a chance integer  
+		return random.nextInt(x) == 0;
 	}
 
 }
