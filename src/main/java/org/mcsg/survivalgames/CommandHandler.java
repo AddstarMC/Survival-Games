@@ -112,10 +112,10 @@ public class CommandHandler implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd1, String commandLabel, String[] args) {
 		PluginDescriptionFile pdfFile = plugin.getDescription();
-		if (!(sender instanceof Player)) {
+		/*if (!(sender instanceof Player)) {
 			msgmgr.logMessage(PrefixType.WARNING, "Only in-game players can use SurvivalGames commands! ");
 			return true;
-		}
+		}*/
 
 		Player player = (Player) sender;
 
