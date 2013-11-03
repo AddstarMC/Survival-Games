@@ -166,9 +166,9 @@ public class GameManager {
 	public void selectKit(Player p, int i) {
 		p.getInventory().clear();
 		ArrayList<Kit>kits = getKits(p);
-		if(i <= kits.size()){
-			Kit k = getKits(p).get(i);
-			if(k!=null){
+		if (i < kits.size()) {
+			Kit k = kits.get(i);
+			if (k != null) {
 				p.getInventory().setContents(k.getContents().toArray(new ItemStack[0]));
 			}
 		}
