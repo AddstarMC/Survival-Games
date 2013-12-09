@@ -190,8 +190,9 @@ public class QueueManager {
 				int rb = 0;
 				long t1 = new Date().getTime();
 				int pt = SettingsManager.getInstance().getConfig().getInt("rollback.per-tick", 100);
+
+				SurvivalGames.debug("Rollback: " + a + " changes remaining...");
 				while(a>=0 && (rb < pt|| shutdown)){
-					SurvivalGames.debug("Reseting "+a);
 					BlockData result = data.get(a);
 					if(result.getGameId() == game.getID()){
 
