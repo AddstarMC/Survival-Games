@@ -147,19 +147,19 @@ public class GameScoreboard {
 	public void removePlayer(Player player) {
 		
 		// remove the player from the team
-		this.waitingTeam.removePlayer(player);
-		this.livingTeam.removePlayer(player);
-		this.deadTeam.removePlayer(player);
-		this.scoreboard.resetScores(player);
+		waitingTeam.removePlayer(player);
+		livingTeam.removePlayer(player);
+		deadTeam.removePlayer(player);
+		scoreboard.resetScores(player);
 		
 		// Restore the players scoreboard
-		Scoreboard original = this.originalScoreboard.get(player.getName());
+		Scoreboard original = originalScoreboard.get(player.getName());
 		if (original != null) {
 			player.setScoreboard(original);
-			this.originalScoreboard.remove(player.getName());
+			originalScoreboard.remove(player.getName());
 		}
 
-		this.activePlayers.remove(player.getName());
+		activePlayers.remove(player.getName());
 				
 		updateSidebarTitle();
 	}
@@ -168,11 +168,11 @@ public class GameScoreboard {
 	 * Update the title of the sidebar objective
 	 */
 	private void updateSidebarTitle() {
-		final int noofPlayers = this.activePlayers.size();
+		final int noofPlayers = activePlayers.size();
 		final int maxPlayers = SettingsManager.getInstance().getSpawnCount(gameID);
 		final String gameName = GameManager.getInstance().getGame(gameID).getName();
 		
-		this.sidebarObjective.setDisplayName(ChatColor.GOLD + gameName + " (" + noofPlayers + "/" + maxPlayers + ")");
+		sidebarObjective.setDisplayName(ChatColor.GOLD + gameName + " (" + noofPlayers + "/" + maxPlayers + ")");
 	}
 
 	/**
@@ -182,30 +182,39 @@ public class GameScoreboard {
 	 */
 	public void incScore(final Player player) {
 		// Set the players score to zero, then increase it
-		Score score = this.sidebarObjective.getScore(player);
+		Score score = sidebarObjective.getScore(player);
 		if (score != null) {
 			score.setScore(score.getScore() + 1);
 		}
 	}
 	
 	public void playerLiving(Player player) {
-		this.waitingTeam.removePlayer(player);
-		this.deadTeam.removePlayer(player);
-		this.livingTeam.addPlayer(player);
+		waitingTeam.removePlayer(player);
+		deadTeam.removePlayer(player);
+		livingTeam.addPlayer(player);
 	}
 
 	public void playerDead(Player player) {
-		this.waitingTeam.removePlayer(player);
-		this.livingTeam.removePlayer(player);
-		this.deadTeam.addPlayer(player);
-		
-		// Restore the players scoreboard
-		Scoreboard original = this.originalScoreboard.get(player.getName());
-		if (original != null) {
-			player.setScoreboard(original);
-			this.originalScoreboard.remove(player.getName());
+		// If we have too many players on scoreboard, it doesn't show
+		// So keep removing players until we are below the limit
+		int players = waitingTeam.getSize() + livingTeam.getSize() + deadTeam.getSize();
+		if (players > 15) {
+			// Remove the player completely from all teams
+			removePlayer(player);
+		} else {
+			// Move player to "dead" team
+			waitingTeam.removePlayer(player);
+			livingTeam.removePlayer(player);
+			deadTeam.addPlayer(player);
+			
+			// Restore the players scoreboard
+			Scoreboard original = originalScoreboard.get(player.getName());
+			if (original != null) {
+				player.setScoreboard(original);
+				originalScoreboard.remove(player.getName());
+			}
+			activePlayers.remove(player.getName());
+			updateSidebarTitle();
 		}
-		this.activePlayers.remove(player.getName());
-		updateSidebarTitle();
 	}
 }
