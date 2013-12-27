@@ -165,6 +165,8 @@ public class GameManager {
 	@SuppressWarnings("deprecation")
 	public void selectKit(Player p, int i) {
 		p.getInventory().clear();
+		p.getEquipment().setArmorContents(null);
+		p.updateInventory();
 		ArrayList<Kit>kits = getKits(p);
 		if ((i >= 0) && (i < kits.size())) {
 			Kit k = kits.get(i);
@@ -173,7 +175,6 @@ public class GameManager {
 			}
 		}
 		p.updateInventory();
-
 	}
 
 	public int getGameCount() {

@@ -197,6 +197,7 @@ public class Game {
 	 */
 
 
+	@SuppressWarnings("deprecation")
 	public boolean addPlayer(final Player p) {
 		if(SettingsManager.getInstance().getLobbySpawn() == null){
 			msgmgr.sendFMessage(PrefixType.WARNING, "error.nolobbyspawn", p);
@@ -243,6 +244,7 @@ public class Game {
 						p.setFoodLevel(20);
 						p.getInventory().clear();
 						p.getEquipment().setArmorContents(null);
+						p.updateInventory();
 						
 						p.setFlying(false);
 						p.setAllowFlight(false);
@@ -271,6 +273,7 @@ public class Game {
 
 								p.getInventory().clear();
 								p.getEquipment().setArmorContents(null);
+								p.updateInventory();
 								showMenu(p);
 								
 								for (PotionEffect effect : p.getActivePotionEffects()) {
@@ -848,6 +851,7 @@ public class Game {
 		}
 
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				p.setFlying(false);
 				p.setAllowFlight(false);
@@ -856,6 +860,7 @@ public class Game {
 
 				p.getInventory().clear();
 				p.getEquipment().setArmorContents(null);
+				p.updateInventory();
 				showMenu(p);
 				
 				for (PotionEffect effect : p.getActivePotionEffects()) {
