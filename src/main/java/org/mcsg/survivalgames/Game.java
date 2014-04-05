@@ -558,7 +558,8 @@ public class Game {
 		HookManager.getInstance().runHook("PLAYER_REMOVED", "player-"+p.getName());
 		LobbyManager.getInstance().updateWall(gameID);
 
-		if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
+		if (activePlayers.size() < 2 && mode == GameMode.INGAME) {
+			mode = GameMode.FINISHING;
 			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run(){
 					playerWin(p);
@@ -658,13 +659,15 @@ public class Game {
 					config.getInt("endgame.fire-lighting.interval") * 20));
 		}
 
-		if (activePlayers.size() < 2 && mode != GameMode.WAITING) {
-			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable(){
+		if (activePlayers.size() < 2 && mode == GameMode.INGAME) {
+			mode = GameMode.FINISHING;
+			LobbyManager.getInstance().updateWall(gameID);
+			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run(){
 					playerWin(p);
 					endGame();
 				}
-			}, 5L));
+			}, 10L));
 		}
 		LobbyManager.getInstance().updateWall(gameID);
 	}
