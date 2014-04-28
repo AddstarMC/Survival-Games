@@ -1047,6 +1047,7 @@ public class Game {
 							int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
 							double dist = p.getLocation().distance(dmspawn);
 							if ((dist > dmradius) || (ydiff > 4)) {
+								SurvivalGames.$("Player: " + p.getName() + " dist=" + dist + ", ydiff=" + ydiff);
 								p.sendMessage(ChatColor.RED + "Return to the death match area!");
 								p.getLocation().getWorld().strikeLightningEffect(p.getLocation());
 								p.damage(5);
