@@ -48,6 +48,9 @@ public class Game {
 	private Arena arena;
 	private int gameID;
 	private String name;
+	private Location dmspawn;
+	private Location winloc;
+	private int dmradius;
 	private int gcount = 0;
 	private FileConfiguration config;
 	private FileConfiguration system;
@@ -104,6 +107,21 @@ public class Game {
 		
 		arena = new Arena(min, max);
 
+		int dmx = system.getInt("sg-system.arenas." + gameID + ".deathmatch.x", 0);
+		int dmy = system.getInt("sg-system.arenas." + gameID + ".deathmatch.y", 65);
+		int dmz = system.getInt("sg-system.arenas." + gameID + ".deathmatch.z", 0);
+		dmspawn = new Location(SettingsManager.getGameWorld(gameID), dmx, dmy, dmz);
+		
+		dmradius = system.getInt("sg-system.arenas." + gameID + ".deathmatch.radius", 26);
+
+		String winw = system.getString("sg-system.arenas." + gameID + ".win.world", "games");
+		int winx = system.getInt("sg-system.arenas." + gameID + ".win.x", 0);
+		int winy = system.getInt("sg-system.arenas." + gameID + ".win.y", 65);
+		int winz = system.getInt("sg-system.arenas." + gameID + ".win.z", 0);
+		float winyaw = system.getInt("sg-system.arenas." + gameID + ".win.yaw", 0);
+		float winp = system.getInt("sg-system.arenas." + gameID + ".win.pitch", 0);
+		winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
+		
 		loadspawns();
 
 		hookvars.put("arena", gameID + "");
@@ -546,11 +564,20 @@ public class Game {
 		if (teleport) {
 			p.teleport(SettingsManager.getInstance().getLobbySpawn());
 		}
-		sm.removePlayer(p, gameID);
+		// Remove any potion/fire effects
+        for (PotionEffect effect : p.getActivePotionEffects()) {
+            p.removePotionEffect(effect.getType());
+        }
+        if (p.getFireTicks() > 0) {
+            	p.setFireTicks(0);
+        }
+
+        sm.removePlayer(p, gameID);
 		scoreBoard.removePlayer(p);
 		activePlayers.remove(p);
 		inactivePlayers.remove(p);
 		voted.remove(p);
+		
 		for (Object in : spawns.keySet().toArray()) {
 			if (spawns.get(in) == p) spawns.remove(in);
 		}
@@ -687,7 +714,7 @@ public class Game {
 		if (GameMode.DISABLED == mode) return;
 		Player win = activePlayers.get(0);
 		// clearInv(p);
-		win.teleport(SettingsManager.getInstance().getLobbySpawn());
+		win.teleport(winloc);
 		//restoreInv(win);
 		scoreBoard.removePlayer(p);
 		msgmgr.broadcastFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName());
@@ -1010,9 +1037,22 @@ public class Game {
 			}
 			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run() {
-					for(Player p: activePlayers) {
-						p.getLocation().getWorld().strikeLightning(p.getLocation());
-						p.damage(4);
+					// Game could end (or players die) while inside this loop
+					// This must be carefully handled so we dont CME or damage a player that has already left the game
+					ArrayList <Player> players = new ArrayList<Player>(activePlayers);
+					for(Player p: players) {
+						// Verify they are still "alive" and still in the game
+						if ((mode == GameMode.INGAME) && (p != null) && (!p.isDead()) && (activePlayers.contains(p))) {
+							// Player out of arena or too high (towering to avoid players)
+							int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
+							double dist = p.getLocation().distance(dmspawn);
+							if ((dist > dmradius) || (ydiff > 4)) {
+								p.sendMessage(ChatColor.RED + "Return to the death match area!");
+								p.getLocation().getWorld().strikeLightningEffect(p.getLocation());
+								p.damage(5);
+								p.setFireTicks(60);
+							}
+						}
 					}
 				}
 			}, 10 * 20L, config.getInt("deathmatch.killtime") * 20));

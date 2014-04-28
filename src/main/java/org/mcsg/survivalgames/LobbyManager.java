@@ -3,6 +3,7 @@ package org.mcsg.survivalgames;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -47,13 +48,14 @@ public class LobbyManager {
 	}
 	
 	public void gameEnd(int gameID, Player winner) {
-		
-		List<LobbySign> joinSigns = signManager.getSignsByType(gameID, LobbySignType.Join);
-		for (LobbySign sign : joinSigns) {
-			Location location = new Location(sign.getLocation().getWorld(), sign.getLocation().getX(), sign.getLocation().getY() + 2, sign.getLocation().getZ());				
-			FireworkFactory.LaunchFirework(location, FireworkEffect.Type.BALL_LARGE, 1, Color.GREEN);
-		}
-		
+		final Location loc = winner.getLocation();
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+			public void run() {
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.BLUE);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, Color.YELLOW);
+			}
+		}, 5);
+				
 		List<LobbySign> winnerSign = signManager.getSignsByType(gameID, LobbySignType.Winner);
 		for (LobbySign sign : winnerSign) {
 			
