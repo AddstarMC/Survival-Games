@@ -1046,7 +1046,7 @@ public class Game {
 						if ((mode == GameMode.INGAME) && (p != null) && (!p.isDead()) && (activePlayers.contains(p))) {
 							// Player out of arena or too high (towering to avoid players)
 							int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
-							double dist = dmspawn.distance(p.getLocation());
+							double dist = dmspawn.distanceSquared(p.getLocation());
 							if ((dist > dmradius) || (ydiff > 4)) {
 								SurvivalGames.$("Player: " + p.getName() + " dist=" + dist + ", ydiff=" + ydiff);
 								p.sendMessage(ChatColor.RED + "Return to the death match area!");
