@@ -1039,13 +1039,14 @@ public class Game {
 				public void run() {
 					// Game could end (or players die) while inside this loop
 					// This must be carefully handled so we dont CME or damage a player that has already left the game
+					SurvivalGames.$("dmspawn=" + dmspawn);
 					ArrayList <Player> players = new ArrayList<Player>(activePlayers);
 					for(Player p: players) {
 						// Verify they are still "alive" and still in the game
 						if ((mode == GameMode.INGAME) && (p != null) && (!p.isDead()) && (activePlayers.contains(p))) {
 							// Player out of arena or too high (towering to avoid players)
 							int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
-							double dist = p.getLocation().distance(dmspawn);
+							double dist = dmspawn.distance(p.getLocation());
 							if ((dist > dmradius) || (ydiff > 4)) {
 								SurvivalGames.$("Player: " + p.getName() + " dist=" + dist + ", ydiff=" + ydiff);
 								p.sendMessage(ChatColor.RED + "Return to the death match area!");
