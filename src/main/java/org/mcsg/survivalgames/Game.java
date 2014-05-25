@@ -3,6 +3,7 @@ package org.mcsg.survivalgames;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -1019,22 +1020,25 @@ public class Game {
 			}
 			
 			// Death match time!!
-			if (remaining >= 1) return;
+			if (remaining > 0) return;
+			debug("DeathMatch mode starting...");
 			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
 			if (!tasks.remove((Integer) dmTaskID)) {
 				SurvivalGames.$("WARNING: DeathMatch task NOT removed!");
 			}
-			
-			for(Player p: activePlayers){
-				for(int a = 0; a < spawns.size(); a++){
-					if(spawns.get(a) == p){
-						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
-						p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");
-						break;
-					}
+
+			// Teleport everyone to their original spawn point
+			for(Map.Entry<Integer, Player> entry : spawns.entrySet()) {
+				Player p = entry.getValue();
+				Integer a = entry.getKey();
+				if (activePlayers.contains(p) && p.isOnline() && !p.isDead()) {
+					debug("Teleporting " + p.getName() + " (spawn " + a + ")");
+					p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
+					p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");
 				}
 			}
+
 			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run() {
 					// Game could end (or players die) while inside this loop
