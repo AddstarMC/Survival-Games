@@ -1021,7 +1021,7 @@ public class Game {
 			
 			// Death match time!!
 			if (remaining > 0) return;
-			debug("DeathMatch mode starting...");
+			debug("DeathMatch mode starting!");
 			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
 			if (!tasks.remove((Integer) dmTaskID)) {
@@ -1034,7 +1034,7 @@ public class Game {
 				Integer a = entry.getKey();
 				if (activePlayers.contains(p) && p.isOnline() && !p.isDead()) {
 					debug("Teleporting " + p.getName() + " (spawn " + a + ")");
-					p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a));
+					p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a).add(0, 1.5, 0));
 					p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");
 				}
 			}
