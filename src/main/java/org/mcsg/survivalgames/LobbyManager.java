@@ -54,7 +54,7 @@ public class LobbyManager {
 				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.BLUE);
 				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, Color.YELLOW);
 			}
-		}, 5);
+		}, 15);
 				
 		List<LobbySign> winnerSign = signManager.getSignsByType(gameID, LobbySignType.Winner);
 		for (LobbySign sign : winnerSign) {
