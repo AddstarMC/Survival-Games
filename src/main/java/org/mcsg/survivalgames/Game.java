@@ -182,7 +182,7 @@ public class Game {
 	public void enable() {
 		mode = GameMode.WAITING;
 		if(disabled){
-			MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gameenabled", "arena-"+gameID, "arenaname"+name);
+			MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gameenabled", "arena-"+gameID, "arenaname-"+name);
 		}
 		disabled = false;
 		int b = (SettingsManager.getInstance().getSpawnCount(gameID) > queue.size()) ? queue.size() : SettingsManager.getInstance().getSpawnCount(gameID);
@@ -197,7 +197,7 @@ public class Game {
 
 		LobbyManager.getInstance().updateWall(gameID);
 
-		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamewaiting", "arena-"+gameID, "arenaname"+name);
+		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamewaiting", "arena-"+gameID, "arenaname-"+name);
 		
 		scoreBoard.reset();
 
@@ -498,7 +498,7 @@ public class Game {
 
 		mode = GameMode.INGAME;
 		LobbyManager.getInstance().updateWall(gameID);
-		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamestarted", "arena-"+gameID, "arenaname"+name);
+		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamestarted", "arena-"+gameID, "arenaname-"+name);
 
 	}
 	/*
@@ -519,7 +519,7 @@ public class Game {
 	int tid = 0;
 	public void countdown(int time) {
 		//Bukkit.broadcastMessage(""+time);
-		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamestarting", "arena-"+gameID, "t-"+time, "arenaname"+name);
+		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamestarting", "arena-"+gameID, "t-"+time, "arenaname-"+name);
 		countdownRunning = true;
 		count = time;
 		Bukkit.getScheduler().cancelTask(tid);
@@ -718,7 +718,7 @@ public class Game {
 		win.teleport(winloc);
 		//restoreInv(win);
 		scoreBoard.removePlayer(p);
-		msgmgr.broadcastFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName(), "arenaname"+name);
+		msgmgr.broadcastFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName(), "arenaname-"+name);
 
 		mode = GameMode.FINISHING;
 		LobbyManager.getInstance().updateWall(gameID);
@@ -739,7 +739,7 @@ public class Game {
 
 		loadspawns();
 		LobbyManager.getInstance().updateWall(gameID);
-		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gameend", "arena-"+gameID, "arenaname"+name);
+		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gameend", "arena-"+gameID, "arenaname-"+name);
 
 		// Remove all entities in the world
 		for (Entity entity : this.arena.getMax().getWorld().getEntities()) {
@@ -792,7 +792,7 @@ public class Game {
 
 		endGame();
 		LobbyManager.getInstance().updateWall(gameID);
-		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamedisabled", "arena-"+gameID, "arenaname"+name);
+		MessageManager.getInstance().broadcastFMessage(PrefixType.INFO, "broadcast.gamedisabled", "arena-"+gameID, "arenaname-"+name);
 
 	}
 	/*

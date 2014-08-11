@@ -104,11 +104,11 @@ public class StatsManager {
 
         int kslevel = s.addKill(killed);
         if(kslevel > 3){
-        	msgmgr.broadcastFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), "player-"+p.getName(), "arenaname"+name);
+        	msgmgr.broadcastFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), "player-"+p.getName(), "arenaname-"+name);
         }
         else if(kslevel > 0){
             for (Player pl : GameManager.getInstance().getGame(arenaid).getAllPlayers()) {
-            	msgmgr.sendFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), pl, "player-"+p.getName(), "arenaname"+name);
+            	msgmgr.sendFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), pl, "player-"+p.getName(), "arenaname-"+name);
             }
         }
     }
