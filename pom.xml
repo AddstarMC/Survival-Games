@@ -5,52 +5,46 @@
 	<version>0.6.0-b${env.BUILD_NUMBER}</version>
 	<name>SurvivalGames</name>
 	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<upload.dbo.category>server-mods</upload.dbo.category>
-		<upload.dbo.slug>survival-games</upload.dbo.slug>
-	</properties>
-  
 	<repositories>
+		<!-- Repository for Bukkit -->
 		<repository>
 			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
-		</repository> 
-		<repository>
-			<id>drtshock-repo</id>
-			<url>http://ci.drtshock.com/plugin/repository/everything</url>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
+
+		<!-- WorldEdit, WorldGuard, etc -->
 		<repository>
-			<id>sk89q-repo</id>
+			<id>sk89q-mvn2</id>
 			<url>http://maven.sk89q.com/repo</url>
 		</repository>
+
+		<!-- For Vault -->
 		<repository>
-			<id>addstar-repo</id>
-			<url>http://maven.addstar.com.au/artifactory/ext-release-local</url>
+			<id>theyeticave</id>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
 		</repository>
 	</repositories>
 	
 	<dependencies>
+		<!-- Bukkit -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.4-R0.1-SNAPSHOT</version>
+			<version>1.7.10-R0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- WorldEdit -->
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
-			<version>5.5.7-SNAPSHOT</version>
+			<version>5.6.2</version>
 		</dependency>
+
+		<!-- Used for Economy interop -->
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.2.26-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mcsg.double0negative</groupId>
-			<artifactId>tabapi</artifactId>
-			<version>B%200.1.15</version>
-			<scope>compile</scope>
+			<version>1.4.1</version>
 		</dependency>
 	</dependencies>
 	
