@@ -63,7 +63,7 @@ public class LobbySignWinnerSign extends LobbySign {
         }
         
         Sign sign = getSign();
-        sign.setLine(3, ChatColor.DARK_GREEN + m_lastWinnerName.substring(14));
+        sign.setLine(3, "" + ChatColor.DARK_GREEN + m_lastWinnerName.substring(0, 13));
         sign.update();
     }
 
@@ -72,7 +72,7 @@ public class LobbySignWinnerSign extends LobbySign {
         lines[0] = "The last winner on";
         lines[1] = GameManager.getInstance().getGame(gameId).getName();
         lines[2] = "was";
-        lines[3] = ChatColor.DARK_GREEN + m_lastWinnerName.substring(14);
+        lines[3] = "" + ChatColor.DARK_GREEN + m_lastWinnerName.substring(0, 13);
         return lines;
     }
     
