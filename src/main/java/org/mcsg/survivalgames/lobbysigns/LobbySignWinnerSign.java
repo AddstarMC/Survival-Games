@@ -2,6 +2,7 @@ package org.mcsg.survivalgames.lobbysigns;
 
 import java.io.IOException;
 
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -71,7 +72,7 @@ public class LobbySignWinnerSign extends LobbySign {
         lines[0] = "The last winner on";
         lines[1] = GameManager.getInstance().getGame(gameId).getName();
         lines[2] = "was";
-        lines[3] = m_lastWinnerName;
+        lines[3] = ChatColor.DARK_GREEN + m_lastWinnerName.substring(14);
         return lines;
     }
     

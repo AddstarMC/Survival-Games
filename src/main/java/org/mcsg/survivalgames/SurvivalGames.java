@@ -35,10 +35,6 @@ public class SurvivalGames extends JavaPlugin {
 	
 	private LobbySignManager lobbySignManager;
 	
-	public static List < String > auth = Arrays.asList(new String[] {
-		"n3wton", "TheFish97"
-	});
-
 	SurvivalGames p = this;
 	public void onDisable() {
 		disabling = false;

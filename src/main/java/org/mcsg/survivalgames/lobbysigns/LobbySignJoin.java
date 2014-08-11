@@ -30,7 +30,7 @@ public class LobbySignJoin extends LobbySign {
 	@Override
 	public String[] setSignContent(String[] lines) {
 		lines[1] = ChatColor.BOLD + "Join Arena";
-		lines[2] = getGame().getName();
+		lines[2] = ChatColor.DARK_BLUE + getGame().getName();
 		return lines;
 	}
 

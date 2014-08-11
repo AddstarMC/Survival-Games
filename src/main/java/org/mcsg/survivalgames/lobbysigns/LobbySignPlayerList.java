@@ -53,7 +53,7 @@ public class LobbySignPlayerList extends LobbySign {
 			}
 			
 			Player player = players.get(playerIndex);
-			String prefix = (SurvivalGames.auth.contains(player.getName()) ? ChatColor.DARK_GREEN : "") + (getGame().isPlayerinactive(player) ? "" + ChatColor.STRIKETHROUGH : "");
+			String prefix = getGame().isPlayerinactive(player) ? "" + ChatColor.DARK_RED + ChatColor.STRIKETHROUGH : "" + ChatColor.DARK_AQUA;
 			sign.setLine(index, prefix + player.getName());
 			index++;
 		}
