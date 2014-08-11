@@ -63,7 +63,7 @@ public class LobbySignWinnerSign extends LobbySign {
         }
         
         Sign sign = getSign();
-        sign.setLine(3, m_lastWinnerName);
+        sign.setLine(3, ChatColor.DARK_GREEN + m_lastWinnerName.substring(14));
         sign.update();
     }
 
