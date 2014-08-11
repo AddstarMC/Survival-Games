@@ -99,16 +99,16 @@ public class StatsManager {
         arenas.get(arenaid).get(p).win(time);
     }
 
-    public void addKill(Player p, Player killed, int arenaid){
+    public void addKill(Player p, Player killed, int arenaid, String name){
         PlayerStatsSession s = arenas.get(arenaid).get(p);
 
         int kslevel = s.addKill(killed);
         if(kslevel > 3){
-        	msgmgr.broadcastFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), "player-"+p.getName());
+        	msgmgr.broadcastFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), "player-"+p.getName(), "arenaname"+name);
         }
         else if(kslevel > 0){
             for (Player pl : GameManager.getInstance().getGame(arenaid).getAllPlayers()) {
-            	msgmgr.sendFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), pl, "player-"+p.getName());
+            	msgmgr.sendFMessage(PrefixType.INFO, "killstreak.level"+((kslevel>5)?5:kslevel), pl, "player-"+p.getName(), "arenaname"+name);
             }
         }
     }

@@ -643,7 +643,7 @@ public class Game {
 					msgFall(PrefixType.INFO, "death."+enttype, "player-"+p.getName(), "killer-"+killername, "item-"+itemname);
 							
 					if (killer != null && p != null) {
-						sm.addKill(killer, p, gameID);
+						sm.addKill(killer, p, gameID, name);
 						scoreBoard.incScore(killer);
 					}
 					pk = new PlayerKilledEvent(p, this, killer, cause);
