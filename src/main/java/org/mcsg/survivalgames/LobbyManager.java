@@ -51,8 +51,13 @@ public class LobbyManager {
 		final Location loc = winner.getLocation();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 			public void run() {
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.BLUE);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL, 1, Color.RED);
 				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, Color.YELLOW);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.BLUE);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.FUCHSIA);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 2, Color.ORANGE);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 2, Color.SILVER);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 2, Color.RED);
 			}
 		}, 15);
 				
