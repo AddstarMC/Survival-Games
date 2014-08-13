@@ -1,5 +1,6 @@
 package org.mcsg.survivalgames.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.Game;
@@ -14,7 +15,13 @@ import org.mcsg.survivalgames.MessageManager.PrefixType;
 public class DelArena implements SubCommand{
 
     @Override
-    public boolean onCommand(Player player, String[] args) {
+    public boolean onCommand(CommandSender sender, String[] args) {
+    	// Only players can use this command
+    	if (!(sender instanceof Player)) {
+            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
+            return true;
+    	}
+    	Player player = (Player) sender;
         if (!player.hasPermission(permission()) && !player.isOp()){
             MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.nopermission", player);
             return true;
@@ -48,7 +55,7 @@ public class DelArena implements SubCommand{
     }
 
     @Override
-    public String help (Player p) {
+    public String help (CommandSender s) {
         return "/sg delarena <id> - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.delarena", "Delete an arena");
     }
 

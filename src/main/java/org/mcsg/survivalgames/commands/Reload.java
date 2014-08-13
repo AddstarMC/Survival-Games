@@ -1,6 +1,7 @@
 package org.mcsg.survivalgames.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game;
@@ -13,13 +14,19 @@ import org.mcsg.survivalgames.SettingsManager;
 public class Reload implements SubCommand{
 
 	@Override
-	public boolean onCommand(final Player player, String[] args) {
-		if(player.hasPermission(permission())){
+	public boolean onCommand(final CommandSender sender, String[] args) {
+		if (sender instanceof Player) {
+	        if(!sender.hasPermission(permission()) && !sender.isOp()){
+	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", sender);
+	            return true;
+	        }
+    	}
+		if(sender.hasPermission(permission())){
 			if(args.length != 1){
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Valid reload types <Settings | Games | All>", player);
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Settings will reload the settings configs and attempt to reapply them", player);
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Games will reload all games currently running", player);
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "All will attempt to reload the entire plugin", player);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Valid reload types <Settings | Games | All>", sender);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Settings will reload the settings configs and attempt to reapply them", sender);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Games will reload all games currently running", sender);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "All will attempt to reload the entire plugin", sender);
 
 				return true;
 
@@ -33,7 +40,7 @@ public class Reload implements SubCommand{
 				for(Game g: GameManager.getInstance().getGames()){
 					g.reloadConfig(); 
 				}
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Settings Reloaded", player);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Settings Reloaded", sender);
 			}
 			else if(args[0].equalsIgnoreCase("games")){	
 				for(Game g:GameManager.getInstance().getGames()){
@@ -41,23 +48,23 @@ public class Reload implements SubCommand{
 					g.disable();
 					g.enable();
 				}
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Games Reloaded", player);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Games Reloaded", sender);
 			}
 			else if(args[0].equalsIgnoreCase("all")){	
 				final Plugin pinstance = GameManager.getInstance().getPlugin();
 				Bukkit.getPluginManager().disablePlugin(pinstance);
 				Bukkit.getPluginManager().enablePlugin(pinstance);
-				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Plugin reloaded", player);
+				MessageManager.getInstance().sendMessage(PrefixType.INFO, "Plugin reloaded", sender);
 			}
 
 		} else {
-			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.nopermission", player);
+			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.nopermission", sender);
 		}
 		return true;
 	}
 
 	@Override
-	public String help(Player p) {
+	public String help(CommandSender s) {
 		return "/sg reload <Settings | Games | All> - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.reload", "Settings will reload the settings configs and attempt to reapply them. Games will reload all games currently running and All reloads everything");
 	}
 

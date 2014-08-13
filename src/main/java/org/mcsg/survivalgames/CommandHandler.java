@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
@@ -112,48 +111,42 @@ public class CommandHandler implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd1, String commandLabel, String[] args) {
 		PluginDescriptionFile pdfFile = plugin.getDescription();
-		/*if (!(sender instanceof Player)) {
-			msgmgr.logMessage(PrefixType.WARNING, "Only in-game players can use SurvivalGames commands! ");
-			return true;
-		}*/
-
-		Player player = (Player) sender;
 
 		if (SurvivalGames.config_todate == false) {
-			msgmgr.sendMessage(PrefixType.WARNING, "The config file is out of date. Please tell an administrator to reset the config.", player);
+			msgmgr.sendMessage(PrefixType.WARNING, "The config file is out of date. Please tell an administrator to reset the config.", sender);
 			return true;
 		}
 
 		if (SurvivalGames.dbcon == false) {
-			msgmgr.sendMessage(PrefixType.WARNING, "Could not connect to server. Plugin disabled.", player);
+			msgmgr.sendMessage(PrefixType.WARNING, "Could not connect to server. Plugin disabled.", sender);
 			return true;
 		}
 
 		if (cmd1.getName().equalsIgnoreCase("survivalgames")) {
 			if (args == null || args.length < 1) {
-				msgmgr.sendMessage(PrefixType.INFO, "Version " + pdfFile.getVersion(), player);
-				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help <player | staff | admin> for command information", player);
+				msgmgr.sendMessage(PrefixType.INFO, "Version " + pdfFile.getVersion(), sender);
+				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help <player | staff | admin> for command information", sender);
 				return true;
 			}
 			if (args[0].equalsIgnoreCase("help")) {
 				if (args.length == 1) {
-					help(player, CommandGroup.Player);
+					help(sender, CommandGroup.Player);
 				}
 				else {
 					if (args[1].toLowerCase().startsWith("player")) {
-						help(player, CommandGroup.Player);
+						help(sender, CommandGroup.Player);
 						return true;
 					}
 					if (args[1].toLowerCase().startsWith("staff")) {
-						help(player, CommandGroup.Staff);
+						help(sender, CommandGroup.Staff);
 						return true;
 					}
 					if (args[1].toLowerCase().startsWith("admin")) {
-						help(player, CommandGroup.Admin);
+						help(sender, CommandGroup.Admin);
 						return true;
 					}
 					else {
-						msgmgr.sendMessage(PrefixType.INFO, "Type /sg help <player | staff | admin> for command information", player);
+						msgmgr.sendMessage(PrefixType.INFO, "Type /sg help <player | staff | admin> for command information", sender);
 					}
 				}
 				return true;
@@ -164,38 +157,37 @@ public class CommandHandler implements CommandExecutor {
 			l.remove(0);
 			args = (String[]) l.toArray(new String[0]);
 			if (!commands.containsKey(sub)) {
-				msgmgr.sendMessage(PrefixType.WARNING, "Command doesn't exist.", player);
-				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help for command information", player);
+				msgmgr.sendMessage(PrefixType.WARNING, "Command doesn't exist.", sender);
+				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help for command information", sender);
 				return true;
 			}
 			try {
-				commands.get(sub).onCommand(player, args);
+				commands.get(sub).onCommand(sender, args);
 			} catch (Exception e) {
 				e.printStackTrace();
-				msgmgr.sendFMessage(PrefixType.ERROR, "error.command", player, "command-["+sub+"] "+Arrays.toString(args));
-				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help for command information", player);
+				msgmgr.sendFMessage(PrefixType.ERROR, "error.command", sender, "command-["+sub+"] "+Arrays.toString(args));
+				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help for command information", sender);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public void help (Player p, CommandGroup group) {
+	public void help (CommandSender s, CommandGroup group) {
 		if (group == CommandGroup.Player) {
-			p.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Player Commands" + ChatColor.BLUE + " ------------");
+			s.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Player Commands" + ChatColor.BLUE + " ------------");
 		}
 		if (group == CommandGroup.Staff) {
-			p.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Staff Commands" + ChatColor.BLUE + " ------------");
+			s.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Staff Commands" + ChatColor.BLUE + " ------------");
 		}
 		if (group == CommandGroup.Admin) {
-			p.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Admin Commands" + ChatColor.BLUE + " ------------");
+			s.sendMessage(ChatColor.BLUE + "------------ " + msgmgr.pre + ChatColor.DARK_AQUA + " Admin Commands" + ChatColor.BLUE + " ------------");
 		}
 
 		for (String command : commands.keySet()) {
 			try{
 				if (helpinfo.get(command) == group) {
-
-					msgmgr.sendMessage(PrefixType.INFO, commands.get(command).help(p), p);
+					msgmgr.sendMessage(PrefixType.INFO, commands.get(command).help(s), s);
 				}
 			}catch(Exception e){}
 		}

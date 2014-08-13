@@ -1,5 +1,6 @@
 package org.mcsg.survivalgames.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.MessageManager;
@@ -7,7 +8,13 @@ import org.mcsg.survivalgames.SettingsManager;
 import org.mcsg.survivalgames.Game.GameMode;
 
 public class Kit implements SubCommand {
-	   public boolean onCommand(Player player, String[] args) {
+	   public boolean onCommand(CommandSender sender, String[] args) {
+	    	// Only players can use this command
+	    	if (!(sender instanceof Player)) {
+	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
+	            return true;
+	    	}
+	    	Player player = (Player) sender;
 	        if (!player.hasPermission(permission()) && !player.isOp()) {
 	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", player);
 	            return false;
@@ -28,7 +35,7 @@ public class Kit implements SubCommand {
 	    }
 	    
 	    @Override
-	    public String help(Player p) {
+	    public String help(CommandSender s) {
 	        return "/sg kit - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.kit", "Select a kit for the game");
 	    }
 

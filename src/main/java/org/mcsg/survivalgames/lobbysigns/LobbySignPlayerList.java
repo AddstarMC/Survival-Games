@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.mcsg.survivalgames.SurvivalGames;
 
 public class LobbySignPlayerList extends LobbySign {
 	

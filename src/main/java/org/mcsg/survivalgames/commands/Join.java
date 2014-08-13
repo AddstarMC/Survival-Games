@@ -1,5 +1,6 @@
 package org.mcsg.survivalgames.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.MessageManager;
@@ -8,7 +9,13 @@ import org.mcsg.survivalgames.MessageManager.PrefixType;
 
 public class Join implements SubCommand{
 
-	public boolean onCommand(Player player, String[] args) {
+	public boolean onCommand(CommandSender sender, String[] args) {
+    	// Only players can use this command
+    	if (!(sender instanceof Player)) {
+            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
+            return true;
+    	}
+    	Player player = (Player) sender;
 		if(args.length >= 1){
 			if(player.hasPermission(permission())){
 				try {
@@ -54,7 +61,7 @@ public class Join implements SubCommand{
 	}
 
 	@Override
-	public String help(Player p) {
+	public String help(CommandSender s) {
 		return "/sg join - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.join", "Join the lobby");
 	}
 

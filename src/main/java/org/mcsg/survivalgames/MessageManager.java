@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.util.MessageUtil;
@@ -48,14 +49,18 @@ public class MessageManager {
 	 * @param vars
 	 */
 	public void sendFMessage(PrefixType type, String input, Player player, String ... args) {
+		CommandSender sender = (CommandSender) player;
+		sendFMessage(type, input, sender, args);
+	}
+	
+	public void sendFMessage(PrefixType type, String input, CommandSender sender, String ... args) {
 		String msg = SettingsManager.getInstance().getMessageConfig().getString("messages."+input);
 		boolean enabled = SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true);
-		if(msg == null){player.sendMessage(ChatColor.RED+"Failed to load message for messages."+input); return;}
+		if(msg == null){sender.sendMessage(ChatColor.RED+"Failed to load message for messages."+input); return;}
 		if(!enabled)return;
 		if(args != null && args.length != 0){msg = MessageUtil.replaceVars(msg, args);}
 		msg = MessageUtil.replaceColors(msg);
-		player.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
-
+		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
 	}
 	
 	/**
@@ -68,8 +73,8 @@ public class MessageManager {
 	 * @param p
 	 */
 	
-	public void sendMessage(PrefixType type, String msg, Player player){
-		player.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
+	public void sendMessage(PrefixType type, String msg, CommandSender sender){
+		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
 	}
 	
 	public void logMessage(PrefixType type, String msg) {

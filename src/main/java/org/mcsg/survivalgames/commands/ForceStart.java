@@ -1,5 +1,7 @@
 package org.mcsg.survivalgames.commands;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
@@ -11,10 +13,18 @@ public class ForceStart implements SubCommand {
 
 	MessageManager msgmgr = MessageManager.getInstance();
 
-	public boolean onCommand(Player player, String[] args) {
+	public boolean onCommand(CommandSender sender, String[] args) {
+		Player player = null;
+		if (sender instanceof Player) {
+	        if(!sender.hasPermission(permission()) && !sender.isOp()){
+	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", sender);
+	            return true;
+	        }
+	        player = (Player) sender;
+    	}
 
-		if (!player.hasPermission(permission()) && !player.isOp()) {
-			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.nopermission", player);
+		if (!sender.hasPermission(permission()) && !sender.isOp()) {
+			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.nopermission", sender);
 			return true;
 		}
 		int game = -1;
@@ -24,24 +34,28 @@ public class ForceStart implements SubCommand {
 		}
 		if(args.length >= 1){
 			game = Integer.parseInt(args[0]);
-
+		} else {
+			if (player == null) {
+	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
+	            return true;
+			} else {
+				game  = GameManager.getInstance().getPlayerGameId(player);
+			}
 		}
-		else
-			game  = GameManager.getInstance().getPlayerGameId(player);
 		
 		if(game == -1){
-			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.notingame", player);
+			MessageManager.getInstance().sendMessage(PrefixType.ERROR, "No valid game found.", sender);
 			return true;
 		}
 		
 		Game g = GameManager.getInstance().getGame(game);
 		if(g.getActivePlayers() < 2){
-			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.notenoughtplayers", player);
+			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.notenoughtplayers", sender);
 			return true;
 		}
 
-		if (g.getMode() != Game.GameMode.WAITING && !player.hasPermission("sg.arena.restart")) {
-			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.alreadyingame", player);
+		if (g.getMode() != Game.GameMode.WAITING && !sender.hasPermission("sg.arena.restart")) {
+			MessageManager.getInstance().sendFMessage(PrefixType.ERROR, "error.alreadyingame", sender);
 			return true;
 		}
 		for (Player pl : g.getAllPlayers()) {
@@ -49,13 +63,13 @@ public class ForceStart implements SubCommand {
 		}
 		g.countdown(seconds);
 
-		msgmgr.sendFMessage(PrefixType.INFO, "game.started", player, "arena-" + game);
+		msgmgr.sendFMessage(PrefixType.INFO, "game.started", sender, "arena-" + game);
 
 		return true;
 	}
 
 	@Override
-	public String help(Player p) {
+	public String help(CommandSender s) {
 		return "/sg forcestart [id] [time] - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.forcestart", "Forces the game to start");
 	}
 

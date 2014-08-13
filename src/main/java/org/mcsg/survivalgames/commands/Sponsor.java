@@ -1,8 +1,7 @@
 package org.mcsg.survivalgames.commands;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.mcsg.survivalgames.MessageManager;
-
 
 
 public class Sponsor implements SubCommand {
@@ -10,7 +9,7 @@ public class Sponsor implements SubCommand {
 	MessageManager msgmgr = MessageManager.getInstance();
 	
 	@Override
-	public boolean onCommand(Player player, String[] args) {
+	public boolean onCommand(CommandSender sender, String[] args) {
 	/*	if (!player.hasPermission("sg.player.sponsor") && !player.isOp()) {
             player.sendMessage(ChatColor.RED + "No Permission");
             return true;
@@ -70,7 +69,7 @@ public class Sponsor implements SubCommand {
 	}
 
 	@Override
-	public String help(Player p) {
+	public String help(CommandSender s) {
 		return "/sg sponsor <player> <itemid> <amount> - Sponsor a player!";
 	}
 

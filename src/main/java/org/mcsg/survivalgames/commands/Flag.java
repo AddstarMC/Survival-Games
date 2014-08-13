@@ -2,6 +2,7 @@ package org.mcsg.survivalgames.commands;
 
 import java.util.HashMap;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
@@ -11,22 +12,23 @@ import org.mcsg.survivalgames.SettingsManager;
 public class Flag implements SubCommand {
 
     @Override
-    public boolean onCommand(Player player, String[] args) {
-        
-        if (!player.hasPermission(permission())) {
-            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", player);
-            return true;
-        }
+    public boolean onCommand(CommandSender sender, String[] args) {
+    	if (sender instanceof Player) {
+	        if(!sender.hasPermission(permission()) && !sender.isOp()){
+	            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", sender);
+	            return true;
+	        }
+    	}
         
         if(args.length < 2){
-            player.sendMessage(help(player));
+            sender.sendMessage(help(sender));
             return true;
         }
         
         Game g = GameManager.getInstance().getGame(Integer.parseInt(args[0]));
         
         if(g == null){
-            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.gamedoesntexist", player, "arena-" + args[0]);
+            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.gamedoesntexist", sender, "arena-" + args[0]);
             return true;
         }
         
@@ -40,7 +42,7 @@ public class Flag implements SubCommand {
     }
 
     @Override
-    public String help(Player p) {
+    public String help(CommandSender s) {
         return "/sg flag <id> <flag> <value> - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.flag", "Modifies an arena-specific setting");
     }
 

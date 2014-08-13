@@ -3,6 +3,7 @@ package org.mcsg.survivalgames.commands;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
@@ -23,7 +24,13 @@ public class SetSpawn implements SubCommand{
         }
     }
     
-    public boolean onCommand(Player player, String[] args) {
+    public boolean onCommand(CommandSender sender, String[] args) {
+    	// Only players can use this command
+    	if (!(sender instanceof Player)) {
+            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
+            return true;
+    	}
+    	Player player = (Player) sender;
         if (!player.hasPermission(permission()) && !player.isOp()) {
             MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", player);
             return true;
@@ -68,7 +75,7 @@ public class SetSpawn implements SubCommand{
     }
     
     @Override
-    public String help(Player p) {
+    public String help(CommandSender s) {
         return "/sg setspawn next - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.setspawn", "Sets a spawn for the arena you are located in");
     }
 

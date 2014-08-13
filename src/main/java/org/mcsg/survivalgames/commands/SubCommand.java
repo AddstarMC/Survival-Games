@@ -1,12 +1,12 @@
 package org.mcsg.survivalgames.commands;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public interface SubCommand {
 
-    public boolean onCommand(Player player, String[] args);
+    public boolean onCommand(CommandSender sender, String[] args);
 
-    public String help(Player p);
+    public String help(CommandSender p);
     
     public String permission();
     
