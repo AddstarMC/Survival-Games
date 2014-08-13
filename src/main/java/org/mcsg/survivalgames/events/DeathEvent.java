@@ -1,5 +1,8 @@
 package org.mcsg.survivalgames.events;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +40,21 @@ public class DeathEvent implements Listener {
 		if (gameid == -1) return;
 		if (!gm.isPlayerActive(player)) return;
 
-		SurvivalGames.$("Handle death: " + player.getName());
+		SurvivalGames.$("Player died: " + player.getName() + " (" + event.getDeathMessage() + ")");
+
+		// Show alive/dead player lists, for troubleshooting/informational purposes
+		ArrayList <Player> alive = new ArrayList <Player>();
+		ArrayList <Player> dead = new ArrayList <Player>();
+		for (Player p : gm.getGame(gameid).getAllPlayers()) {
+			if (gm.isPlayerActive(p)) {
+				alive.add(p);
+			} else {
+				dead.add(p);
+			}
+		}
+		SurvivalGames.$("Players alive: " + StringUtils.join(alive.toArray()));
+		SurvivalGames.$("Players dead : " + StringUtils.join(dead.toArray()));
+		
 		event.setDeathMessage(null);
 		gm.getGame(gameid).playerDeath(event);
 	}
