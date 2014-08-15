@@ -606,7 +606,6 @@ public class Game {
 					// Only one player remaining, cancel timer and tell the player
 					mode = GameMode.WAITING;
 					Player l = activePlayers.get(0);
-					msgmgr.sendMessage(PrefixType.INFO, p.getDisplayName() + " left the arena. Countdown has been stopped.", l);
 					LobbyManager.getInstance().updateWall(gameID);
 				} else {
 					// No players left so just end the game
