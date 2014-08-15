@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 
 public class LogoutEvent implements Listener{
@@ -18,9 +17,6 @@ public class LogoutEvent implements Listener{
 
         if(id == -1) return;
 
-        if(GameManager.getInstance().getGameMode(id)==Game.GameMode.INGAME)
-            GameManager.getInstance().getGame(id).playerLeave(p, false);
-        else
-            GameManager.getInstance().getGame(id).playerLeave(p, false);
+        GameManager.getInstance().getGame(id).playerLeave(p, false);
     }
 }

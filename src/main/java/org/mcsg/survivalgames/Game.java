@@ -450,12 +450,11 @@ public class Game {
 			return;
 		}
 
-		if (activePlayers.size() <= 0) {
+		if (activePlayers.size() < 2) {
 			for (Player pl: activePlayers) {
 				msgmgr.sendMessage(PrefixType.WARNING, "Not enough players!", pl);
 				mode = GameMode.WAITING;
 				LobbyManager.getInstance().updateWall(gameID);
-
 			}
 			return;
 		} else {
@@ -528,6 +527,12 @@ public class Game {
 			mode  = GameMode.STARTING;
 			tid = Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin) GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run() {
+					// Fail safe to stop timer if game is ended or not in correct state
+					if (mode != GameMode.STARTING) {
+						Bukkit.getScheduler().cancelTask(tid);
+						return;
+					}
+						
 					if (count > 0) {
 						if (count % 10 == 0) {
 							msgFall(PrefixType.INFO, "game.countdown","t-"+count);
@@ -586,14 +591,33 @@ public class Game {
 		HookManager.getInstance().runHook("PLAYER_REMOVED", "player-"+p.getName());
 		LobbyManager.getInstance().updateWall(gameID);
 
-		if (activePlayers.size() < 2 && mode == GameMode.INGAME) {
-			mode = GameMode.FINISHING;
-			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-				public void run(){
-					playerWin(p);
-					endGame();
+		if (activePlayers.size() < 2) {
+			if (mode == GameMode.INGAME) {
+				mode = GameMode.FINISHING;
+				tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+					public void run(){
+						playerWin(p);
+						endGame();
+					}
+				}, 1L));
+			}
+			else if (mode == GameMode.STARTING) {
+				if (activePlayers.size() == 1) {
+					// Only one player remaining, cancel timer and tell the player
+					mode = GameMode.WAITING;
+					Player l = activePlayers.get(0);
+					msgmgr.sendMessage(PrefixType.INFO, p.getDisplayName() + " left the arena. Countdown has been stopped.", l);
+					LobbyManager.getInstance().updateWall(gameID);
+				} else {
+					// No players left so just end the game
+					mode = GameMode.FINISHING;
+					tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+						public void run(){
+							endGame();
+						}
+					}, 1L));
 				}
-			}, 1L));
+			}
 		}
 	}
 
