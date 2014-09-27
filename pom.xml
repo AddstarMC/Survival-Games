@@ -2,14 +2,28 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>SurvivalGames</artifactId>
-	<version>0.6.0-b${env.BUILD_NUMBER}</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<name>SurvivalGames</name>
+
+	<properties>
+		<version.build>0.6.0-b${env.BUILD_NUMBER}</version.build>
+	</properties>
 	
 	<repositories>
-		<!-- Repository for Bukkit -->
+		<!-- Addstar repo -->
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
+			<id>addstar-release</id>
+			<url>http://maven.addstar.com.au/artifactory/ext-release-local</url>
+		</repository>
+		<repository>
+			<id>addstar-snapshot</id>
+			<url>http://maven.addstar.com.au/artifactory/ext-snapshot-local</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 		</repository>
 
 		<!-- WorldEdit, WorldGuard, etc -->
