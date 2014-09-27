@@ -88,20 +88,28 @@ public class MessageManager {
 		}
 	}
 	
-	public void broadcastFMessage(PrefixType type, String input, String ...args ) {
+	public String getFMessage(PrefixType type, String input, String ...args ) {
 		String msg = SettingsManager.getInstance().getMessageConfig().getString("messages."+input);
-		boolean enabled = SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true);
-		if(msg == null){Bukkit.broadcastMessage(ChatColor.RED+"Failed to load message for messages."+input);return;}
-		if(!enabled)return;
-		if(args != null && args.length != 0){msg = MessageUtil.replaceVars(msg, args);}
-		msg = MessageUtil.replaceColors(msg);
-		Bukkit.broadcastMessage(prefix.get(PrefixType.MAIN)+ prefix.get(type)+ " "+msg);
+		if(msg == null){
+			Bukkit.broadcastMessage(ChatColor.RED+"Failed to load message for messages." + input);
+			return "";
+		}
+		if (args != null && args.length != 0) {
+			msg = MessageUtil.replaceVars(msg, args);
+		}
+		msg = prefix.get(PrefixType.MAIN) + prefix.get(type) + " " + MessageUtil.replaceColors(msg);
+		return msg;
+	}
+
+	public void broadcastFMessage(PrefixType type, String input, String ...args ) {
+		if (SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true)) {
+			String msg = getFMessage(type, input, args);
+			Bukkit.broadcastMessage(msg);
+		}
 	}
 	
 	public void broadcastMessage(PrefixType type, String msg, Player player){
 		Bukkit.broadcastMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ " "+msg );
 	}
-	
-
 
 }

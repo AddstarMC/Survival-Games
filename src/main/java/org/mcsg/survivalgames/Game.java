@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffect;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.api.PlayerJoinArenaEvent;
 import org.mcsg.survivalgames.api.PlayerKilledEvent;
+import org.mcsg.survivalgames.api.PlayerWinEvent;
 import org.mcsg.survivalgames.hooks.HookManager;
 import org.mcsg.survivalgames.logging.QueueManager;
 import org.mcsg.survivalgames.stats.StatsManager;
@@ -741,7 +742,16 @@ public class Game {
 		win.teleport(winloc);
 		//restoreInv(win);
 		scoreBoard.removePlayer(p);
-		msgmgr.broadcastFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName(), "arenaname-"+name);
+
+		String msg = msgmgr.getFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName(), "arenaname-"+name);
+		PlayerWinEvent ev = new PlayerWinEvent(this, win, p, msg);
+		Bukkit.getServer().getPluginManager().callEvent(ev);
+
+		if (SettingsManager.getInstance().getMessageConfig().getBoolean("messages.game.playerwin_enabled", true)) {
+			if ((ev.getMessage() != null) && (!ev.getMessage().isEmpty())) {
+				Bukkit.broadcastMessage(ev.getMessage());
+			}
+		}
 
 		mode = GameMode.FINISHING;
 		LobbyManager.getInstance().updateWall(gameID);
