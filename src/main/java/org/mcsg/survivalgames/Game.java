@@ -109,17 +109,17 @@ public class Game {
 		
 		arena = new Arena(min, max);
 
-		int dmx = system.getInt("sg-system.arenas." + gameID + ".deathmatch.x", 0);
-		int dmy = system.getInt("sg-system.arenas." + gameID + ".deathmatch.y", 65);
-		int dmz = system.getInt("sg-system.arenas." + gameID + ".deathmatch.z", 0);
+		double dmx = system.getDouble("sg-system.arenas." + gameID + ".deathmatch.x", 0);
+		double dmy = system.getDouble("sg-system.arenas." + gameID + ".deathmatch.y", 65);
+		double dmz = system.getDouble("sg-system.arenas." + gameID + ".deathmatch.z", 0);
 		dmspawn = new Location(SettingsManager.getGameWorld(gameID), dmx, dmy, dmz);
 		
 		dmradius = system.getInt("sg-system.arenas." + gameID + ".deathmatch.radius", 26);
 
 		String winw = system.getString("sg-system.arenas." + gameID + ".win.world", "games");
-		int winx = system.getInt("sg-system.arenas." + gameID + ".win.x", 0);
-		int winy = system.getInt("sg-system.arenas." + gameID + ".win.y", 65);
-		int winz = system.getInt("sg-system.arenas." + gameID + ".win.z", 0);
+		double winx = system.getDouble("sg-system.arenas." + gameID + ".win.x", 0);
+		double winy = system.getDouble("sg-system.arenas." + gameID + ".win.y", 65);
+		double winz = system.getDouble("sg-system.arenas." + gameID + ".win.z", 0);
 		float winyaw = system.getInt("sg-system.arenas." + gameID + ".win.yaw", 0);
 		float winp = system.getInt("sg-system.arenas." + gameID + ".win.pitch", 0);
 		winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
