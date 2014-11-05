@@ -8,10 +8,6 @@ public class StatsDataManager {
 		
 	}
 	
-	
-	
-	
-	
 	public static StatsDataManager getInstance(){
 		return instance;
 	}
@@ -21,12 +17,7 @@ public class StatsDataManager {
 		
 	}
 	
-	
-	
-	
-	
 	class PlayerData{
-		
 		public String getName() {
 			return name;
 		}
@@ -48,11 +39,5 @@ public class StatsDataManager {
 			this.pos = pos;
 			this.score = score;
 		}
-		
-		
 	}
-	
-	
-	
-	
 }

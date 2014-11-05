@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -26,14 +27,8 @@ public class StatsManager {
     private ArrayList<PreparedStatement> queue = new ArrayList<PreparedStatement>();
     private DatabaseDumper dumper = new DatabaseDumper();
     private DatabaseManager dbman = DatabaseManager.getInstance();
-    
-    //private HashMap<Player, PlayerStatsSession>pstats = new HashMap<Player, PlayerStatsSession>();
-    
-    private HashMap<Integer, HashMap<Player, PlayerStatsSession>>arenas  = new HashMap<Integer, HashMap<Player, PlayerStatsSession>>();
-    
-    
+    private HashMap<Integer, HashMap<UUID, PlayerStatsSession>>arenas  = new HashMap<Integer, HashMap<UUID, PlayerStatsSession>>();
     private boolean enabled = true;
-    
     MessageManager msgmgr;
 
     private StatsManager(){
@@ -74,17 +69,17 @@ public class StatsManager {
     }
 
     public void addArena(int arenaid){
-        arenas.put(arenaid, new HashMap<Player, PlayerStatsSession>());
+        arenas.put(arenaid, new HashMap<UUID, PlayerStatsSession>());
     }
 
 
 
     public void addPlayer(Player p, int arenaid){
-        arenas.get(arenaid).put(p, new PlayerStatsSession(p, arenaid));
+        arenas.get(arenaid).put(p.getUniqueId(), new PlayerStatsSession(p, arenaid));
     }
 
     public void removePlayer(Player p, int id){
-        arenas.get(id).remove(p);
+        arenas.get(id).remove(p.getUniqueId());
     }
 
     public void playerDied(Player p, int pos, int arenaid,long time){
@@ -92,15 +87,15 @@ public class StatsManager {
         System.out.println("arena null "+(arenas == null));
         System.out.println("arenagetplayer null "+(arenas.get(arenaid).get(p) == null));*/
 
-        arenas.get(arenaid).get(p).died(pos, time);
+        arenas.get(arenaid).get(p.getUniqueId()).died(pos, time);
     }
 
     public void playerWin(Player p, int arenaid, long time){
-        arenas.get(arenaid).get(p).win(time);
+        arenas.get(arenaid).get(p.getUniqueId()).win(time);
     }
 
     public void addKill(Player p, Player killed, int arenaid, String name){
-        PlayerStatsSession s = arenas.get(arenaid).get(p);
+        PlayerStatsSession s = arenas.get(arenaid).get(p.getUniqueId());
 
         int kslevel = s.addKill(killed);
         if(kslevel > 3){
@@ -118,11 +113,13 @@ public class StatsManager {
         int gameno = 0;
         Game g = GameManager.getInstance().getGame(arenaid);
 
+        PreparedStatement s2 = null;
+        ResultSet rs = null;
         try {
             long time1 = new Date().getTime();
-            PreparedStatement s2 = dbman.createStatement("SELECT * FROM "+SettingsManager.getSqlPrefix() + 
+            s2 = dbman.createStatement("SELECT * FROM "+SettingsManager.getSqlPrefix() + 
                     "gamestats ORDER BY gameno DESC LIMIT 1");
-            ResultSet rs = s2.executeQuery();
+            rs = s2.executeQuery();
             rs.next();
             gameno = rs.getInt(1) + 1;
 
@@ -131,7 +128,15 @@ public class StatsManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
             g.setRBStatus("Error: getno");
-        }
+		} finally {
+			try {
+				if (rs != null) { rs.close(); rs = null; }
+				if (s2 != null) { s2.close(); s2 = null; }
+			} catch (SQLException e) {
+				System.out.println("ERROR: Failed to close PreparedStatement or ResultSet!");
+				e.printStackTrace();
+			}
+		}
 
         addSQL("INSERT INTO "+SettingsManager.getSqlPrefix()+"gamestats VALUES(NULL,"+arenaid+","+players+",'"+winner.getName()+"',"+time+")");
 
@@ -140,16 +145,7 @@ public class StatsManager {
             addSQL(s.createQuery());
         }
         arenas.get(arenaid).clear();
-
-
     }
-
-
-
-
-
-
-
 
     private void addSQL(String query){
         addSQL( dbman.createStatement(query));
@@ -163,18 +159,23 @@ public class StatsManager {
         }
     }
 
-
     class DatabaseDumper extends Thread{
-
         public void run(){
             while(queue.size()>0){
                 PreparedStatement s = queue.remove(0);
                 try{
-
-
                     s.execute();
-                }catch(Exception e){     dbman.connect();}
-
+                }
+                catch(Exception e) {
+                	dbman.connect();
+        		} finally {
+        			try {
+        				if (s != null) { s.close(); s = null; }
+        			} catch (SQLException e) {
+        				System.out.println("ERROR: Failed to close PreparedStatement or ResultSet!");
+        				e.printStackTrace();
+        			}
+        		}
             }
         }
     }

@@ -3,6 +3,7 @@ package org.mcsg.survivalgames.stats;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,12 +11,10 @@ import org.bukkit.entity.Player;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
 
-
-
 public class PlayerStatsSession {
-
-
-    public Player player;
+    public UUID player;
+    public String prealname;
+    public String pdispname;
     public int kills = 0,death = 0,gameno, arenaid, points = 0;
     public int finish = 0;
     long time = 0;
@@ -26,38 +25,29 @@ public class PlayerStatsSession {
     int position = 0;
     int pppoints = 0;
 
-    private ArrayList<Player>killed = new ArrayList<Player>();
-
+    private ArrayList<UUID>killed = new ArrayList<UUID>();
 
     private HashMap<Integer, Integer>kslist = new HashMap<Integer, Integer>();
 
-
-
-
-
-
-
     public PlayerStatsSession(Player p, int arenaid ){
-        this.player = p;
+        this.player = p.getUniqueId();
         this.arenaid = arenaid;
-
+        this.prealname = p.getName();
+        this.pdispname = p.getDisplayName();
 
         kslist.put(1, 0);
         kslist.put(2, 0);
         kslist.put(3, 0);
         kslist.put(4, 0);
         kslist.put(5, 0);
-
-
     }
 
     public void setGameID(int gameid){
         this.gameno = gameid;
     }
 
-
     public int addKill(Player p){
-        killed.add(p);
+        killed.add(p.getUniqueId());
         kills++;
         checkKS();
         lastkill = new Date().getTime();
@@ -81,25 +71,20 @@ public class PlayerStatsSession {
     }
 
     public void addkillStreak(int ks){
-
         ksbon = ksbon + ( SettingsManager.getInstance().getConfig().getInt("stats.points.killstreak.base") * (SettingsManager.getInstance().getConfig().getInt("stats.points.killstreak.multiplier") + ks));
         int level = ks;
         if(level>5)level = 5;
         kslist.put(level, kslist.get(level)+1);
         if(level < 4){
             for(Player p: GameManager.getInstance().getGame(arenaid).getAllPlayers()){
-                p.sendMessage(SettingsManager.getInstance().getConfig().getString("stats.killstreak.level"+level).replace("{player}", player.getName()).replaceAll("(&([a-fk-or0-9]))", "\u00A7$2"));
+                p.sendMessage(SettingsManager.getInstance().getConfig().getString("stats.killstreak.level"+level).replace("{player}", pdispname).replaceAll("(&([a-fk-or0-9]))", "\u00A7$2"));
             }
         }
         else{
-            Bukkit.getServer().broadcastMessage(SettingsManager.getInstance().getConfig().getString("stats.killstreak.level"+level).replace("{player}", player.getName()).replaceAll("(&([a-fk-or0-9]))", "\u00A7$2"));
+            Bukkit.getServer().broadcastMessage(SettingsManager.getInstance().getConfig().getString("stats.killstreak.level"+level).replace("{player}", pdispname).replaceAll("(&([a-fk-or0-9]))", "\u00A7$2"));
         }
         lastkill = new Date().getTime();
-
-
     }
-
-
 
     public void calcPoints(){
         FileConfiguration c = SettingsManager.getInstance().getConfig();
@@ -128,24 +113,20 @@ public class PlayerStatsSession {
         return false;
     }
 
-
     public String createQuery(){
         calcPoints();
         String query= "INSERT INTO "+SettingsManager.getSqlPrefix()+"playerstats VALUES(NULL,";
-        query = query + gameno+","+/*SettingsManager.getInstance().getConfig().getString("sql.server-prefix")+*/arenaid+",'"+player.getName()+"',"+points+","+position+","+kills+","+death+",";
+        query = query + gameno+","+/*SettingsManager.getInstance().getConfig().getString("sql.server-prefix")+*/arenaid+",'"+prealname+"',"+points+","+position+","+kills+","+death+",";
         String killeds = "'";
-        for(Player p:killed){
-            killeds = killeds + ((killeds.length()>2)?":":"")+p.getName();
+        for (UUID u: killed) {
+        	Player p = Bukkit.getPlayer(u);
+            killeds = killeds + ((killeds.length()>2)?":":"")+p.getDisplayName();
         }
         // killeds = killeds.replaceFirst(":", "");
         query = query + killeds +"',"+time;
         query = query + ","+kslist.get(1)+ ","+kslist.get(2)+ ","+kslist.get(3)+ ","+kslist.get(4)+ ","+kslist.get(5)+")";
 
-
        // System.out.println(query);
-
         return query;
-
     }
-
 }

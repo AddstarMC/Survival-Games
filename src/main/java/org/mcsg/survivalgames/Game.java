@@ -722,6 +722,7 @@ public class Game {
 			}, 10L));
 		}
 		LobbyManager.getInstance().updateWall(gameID);
+        sm.removePlayer(p, gameID);
 	}
 
 

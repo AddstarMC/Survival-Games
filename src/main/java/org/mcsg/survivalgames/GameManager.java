@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,7 +29,7 @@ public class GameManager {
 	private SurvivalGames p;
 	public static HashMap < Integer, HashSet < Block >> openedChest = new HashMap < Integer, HashSet < Block >> ();
 	private ArrayList<Kit>kits = new ArrayList<Kit>();
-	private HashSet<Player>kitsel = new HashSet<Player>();
+	private HashSet<UUID>kitsel = new HashSet<UUID>();
 	MessageManager msgmgr = MessageManager.getInstance();
 
 	private GameManager() {
@@ -151,15 +152,15 @@ public class GameManager {
 	}
 
 	public boolean isInKitMenu(Player p){
-		return kitsel.contains(p);
+		return kitsel.contains(p.getUniqueId());
 	}
 
 	public void leaveKitMenu(Player p){
-		kitsel.remove(p);
+		kitsel.remove(p.getUniqueId());
 	}
 
 	public void openKitMenu(Player p){
-		kitsel.add(p);
+		kitsel.add(p.getUniqueId());
 	}
 
 	@SuppressWarnings("deprecation")
