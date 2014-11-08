@@ -25,16 +25,27 @@ public class Spectate implements SubCommand{
                 MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Game ID");
                 return true;
             }
+        } else {
+        	if (args[0].equalsIgnoreCase("leave")) {
+                if(GameManager.getInstance().isSpectator(player)) {
+                    GameManager.getInstance().removeSpectator(player);
+                    return true;
+                } else {
+                        MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Game ID");
+                        return true;
+                }
+        	} else {
+	        	if(SettingsManager.getInstance().getSpawnCount(Integer.parseInt(args[0])) == 0){
+		            MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.nospawns", player);
+		            return true;
+		        }
+		        if(GameManager.getInstance().isPlayerActive(player)){
+		            MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.specingame", player);
+		            return true;
+		        }
+		        GameManager.getInstance().getGame(Integer.parseInt(args[0])).addSpectator(player);
+        	}
         }
-        if(SettingsManager.getInstance().getSpawnCount(Integer.parseInt(args[0])) == 0){
-            MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.nospawns", player);
-            return true;
-        }
-        if(GameManager.getInstance().isPlayerActive(player)){
-            MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.specingame", player);
-            return true;
-        }
-        GameManager.getInstance().getGame(Integer.parseInt(args[0])).addSpectator(player);
         return true;
     }
 

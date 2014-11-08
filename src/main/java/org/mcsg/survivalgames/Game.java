@@ -905,6 +905,7 @@ public class Game {
 		}
 
 		p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, 1).add(0, 10, 0));
+		p.setGameMode(org.bukkit.GameMode.CREATIVE);
 
 		HookManager.getInstance().runHook("PLAYER_SPECTATE", "player-"+p.getName());
 
@@ -933,9 +934,10 @@ public class Game {
 			}
 		}, 1L);
 
-		msgFall(PrefixType.MAIN, "game.spectatorjoin", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
+		msgFall(PrefixType.INFO, "game.spectatorjoin", "player-"+p.getDisplayName(), "spectators-"+(spectators.size()+1));
 
 		spectators.add(p.getName());
+
 		msgmgr.sendMessage(PrefixType.INFO, "You are now spectating! Use /sg spectate again to return to the lobby.", p);
 		msgmgr.sendMessage(PrefixType.INFO, "Right click while holding shift to teleport to the next ingame player, left click to go back.", p);
 		nextspec.put(p, 0);
@@ -965,7 +967,7 @@ public class Game {
 		p.setFlySpeed(0.2F);
 		spectators.remove(p.getName());
 		nextspec.remove(p);
-		msgFall(PrefixType.MAIN, "game.spectatorleave", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
+		msgFall(PrefixType.INFO, "game.spectatorleave", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
 	}
 
 	public void clearSpecs() {

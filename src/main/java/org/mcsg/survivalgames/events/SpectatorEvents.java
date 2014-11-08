@@ -51,7 +51,6 @@ public class SpectatorEvents implements Listener {
         Player player = event.getPlayer();
         try{
             if(GameManager.getInstance().isSpectator(player)) {
-            	SurvivalGames.debug(player.getName() + " action: " + event.getAction());
             	if (player.isSneaking() && ( 
             		(event.getAction() == Action.RIGHT_CLICK_AIR) || 
             		(event.getAction() == Action.RIGHT_CLICK_BLOCK) ||
