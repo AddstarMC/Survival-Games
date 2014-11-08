@@ -10,6 +10,14 @@
 	</properties>
 	
 	<repositories>
+		<!-- For spigot -->
+		<repository>
+			<id>md5-repo</id>
+			<url>http://repo.md-5.net/content/groups/public/</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+
 		<!-- Addstar repo -->
 		<repository>
 			<id>addstar-release</id>
@@ -40,18 +48,24 @@
 	</repositories>
 	
 	<dependencies>
-		<!-- Bukkit -->
+		<!-- We use Spigot now, not Bukkit -->
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
 			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.spigotmc</groupId>
+					<artifactId>sneaky-throw</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- WorldEdit -->
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
-			<version>5.6.2</version>
+			<version>5.6.3</version>
 		</dependency>
 
 		<!-- Used for Economy interop -->
@@ -67,7 +81,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -104,5 +118,4 @@
 			</resource>
 		</resources>
 	</build>
-	
 </project>
