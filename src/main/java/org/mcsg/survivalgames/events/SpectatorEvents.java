@@ -72,6 +72,7 @@ public class SpectatorEvents implements Listener {
                 Location l = tpto.getLocation();
                 l.setYaw(0);
                 l.setPitch(0);
+                l.setY(l.getY()+3);
                 player.teleport(l);
                 player.sendMessage(ChatColor.AQUA+"You are now spectating "+tpto.getName());
             }

@@ -915,8 +915,9 @@ public class Game {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 			@SuppressWarnings("deprecation")
 			public void run() {
-				p.setFlying(true);
+				p.setGameMode(org.bukkit.GameMode.CREATIVE);
 				p.setAllowFlight(true);
+				p.setFlying(true);
 				p.setWalkSpeed(0.3F);
 				p.setFlySpeed(0.3F);
 				p.setFireTicks(0);
@@ -924,7 +925,6 @@ public class Game {
 				p.getInventory().clear();
 				p.getEquipment().setArmorContents(null);
 				p.updateInventory();
-				p.setGameMode(org.bukkit.GameMode.CREATIVE);
 				
 				for (PotionEffect effect : p.getActivePotionEffects()) {
                     p.removePotionEffect(effect.getType());
@@ -950,8 +950,8 @@ public class Game {
 			}
 		}
 		//restoreInv(p);
-		p.setAllowFlight(false);
 		p.setFlying(false);
+		p.setAllowFlight(false);
 		p.setFallDistance(0);
 		p.setHealth(p.getMaxHealth());
 		p.setFoodLevel(20);
