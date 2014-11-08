@@ -10,6 +10,8 @@ messages:
     playerjoingame: '&a{$player} joined the game! {$activeplayers}/{$maxplayers}'
     playerleavegame: '&b{$player} left the arena!'
     playervote: '&b{$player} voted to start the game!'
+    spectatorjoin: '&a{$player} is now spectating the game ({$spectators} total)'
+    spectatorleave: '&a{$player} is no longer spectating ({$spectators} left)'
     countdown: '&6Game starting in {$t}'
     goodluck: '&6Good luck!'
     playersremaining: '&2There are &e{$activeplayers} &2remaining!'

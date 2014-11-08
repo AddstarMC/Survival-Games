@@ -12,10 +12,12 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
+import org.mcsg.survivalgames.SurvivalGames;
 
 public class SpectatorEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
@@ -46,38 +48,39 @@ public class SpectatorEvents implements Listener {
     public void onPlayerClickEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         try{
-            if(GameManager.getInstance().isSpectator(player) && player.isSneaking() && 
-            		((event.getAction() == Action.RIGHT_CLICK_AIR) || 
+            if(GameManager.getInstance().isSpectator(player)) {
+            	SurvivalGames.debug(player.getName() + " action: " + event.getAction());
+            	if (player.isSneaking() && ( 
+            		(event.getAction() == Action.RIGHT_CLICK_AIR) || 
             		(event.getAction() == Action.RIGHT_CLICK_BLOCK) ||
                     (event.getAction() == Action.LEFT_CLICK_AIR) || 
                     (event.getAction() == Action.LEFT_CLICK_BLOCK))) {
-                Player[]players = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player)).getPlayers()[0];
-                Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player));
+		                Player[]players = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player)).getPlayers()[0];
+		                Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerSpectateId(player));
+		
+		                int i = g.getNextSpec().get(player);
+		                if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
+		                    i++;
+		                else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+		                    i--;
 
-                int i = g.getNextSpec().get(player);
-                if((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)){
-                    i++;
-                }
-                else if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
-                    i--;
-                }
-                if(i>players.length-1){
-                    i = 0;
-                }
-                if(i<0){
-                    i = players.length-1;
-                }
-                g.getNextSpec().put(player, i);
-                Player tpto = players[i];
-                Location l = tpto.getLocation();
-                l.setYaw(0);
-                l.setPitch(0);
-                l.setY(l.getY()+3);
-                player.teleport(l);
-                player.sendMessage(ChatColor.AQUA+"You are now spectating "+tpto.getName());
-            }
-            else if (GameManager.getInstance().isSpectator(player)) {
-                event.setCancelled(true);
+		                if (i > players.length-1) i = 0;
+		                if (i < 0) i = players.length-1;
+
+		                g.getNextSpec().put(player, i);
+		                Player tpto = players[i];
+		                Location l = tpto.getLocation();
+		                l.setYaw(0);
+		                l.setPitch(0);
+		                l.setY(l.getY()+3);
+		                player.setFlying(true);
+		                player.teleport(l);
+		                player.setFlying(true);
+		                player.sendMessage(ChatColor.AQUA+"You are now spectating: "+tpto.getName());
+	            }
+	            else if (GameManager.getInstance().isSpectator(player)) {
+	                event.setCancelled(true);
+	            }
             }
         }
         catch(Exception e){e.printStackTrace();}
@@ -114,5 +117,12 @@ public class SpectatorEvents implements Listener {
             event.setCancelled(true);
         }
     }
-}
 
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+    public void onItemDrop(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (GameManager.getInstance().isSpectator(player)) {
+            event.setCancelled(true);
+        }
+    }
+}

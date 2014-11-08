@@ -932,7 +932,9 @@ public class Game {
 
 			}
 		}, 1L);
-		
+
+		msgFall(PrefixType.MAIN, "game.spectatorjoin", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
+
 		spectators.add(p.getName());
 		msgmgr.sendMessage(PrefixType.INFO, "You are now spectating! Use /sg spectate again to return to the lobby.", p);
 		msgmgr.sendMessage(PrefixType.INFO, "Right click while holding shift to teleport to the next ingame player, left click to go back.", p);
@@ -959,11 +961,11 @@ public class Game {
 		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 		p.teleport(SettingsManager.getInstance().getLobbySpawn());
 		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
-		// Bukkit.getServer().broadcastPrefixType("Removing Spec "+p.getName()+" "+spectators.size()+" left");
+		p.setWalkSpeed(0.2F);
+		p.setFlySpeed(0.2F);
 		spectators.remove(p.getName());
-		// Bukkit.getServer().broadcastPrefixType("Removed");
-
 		nextspec.remove(p);
+		msgFall(PrefixType.MAIN, "game.spectatorleave", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
 	}
 
 	public void clearSpecs() {
