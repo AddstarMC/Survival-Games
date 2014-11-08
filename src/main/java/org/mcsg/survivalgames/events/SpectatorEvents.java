@@ -12,6 +12,8 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -122,6 +124,17 @@ public class SpectatorEvents implements Listener {
     public void onItemDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         if (GameManager.getInstance().isSpectator(player)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+    public void onInventoryDrag(InventoryDragEvent event) {
+    	if ((event.getInventory().getType() != InventoryType.PLAYER) && (event.getInventory().getType() != InventoryType.CRAFTING))
+    		return;
+    	
+    	Player p = (Player) event.getWhoClicked();
+        if (GameManager.getInstance().isSpectator(p)) {
             event.setCancelled(true);
         }
     }
