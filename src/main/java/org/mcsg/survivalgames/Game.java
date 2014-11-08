@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.server.EntityPlayer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -898,9 +900,6 @@ public class Game {
 	 * 
 	 */
 
-
-
-
 	public void addSpectator(final Player p) {
 		if (mode != GameMode.INGAME) {
 			msgmgr.sendMessage(PrefixType.WARNING, "You can only spectate running games!", p);
@@ -918,15 +917,16 @@ public class Game {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
 			@SuppressWarnings("deprecation")
 			public void run() {
-				p.setFlying(false);
-				p.setAllowFlight(false);
-				p.setWalkSpeed(0.2F);
+				p.setFlying(true);
+				p.setAllowFlight(true);
+				p.setWalkSpeed(0.3F);
+				p.setFlySpeed(0.3F);
 				p.setFireTicks(0);
 
 				p.getInventory().clear();
 				p.getEquipment().setArmorContents(null);
 				p.updateInventory();
-				showMenu(p);
+				p.setGameMode(org.bukkit.GameMode.CREATIVE);
 				
 				for (PotionEffect effect : p.getActivePotionEffects()) {
                     p.removePotionEffect(effect.getType());
@@ -958,7 +958,9 @@ public class Game {
 		p.setHealth(p.getMaxHealth());
 		p.setFoodLevel(20);
 		p.setSaturation(20);
+		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 		p.teleport(SettingsManager.getInstance().getLobbySpawn());
+		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 		// Bukkit.getServer().broadcastPrefixType("Removing Spec "+p.getName()+" "+spectators.size()+" left");
 		spectators.remove(p.getName());
 		// Bukkit.getServer().broadcastPrefixType("Removed");
