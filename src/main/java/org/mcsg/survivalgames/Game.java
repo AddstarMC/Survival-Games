@@ -905,7 +905,7 @@ public class Game {
 		}
 
 		p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, 1).add(0, 10, 0));
-		p.setGameMode(org.bukkit.GameMode.CREATIVE);
+		p.setNoDamageTicks(40);
 
 		HookManager.getInstance().runHook("PLAYER_SPECTATE", "player-"+p.getName());
 
@@ -932,7 +932,7 @@ public class Game {
 				}
 
 			}
-		}, 1L);
+		}, 10L);
 
 		msgFall(PrefixType.INFO, "game.spectatorjoin", "player-"+p.getDisplayName(), "spectators-"+(spectators.size()+1));
 

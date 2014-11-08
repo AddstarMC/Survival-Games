@@ -74,6 +74,7 @@ public class SpectatorEvents implements Listener {
 		                l.setYaw(0);
 		                l.setPitch(0);
 		                l.setY(l.getY()+3);
+						player.setAllowFlight(true);
 		                player.setFlying(true);
 		                player.teleport(l);
 		                player.setFlying(true);
