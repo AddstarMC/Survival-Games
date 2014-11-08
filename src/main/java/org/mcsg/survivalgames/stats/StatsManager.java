@@ -42,18 +42,22 @@ public class StatsManager {
     public void setup(Plugin p, boolean b){
         enabled = b;
         if(b){
-            try{
-                PreparedStatement s = dbman.createStatement(" CREATE TABLE "+SettingsManager.getSqlPrefix() + 
+        	PreparedStatement s = null;
+        	PreparedStatement s1 = null;
+        	ResultSet tables = null;
+        	ResultSet tables1 = null;
+        	try{
+                s = dbman.createStatement(" CREATE TABLE "+SettingsManager.getSqlPrefix() + 
                         "playerstats(id int NOT NULL AUTO_INCREMENT PRIMARY KEY, gameno int,arenaid int, player text, points int,position int," +
                         " kills int, death int, killed text,time int, ks1 int, ks2 int,ks3 int, ks4 int, ks5 int)");
 
-                PreparedStatement s1 = dbman.createStatement(" CREATE TABLE "+SettingsManager.getSqlPrefix() + 
+                s1 = dbman.createStatement(" CREATE TABLE "+SettingsManager.getSqlPrefix() + 
                         "gamestats(gameno int NOT NULL AUTO_INCREMENT PRIMARY KEY, arenaid int, players int, winner text, time int )");
 
 
                 DatabaseMetaData dbm = dbman.getMysqlConnection().getMetaData();
-                ResultSet tables = dbm.getTables(null, null, SettingsManager.getSqlPrefix()+"playerstats", null);
-                ResultSet tables1 = dbm.getTables(null, null, SettingsManager.getSqlPrefix()+"gamestats", null);
+                tables = dbm.getTables(null, null, SettingsManager.getSqlPrefix()+"playerstats", null);
+                tables1 = dbm.getTables(null, null, SettingsManager.getSqlPrefix()+"gamestats", null);
 
                 if (tables.next()) { }
                 else {
@@ -63,8 +67,19 @@ public class StatsManager {
                 else {
                     s1.execute();
                 }
-            }catch(Exception e){e.printStackTrace();}
-
+    		}catch(Exception e){
+        			e.printStackTrace();
+    		} finally {
+    			try {
+    				if (tables != null) { tables.close(); tables = null; }
+    				if (tables1 != null) { tables1.close(); tables1 = null; }
+    				if (s != null) { s.close(); s = null; }
+    				if (s1 != null) { s1.close(); s1 = null; }
+    			} catch (SQLException e) {
+    				System.out.println("ERROR: Failed to close PreparedStatements or ResultSets!");
+    				e.printStackTrace();
+    			}
+    		}
         }
     }
 
@@ -179,12 +194,4 @@ public class StatsManager {
             }
         }
     }
-
-
-
-
-
-
-
-
 }
