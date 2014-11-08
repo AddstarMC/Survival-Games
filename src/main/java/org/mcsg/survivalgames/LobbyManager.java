@@ -49,19 +49,7 @@ public class LobbyManager {
 	
 	public void gameEnd(int gameID, Player winner) {
 		final Location loc = winner.getLocation();
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-			public void run() {
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 2, Color.ORANGE);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 2, Color.YELLOW);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, Color.RED);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, Color.YELLOW);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, Color.BLUE);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, Color.SILVER);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 0, Color.FUCHSIA);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 1, Color.SILVER);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 1, Color.RED);
-			}
-		}, 15);
+		launchEndFireworks(loc);
 				
 		List<LobbySign> winnerSign = signManager.getSignsByType(gameID, LobbySignType.Winner);
 		for (LobbySign sign : winnerSign) {
@@ -79,5 +67,18 @@ public class LobbyManager {
             sign.update();
         }
 		
+	}
+	
+	public static void launchEndFireworks(final Location loc) {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
+			public void run() {
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.WHITE, Color.BLUE, Color.SILVER}, false, false, 1, 3);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 2, new Color[]{Color.ORANGE, Color.RED, Color.WHITE}, true, true, 10, 0);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, new Color[]{Color.RED, Color.YELLOW}, true, true, 10, 0);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 1, new Color[]{Color.SILVER, Color.RED}, true, true, 10, 0);
+				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.YELLOW, Color.SILVER}, true, true, 20, 0);
+				//FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 1, Color.FUCHSIA);
+			}
+		}, 15);
 	}
 }

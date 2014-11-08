@@ -30,6 +30,7 @@ import org.mcsg.survivalgames.commands.SetSpawn;
 import org.mcsg.survivalgames.commands.Spectate;
 import org.mcsg.survivalgames.commands.SubCommand;
 import org.mcsg.survivalgames.commands.Teleport;
+import org.mcsg.survivalgames.commands.Test;
 import org.mcsg.survivalgames.commands.Vote;
 
 public class CommandHandler implements CommandExecutor {
@@ -78,7 +79,8 @@ public class CommandHandler implements CommandExecutor {
 		commands.put("flag", new Flag());
 		commands.put("tp", new Teleport());
 		commands.put("reload", new Reload());
-		commands.put("kit", new Kit());		
+		commands.put("kit", new Kit());
+		commands.put("test", new Test());
 	}
 
 	private void loadHelpInfo() {
@@ -106,6 +108,7 @@ public class CommandHandler implements CommandExecutor {
 		helpinfo.put("flag", CommandGroup.Admin);
 		helpinfo.put("tp", CommandGroup.Admin);
 		helpinfo.put("reload", CommandGroup.Admin);
+		helpinfo.put("test", CommandGroup.Admin);
 	}
 
 	@Override
