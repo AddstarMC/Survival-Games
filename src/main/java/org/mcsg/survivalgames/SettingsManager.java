@@ -13,7 +13,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.mcsg.survivalgames.util.ItemReader;
 
 public class SettingsManager {
 
@@ -26,7 +28,6 @@ public class SettingsManager {
 	private FileConfiguration kits;
 	private FileConfiguration messages;
 
-
 	private File f; //spawns
 	private File f2; //system
 	private File f3; //kits
@@ -37,6 +38,10 @@ public class SettingsManager {
 	private static final int MESSAGE_VERSION = 1;
 	private static final int SPAWN_VERSION = 0;
 	private static final int SYSTEM_VERSION = 0;
+
+	private ItemStack specItemNext = null;
+	private ItemStack specItemPrev = null;
+	private ItemStack specItemExit = null;
 	
 	private SettingsManager() {
 
@@ -64,6 +69,10 @@ public class SettingsManager {
 		f4 = new File(p.getDataFolder(), "messages.yml");
 		chestFile = new File(p.getDataFolder(), "items.json");
 
+		specItemNext = ItemReader.read(getConfig().getString("spectate.next-item"));
+		specItemPrev = ItemReader.read(getConfig().getString("spectate.prev-item"));
+		specItemExit = ItemReader.read(getConfig().getString("spectate.exit-item"));
+
 		try {
 			if (!f.exists()) 	f.createNewFile();
 			if (!f2.exists())	f2.createNewFile();
@@ -86,6 +95,30 @@ public class SettingsManager {
 		
 		reloadMessages();
 		saveMessages();
+	}
+
+	public ItemStack getSpecItemNext() {
+		return specItemNext;
+	}
+
+	public void setSpecItemNext(ItemStack specItemNext) {
+		this.specItemNext = specItemNext;
+	}
+
+	public ItemStack getSpecItemPrev() {
+		return specItemPrev;
+	}
+
+	public void setSpecItemPrev(ItemStack specItemPrev) {
+		this.specItemPrev = specItemPrev;
+	}
+
+	public ItemStack getSpecItemExit() {
+		return specItemExit;
+	}
+
+	public void setSpecItemExit(ItemStack specItemExit) {
+		this.specItemExit = specItemExit;
 	}
 
 	public void set(String arg0, Object arg1) {

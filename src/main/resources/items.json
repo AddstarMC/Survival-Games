@@ -2,36 +2,64 @@
 	"chests": [
 		{
 			"items": [
-				{
-					"Material": "WOOD_SWORD",
-					"Name": "Flimsy Sword",
-					"Lore": [
-						"This is",
-						"a pretty",
-						"broken sword"
-					],
-					"Damage": 70
-				},
-				{
-					"Material": "LEATHER_BOOTS",
+				{ "Material": "WOOD_SWORD" },
+				{ "Material": "LEATHER_HELMET" },
+				{ "Material": "LEATHER_CHESTPLATE" },
+				{ "Material": "LEATHER_LEGGINGS" },
+				{ "Material": "LEATHER_BOOTS" },
+				{ "Material": "PORK" },
+				{ "Material": "RAW_FISH" },
+				{ "Material": "APPLE" },
+				{ "Material": "ARROW", "Amount": 5 }
+			],
+			"chance": 0.30
+		},
+		{
+		        "items": [
+			        { "Material": "WOOD_SWORD" },
+				{ "Material": "GOLD_HELMET" },
+				{ "Material": "GOLD_CHESTPLATE" },
+				{ "Material": "GOLD_LEGGINGS" },
+				{ "Material": "GOLD_BOOTS" },
+				{ "Material": "GRILLED_PORK", "Amount": 3 },
+				{ "Material": "APPLE", "Amount": 2 },
+				{ "Material": "RAW_BEEF", "Amount": 4 },
+				{ "Material": "COOKED_BEEF", "Amount": 2 },
+				{ "Material": "RAW_CHICKEN", "Amount": 4 },
+				{ "Material": "COOKED_CHICKEN", "Amount": 2 },
+				{ "Material": "ENDER_PEARL", "Amount": 2 },
+				{ "Material": "MUSHROOM_SOUP", "Amount": 1 }
+	                ],
+			"chance": 0.30
+		},
+                {
+		        "items": [
+			        { "Material": "GOLD_SWORD" },
+				{ "Material": "IRON_HELMET" },
+				{ "Material": "IRON_CHESTPLATE" },
+				{ "Material": "IRON_LEGGINGS" },
+				{ "Material": "IRON_BOOTS" },
+				{ "Material": "CHAINMAIL_HELMET" },
+				{ "Material": "CHAINMAIL_CHESTPLATE" },
+				{ "Material": "CHAINMAIL_LEGGINGS" },
+				{ "Material": "CHAINMAIL_BOOTS" },	
+				{ "Material": "MELON_BLOCK", "Amount": 4 },
+				{ "Material": "MELON", "Amount": 2 },
+				{ "Material": "GOLDEN_APPLE", "Amount": 2 },
+				{ "Material": "FLINT_AND_STEEL", "Amount": 1 },
+				{ "Material": "PAPER",	
+					"Name": "Healing Bandage",
+					"Lore": [ "Instantly heal yourself!", "Right click with this item to use it." ],
 					"Enchantments": [
-						{
-							"Name": "PROTECTION",
-							"Level": 2
-						}
+						{ "Name": "PROTECTION_ENVIRONMENTAL", "Level": 1 }
 					]
 				}
 			],
-			"chance": 0.5
+			"chance": 0.05
 		},
-
 		{
 			"items": [
-				{
-					"Material": "DIAMOND_SWORD",
-					"Name": "Sharp Pointy Thing"
-					"Damage": 100
-				}
+				{ "Material": "IRON_SWORD" }
 			],
 			"chance": 0.01
 		}

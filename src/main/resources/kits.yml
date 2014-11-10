@@ -1,11 +1,6 @@
-
-
-
-    
 ###########################################################
 #######################  Kits #############################
 ###########################################################
-
 
 ##  Kits
 # the permission for each kit is sg.kits.<kitname> where
@@ -26,9 +21,7 @@
 #DONT TOUCH THIS
 version: 1
 
-
-enabled: false
-
+enabled: true
 
 ## Kit Display Mode 
 #
@@ -38,22 +31,34 @@ enabled: false
 
 kit-select-mode: 'SHOW_ALL'
 
-
-
-
 kits:
-  test-kit:
+  Barbarian:
     cost: 0
-    icon: '399'
+    icon: WOOD_SWORD
     contents:
-    - '267,1, 0, sharpness:4, Blade'
-    - '261'
-    - '262, 64'
-  kit2:
+    - 'WOOD_SWORD, 1, 0, knockback:1, Blade'
+    - 'LEATHER_BOOTS'
+  Tank:
     cost: 0
-    icon: '339'
+    icon: LEATHER_CHESTPLATE
     contents:
-    - '276,1, 0, fire:2, Fire'
-    - '261'
-    - '262, 64'
-    
+    - 'LEATHER_CHESTPLATE, 1, 0, protection:4, Tank Vest'
+    - 'LEATHER_LEGGINGS, 1, 0, protection:4, Tank Pants'
+  Archer:
+    cost: 0
+    icon: BOW
+    contents:
+    - BOW
+    - 'ARROW, 3'
+  Healer:
+    cost: 0
+    icon: POTION
+    contents:
+    - 'POTION, 2, 16453'
+    - 'GOLD_HELMET'
+  Pyro:
+    cost: 0
+    icon: BLAZE_ROD
+    contents:
+    - 'BLAZE_ROD, 1, 0, fireaspect:2, Fire Stick'
+    - 'LEATHER_LEGGINGS, 1, 0, protectionfire:2, Fire Pants'

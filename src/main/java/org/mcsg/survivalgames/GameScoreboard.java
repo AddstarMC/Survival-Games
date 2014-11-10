@@ -160,10 +160,40 @@ public class GameScoreboard {
 		}
 
 		activePlayers.remove(player.getName());
-				
+
 		updateSidebarTitle();
 	}
 	
+	/**
+	 * Add a scoreboard for a player
+	 * 
+	 * @param player	The player to add a scoreboard to
+	 */
+	public void addScoreboard(final Player player) {
+		// Store the current scoreboard for the player
+		Scoreboard original = player.getScoreboard();
+		if (original != null) {
+			this.originalScoreboard.put(player.getName(), original);
+		}
+		
+		// Set the players scoreboard and and them too the team
+		player.setScoreboard(this.scoreboard);
+	}
+	
+	/**
+	 * Remove a scoreboard for a player
+	 * 
+	 * @param player	The player to remove a scoreboard from
+	 */
+	public void removeScoreboard(Player player) {
+		// Restore the players scoreboard
+		Scoreboard original = originalScoreboard.get(player.getName());
+		if (original != null) {
+			player.setScoreboard(original);
+			originalScoreboard.remove(player.getName());
+		}
+	}
+
 	/**
 	 * Update the title of the sidebar objective
 	 */

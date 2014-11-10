@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.mcsg.survivalgames.SurvivalGames;
 
 public class MessageUtil {
@@ -15,7 +16,7 @@ public class MessageUtil {
 		if(s == null){
 			return null;
 		}
-		return s.replaceAll("(&([a-fk-or0-9]))", "\u00A7$2");
+		return ChatColor.translateAlternateColorCodes('&', s);
 	}
 
 	public static String replaceVars(String msg, HashMap<String, String>vars){

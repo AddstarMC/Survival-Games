@@ -49,7 +49,7 @@ cmdwhitelist:
 
 #Set how long the grace period for be after the start of 
 #the game in seconds.
-grace-period: 20
+grace-period: 30
 
 #Controlls if chests should be restocked on the first
 #night. If set to true this will also have the side
@@ -87,7 +87,6 @@ block:
 #lag
 rollback:
   per-tick: 100
- 
 
 #Settings for when the game nears end. This runs
 #when there are only x amount of players
@@ -104,8 +103,7 @@ endgame:
   fire-lighting:
     enabled: true
     interval: 20
-  
-  
+
 #If enabled, after x amount of time, each player
 #remaing will be teleported to the center of the
 #arena for a death match. If they have not been 
@@ -114,8 +112,13 @@ deathmatch:
   enabled: false
   time: 30
   killtime: 5
-  
-  
+
+spectate:
+  next-item: '262, 1, 0, null, &a&lNext Player, Left click to teleport|to the next player.'
+  prev-item: '288, 1, 0, null, &b&lPrevious Player, Left click to teleport|to the previous player.'
+  exit-item: '333, 1, 0, null, &c&lStop Spectating, Left click to stop spectating|and return to the lobby.'
+
+
 #Settings for connecting to and 
 #SQL server. These settings will
 #be used for  the online webstats
@@ -131,17 +134,14 @@ sql:
   database: 'survivalgames'
   prefix: 'sg_'
 
-  
-  
+
 ###########################################################
 #######################  Stats ############################
 ###########################################################
-  
-  
+
 #Settings for the webstats. If enabled, stats 
 #such as k/d record, wins, win streaks, kill
 #streaks, etc. will be saved. 
-
 
 stats:
   enabled: false
@@ -161,8 +161,3 @@ stats:
     level3: '&e{player}&5 got an Ultra Kill!'
     level4: '&e{player}&4 got an Unbelievable Kill!'
     level5: '&e{player}&a&kii&4&l Unbelievable+!&a&kii'
-    
-    
-    
-
-

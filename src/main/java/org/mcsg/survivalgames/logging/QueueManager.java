@@ -50,8 +50,6 @@ public class QueueManager {
 		Bukkit.getScheduler().runTaskTimerAsynchronously(GameManager.getInstance().getPlugin(), new DataDumper(), 100, 100);
 	}
 
-
-
 	public void rollback(final int id, final boolean shutdown){
 		loadSave(id);
 		if(!shutdown){
@@ -68,9 +66,7 @@ public class QueueManager {
 		else{ 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), 
 					new RemoveEntities(id), 5);
-		}//
-
-
+		}
 	}
 
 	class RemoveEntities implements Runnable{
@@ -95,7 +91,6 @@ public class QueueManager {
 			}
 		}
 	}
-
 
 	public void add(BlockData data){
 		ArrayList<BlockData>dat = queue.get(data.getGameId());

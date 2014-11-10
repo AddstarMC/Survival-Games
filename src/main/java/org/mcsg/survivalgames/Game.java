@@ -301,7 +301,7 @@ public class Game {
 								}
 
 							}
-						}, 1L);
+						}, 5L);
 						
 						break;
 					}
@@ -568,6 +568,12 @@ public class Game {
 
 	public void playerLeave(final Player p, boolean teleport) {
 		msgFall(PrefixType.INFO, "game.playerleavegame", "player-" + p.getName());
+		Player win = activePlayers.get(0);
+		Inventory inv = p.getInventory();
+		inv.clear();
+		p.getInventory().setHeldItemSlot(0);
+		p.getEquipment().setArmorContents(null);
+		p.updateInventory();
 		if (teleport) {
 			p.teleport(SettingsManager.getInstance().getLobbySpawn());
 		}
@@ -739,6 +745,11 @@ public class Game {
 	public void playerWin(Player p) {
 		if (GameMode.DISABLED == mode) return;
 		Player win = activePlayers.get(0);
+		Inventory inv = p.getInventory();
+		inv.clear();
+		p.getInventory().setHeldItemSlot(0);
+		p.getEquipment().setArmorContents(null);
+		p.updateInventory();
 		// clearInv(p);
 		win.teleport(winloc);
 		//restoreInv(win);
@@ -923,7 +934,12 @@ public class Game {
 				p.setFlySpeed(0.3F);
 				p.setFireTicks(0);
 
-				p.getInventory().clear();
+				Inventory inv = p.getInventory();
+				inv.clear();
+				p.getInventory().setHeldItemSlot(0);
+				inv.setItem(0, SettingsManager.getInstance().getSpecItemNext());
+				inv.setItem(1, SettingsManager.getInstance().getSpecItemPrev());
+				inv.setItem(2, SettingsManager.getInstance().getSpecItemExit());
 				p.getEquipment().setArmorContents(null);
 				p.updateInventory();
 				
@@ -931,6 +947,7 @@ public class Game {
                     p.removePotionEffect(effect.getType());
 				}
 
+				scoreBoard.addScoreboard(p);
 			}
 		}, 10L);
 
@@ -938,8 +955,8 @@ public class Game {
 
 		spectators.add(p.getName());
 
-		msgmgr.sendMessage(PrefixType.INFO, "You are now spectating! Use /sg spectate again to return to the lobby.", p);
-		msgmgr.sendMessage(PrefixType.INFO, "Right click while holding shift to teleport to the next ingame player, left click to go back.", p);
+		msgmgr.sendMessage(PrefixType.INFO, "You are now spectating the game!.", p);
+		msgmgr.sendMessage(PrefixType.INFO, "Use the items in your quickbar to control spectating.", p);
 		nextspec.put(p, 0);
 	}
 
@@ -961,6 +978,12 @@ public class Game {
 		p.setFoodLevel(20);
 		p.setSaturation(20);
 		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
+		scoreBoard.removeScoreboard(p);
+		Inventory inv = p.getInventory();
+		inv.clear();
+		p.getInventory().setHeldItemSlot(0);
+		p.getEquipment().setArmorContents(null);
+		p.updateInventory();
 		p.teleport(SettingsManager.getInstance().getLobbySpawn());
 		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 		p.setWalkSpeed(0.2F);
