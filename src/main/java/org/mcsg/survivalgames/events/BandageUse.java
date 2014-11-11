@@ -1,5 +1,7 @@
 package org.mcsg.survivalgames.events;
 
+import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +10,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.mcsg.survivalgames.GameManager;
+import org.mcsg.survivalgames.SurvivalGames;
 
 public class BandageUse implements Listener {
 	@EventHandler
@@ -17,11 +21,19 @@ public class BandageUse implements Listener {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (p.getItemInHand().getType() == Material.PAPER) {
 				if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
-					p.getInventory().removeItem(new ItemStack(Material.PAPER, 1));
-					double newhealth = e.getPlayer().getHealth() + 10;
-					if (newhealth > 20) newhealth = 20;
-					p.setHealth(newhealth);
-					p.sendMessage(ChatColor.GREEN + "You used a bandage to heal yourself.");
+					ItemStack paper = p.getItemInHand().clone();	// Must match item in hand exactly, so we copy it
+					paper.setAmount(1);
+					HashMap<Integer, ItemStack> removed = p.getInventory().removeItem(paper);
+					p.updateInventory();
+					if ((removed != null) && (removed.size() > 0)) {
+						double newhealth = e.getPlayer().getHealth() + 10;
+						if (newhealth > 20) newhealth = 20;
+						p.setHealth(newhealth);
+						p.sendMessage(ChatColor.GREEN + "You used a bandage to heal yourself.");
+					} else {
+						p.sendMessage(ChatColor.RED + "Sorry, unable to heal due to system error.");
+						SurvivalGames.$(ChatColor.RED + "Healing refused! Unable to remove Paper/Bandage from player: " + p.getName());
+					}
 				}
 			}
 		}
