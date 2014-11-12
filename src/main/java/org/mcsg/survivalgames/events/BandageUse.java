@@ -25,15 +25,15 @@ public class BandageUse implements Listener {
 					paper.setAmount(1);
 					HashMap<Integer, ItemStack> removed = p.getInventory().removeItem(paper);
 					p.updateInventory();
-					if ((removed != null) && (removed.size() > 0)) {
+					//if ((removed != null) && (removed.size() > 0)) {
 						double newhealth = e.getPlayer().getHealth() + 10;
 						if (newhealth > 20) newhealth = 20;
 						p.setHealth(newhealth);
 						p.sendMessage(ChatColor.GREEN + "You used a bandage to heal yourself.");
-					} else {
-						p.sendMessage(ChatColor.RED + "Sorry, unable to heal due to system error.");
-						SurvivalGames.$(ChatColor.RED + "Healing refused! Unable to remove Paper/Bandage from player: " + p.getName());
-					}
+					//} else {
+					//	p.sendMessage(ChatColor.RED + "Sorry, unable to heal due to system error.");
+					//	SurvivalGames.$(ChatColor.RED + "Healing refused! Unable to remove Paper/Bandage from player: " + p.getName());
+					//}
 				}
 			}
 		}
