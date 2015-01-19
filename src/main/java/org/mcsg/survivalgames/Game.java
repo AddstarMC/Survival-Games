@@ -776,7 +776,7 @@ public class Game {
 
 		sm.playerWin(win, gameID, new Date().getTime() - startTime);
 		sm.saveGame(gameID, win, getActivePlayers() + getInactivePlayers(), new Date().getTime() - startTime);
-		sm.removePlayer(p, gameID);
+		sm.removePlayer(win, gameID);
 
 		loadspawns();
 		LobbyManager.getInstance().updateWall(gameID);
