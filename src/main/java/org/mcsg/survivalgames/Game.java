@@ -769,7 +769,6 @@ public class Game {
 		LobbyManager.getInstance().updateWall(gameID);
 		LobbyManager.getInstance().gameEnd(gameID, win);
 
-		clearSpecs();
 		win.setHealth(p.getMaxHealth());
 		win.setFoodLevel(20);
 		win.setFireTicks(0);
@@ -778,10 +777,6 @@ public class Game {
 		sm.playerWin(win, gameID, new Date().getTime() - startTime);
 		sm.saveGame(gameID, win, getActivePlayers() + getInactivePlayers(), new Date().getTime() - startTime);
 		sm.removePlayer(p, gameID);
-
-		activePlayers.clear();
-		inactivePlayers.clear();
-		spawns.clear();
 
 		loadspawns();
 		LobbyManager.getInstance().updateWall(gameID);
@@ -860,6 +855,10 @@ public class Game {
 		tasks.clear();
 		vote = 0;
 		voted.clear();
+		activePlayers.clear();
+		inactivePlayers.clear();
+		spawns.clear();
+		clearSpecs();
 
 		mode = GameMode.RESETING;
 		endgameRunning = false;
