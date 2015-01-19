@@ -9,12 +9,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.MessageManager;
 import org.mcsg.survivalgames.SettingsManager;
+import org.mcsg.survivalgames.SurvivalGames;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.util.DatabaseManager;
 
@@ -107,6 +110,17 @@ public class StatsManager {
 
     public void playerWin(Player p, int arenaid, long time){
         arenas.get(arenaid).get(p.getUniqueId()).win(time);
+    }
+    
+    public void outputStatsDebug(CommandSender sender) {
+    	GameManager gm = GameManager.getInstance();
+    	for (Integer a : arenas.keySet()) {
+    		sender.sendMessage(ChatColor.YELLOW + "Arena: " + a + " - " + gm.getGame(a).getName());
+    		for (UUID u : arenas.get(a).keySet()) {
+    			PlayerStatsSession pss = arenas.get(a).get(u);
+    			sender.sendMessage(ChatColor.GOLD + "  + " + u + " => " + pss.pdispname);
+    		}
+    	}
     }
 
     public void addKill(Player p, Player killed, int arenaid, String name){

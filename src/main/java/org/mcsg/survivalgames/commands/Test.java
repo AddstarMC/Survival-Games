@@ -7,6 +7,7 @@ import org.mcsg.survivalgames.LobbyManager;
 import org.mcsg.survivalgames.MessageManager;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.SettingsManager;
+import org.mcsg.survivalgames.stats.StatsManager;
 
 public class Test implements SubCommand {
 
@@ -25,12 +26,18 @@ public class Test implements SubCommand {
         }
 
         String action = args[0];
-        if (action.equals("endfireworks")) {
+        switch (action) {
+        case "endfireworks":
             MessageManager.getInstance().sendMessage(PrefixType.INFO, "Launching end of game fireworks at your location", sender);
         	Player p = (Player) sender;
         	LobbyManager.launchEndFireworks(p.getLocation());
-        } else {
+        	break;
+        case "statslist":
+        	StatsManager.getInstance().outputStatsDebug(sender);
+        	break;
+        default:
             MessageManager.getInstance().sendMessage(PrefixType.ERROR, ChatColor.RED + "Unknown test action \"" + action + "\"!", sender);
+            break;
         }
         return true;
     }
