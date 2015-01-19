@@ -777,6 +777,7 @@ public class Game {
 
 		sm.playerWin(win, gameID, new Date().getTime() - startTime);
 		sm.saveGame(gameID, win, getActivePlayers() + getInactivePlayers(), new Date().getTime() - startTime);
+		sm.removePlayer(p, gameID);
 
 		activePlayers.clear();
 		inactivePlayers.clear();
