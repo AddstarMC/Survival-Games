@@ -92,7 +92,7 @@ public class SpectatorEvents implements Listener {
                 player.setFlying(true);
                 player.teleport(l);
                 player.setFlying(true);
-                player.sendMessage(ChatColor.GOLD + "You are now spectating: " + ChatColor.AQUA + tpto.getName());
+                player.sendMessage(ChatColor.GOLD + "You are now spectating: " + ChatColor.AQUA + tpto.getDisplayName());
             }
         }
         catch(Exception e){e.printStackTrace();}

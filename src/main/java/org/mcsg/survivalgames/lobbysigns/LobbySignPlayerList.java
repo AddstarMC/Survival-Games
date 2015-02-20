@@ -53,7 +53,7 @@ public class LobbySignPlayerList extends LobbySign {
 			
 			Player player = players.get(playerIndex);
 			String prefix = getGame().isPlayerinactive(player) ? "" + ChatColor.DARK_RED + ChatColor.STRIKETHROUGH : "" + ChatColor.DARK_AQUA;
-			sign.setLine(index, prefix + player.getName());
+			sign.setLine(index, prefix + player.getDisplayName());
 			index++;
 		}
 		

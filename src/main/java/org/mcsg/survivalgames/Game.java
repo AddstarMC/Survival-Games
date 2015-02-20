@@ -228,7 +228,7 @@ public class Game {
 			msgmgr.sendFMessage(PrefixType.WARNING, "game.nopermission", p, "arena-"+gameID);
 			return false;
 		}
-		HookManager.getInstance().runHook("GAME_PRE_ADDPLAYER", "arena-"+gameID, "player-"+p.getName(), "maxplayers-"+spawns.size(), "players-"+activePlayers.size());
+		HookManager.getInstance().runHook("GAME_PRE_ADDPLAYER", "arena-"+gameID, "player-"+p.getDisplayName(), "maxplayers-"+spawns.size(), "players-"+activePlayers.size());
 
 		GameManager.getInstance().removeFromOtherQueues(p, gameID);
 
@@ -318,7 +318,7 @@ public class Game {
 				msgmgr.sendFMessage(PrefixType.WARNING, "error.gamefull", p, "arena-"+gameID);
 				return false;
 			}
-			msgFall(PrefixType.INFO, "game.playerjoingame", "player-"+p.getName(), "activeplayers-"+ getActivePlayers(), "maxplayers-"+ SettingsManager.getInstance().getSpawnCount(gameID));
+			msgFall(PrefixType.INFO, "game.playerjoingame", "player-"+p.getDisplayName(), "activeplayers-"+ getActivePlayers(), "maxplayers-"+ SettingsManager.getInstance().getSpawnCount(gameID));
 			if (activePlayers.size() >= config.getInt("auto-start-players") && !countdownRunning) countdown(config.getInt("auto-start-time"));
 			return true;
 		} else {
@@ -419,7 +419,7 @@ public class Game {
 		}
 		vote++;
 		voted.add(pl);
-		msgFall(PrefixType.INFO, "game.playervote", "player-"+pl.getName());
+		msgFall(PrefixType.INFO, "game.playervote", "player-"+pl.getDisplayName());
 		HookManager.getInstance().runHook("PLAYER_VOTE", "player-"+pl.getName());
 		scoreBoard.playerLiving(pl);
 		/*for(Player p: activePlayers){
@@ -567,7 +567,7 @@ public class Game {
 	 */
 
 	public void playerLeave(final Player p, boolean teleport) {
-		msgFall(PrefixType.INFO, "game.playerleavegame", "player-" + p.getName());
+		msgFall(PrefixType.INFO, "game.playerleavegame", "player-" + p.getDisplayName());
 		Player win = activePlayers.get(0);
 		Inventory inv = p.getInventory();
 		inv.clear();
@@ -662,7 +662,7 @@ public class Game {
 					String killername = "Unknown";
 					
 					if (killer != null) {
-						killername = killer.getName();
+						killername = killer.getDisplayName();
 					}
 					
 					String itemname = "Unknown Item";
@@ -670,7 +670,7 @@ public class Game {
 						itemname = ItemReader.getFriendlyItemName(killer.getItemInHand().getType());
 					}
 
-					msgFall(PrefixType.INFO, "death."+enttype, "player-"+p.getName(), "killer-"+killername, "item-"+itemname);
+					msgFall(PrefixType.INFO, "death."+enttype, "player-"+p.getDisplayName(), "killer-"+killername, "item-"+itemname);
 							
 					if (killer != null && p != null) {
 						sm.addKill(killer, p, gameID, name);
@@ -680,14 +680,14 @@ public class Game {
 				}
 				else {
 					msgFall(PrefixType.INFO, "death." + p.getLastDamageCause().getEntityType(),
-							"player-" + p.getName(),
+							"player-" + p.getDisplayName(),
 							"killer-" + p.getLastDamageCause().getEntityType());
 					pk = new PlayerKilledEvent(p, this, null, cause);
 				}
 				break;
 			default:
 				msgFall(PrefixType.INFO, "death." + cause.name(), 
-						"player-" + p.getName(), 
+						"player-" + p.getDisplayName(),
 						"killer-" + cause);
 				pk = new PlayerKilledEvent(p, this, null, cause);
 
@@ -755,7 +755,7 @@ public class Game {
 		//restoreInv(win);
 		scoreBoard.removePlayer(p);
 
-		String msg = msgmgr.getFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getName(), "player-"+win.getName(), "arenaname-"+name);
+		String msg = msgmgr.getFMessage(PrefixType.INFO, "game.playerwin","arena-"+gameID, "victim-"+p.getDisplayName(), "player-"+win.getDisplayName(), "arenaname-"+name);
 		PlayerWinEvent ev = new PlayerWinEvent(this, win, p, msg);
 		Bukkit.getServer().getPluginManager().callEvent(ev);
 

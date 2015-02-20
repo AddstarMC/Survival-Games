@@ -57,13 +57,13 @@ public class LobbyManager {
 			if (!(sign instanceof LobbySignWinner))
 				continue;
 			
-			((LobbySignWinner)sign).setWinner(winner.getName());
+			((LobbySignWinner)sign).setWinner(winner.getDisplayName());
 			sign.update();
 		}
 
         List<LobbySign> winnerSigns = signManager.getSignsByType(gameID, LobbySignType.WinnerSign);
         for (LobbySign sign : winnerSigns) {
-            ((LobbySignWinnerSign)sign).setWinner(winner.getName());
+            ((LobbySignWinnerSign)sign).setWinner(winner.getDisplayName());
             sign.update();
         }
 		
