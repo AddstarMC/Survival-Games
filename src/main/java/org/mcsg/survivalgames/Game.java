@@ -1071,10 +1071,15 @@ public class Game {
 			int now = (int) (new Date().getTime() / 1000);
 			long length = config.getInt("deathmatch.time") * 60;
 			long remaining = (length - (now - (startTime / 1000)));
-			//SurvivalGames.$("Remaining: " + remaining + " (" + now + " / " + length + " / " + (startTime / 1000) + ")");
 
-			// Every 3 minutes or every minute in the last 3 minutes
-			if (((remaining % 180) == 0) || (((remaining % 60) == 0) && (remaining <= 180))) {
+			// Death Match countdown warning:
+			//   Every 3 minutes
+			//   Every minute in the last 3 minutes
+			//   At 30 seconds + 10 seconds
+			//   Every second for the last 5 seconds
+			if (((remaining % 180) == 0)
+					|| (((remaining % 60) == 0) && (remaining <= 180))
+					|| (remaining == 30) || (remaining == 10) || (remaining <= 5)) {
 				if (remaining > 0) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
 				}
