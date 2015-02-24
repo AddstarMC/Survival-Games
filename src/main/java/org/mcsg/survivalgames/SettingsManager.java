@@ -27,16 +27,19 @@ public class SettingsManager {
 	private FileConfiguration system;
 	private FileConfiguration kits;
 	private FileConfiguration messages;
+	private FileConfiguration dmspawns;
 
 	private File f; //spawns
 	private File f2; //system
 	private File f3; //kits
 	private File f4; //messages
+	private File f5; //deathmatch spawns
 	private File chestFile; //chest
 	
 	private static final int KIT_VERSION = 1;
 	private static final int MESSAGE_VERSION = 1;
 	private static final int SPAWN_VERSION = 0;
+	private static final int DMSPAWN_VERSION = 0;
 	private static final int SYSTEM_VERSION = 0;
 
 	private ItemStack specItemNext = null;
@@ -67,6 +70,7 @@ public class SettingsManager {
 		f2 = new File(p.getDataFolder(), "system.yml");
 		f3 = new File(p.getDataFolder(), "kits.yml");
 		f4 = new File(p.getDataFolder(), "messages.yml");
+		f5 = new File(p.getDataFolder(), "dmspawns.yml");
 		chestFile = new File(p.getDataFolder(), "items.json");
 
 		specItemNext = ItemReader.read(getConfig().getString("spectate.next-item"));
@@ -78,6 +82,7 @@ public class SettingsManager {
 			if (!f2.exists())	f2.createNewFile();
 			if (!f3.exists()) 	loadFile("kits.yml");
 			if (!f4.exists()) 	loadFile("messages.yml");
+			if (!f5.exists()) 	f5.createNewFile();
 			if (!chestFile.exists()) 	loadFile("items.json");
 
 		} 
@@ -90,6 +95,9 @@ public class SettingsManager {
 		
 		reloadSpawns();
 		saveSpawns();
+
+		reloadDMSpawns();
+		saveDMSpawns();
 				
 		reloadKits();
 		
@@ -137,6 +145,10 @@ public class SettingsManager {
 		return spawns;
 	}
 
+	public FileConfiguration getDMSpawns() {
+		return dmspawns;
+	}
+
 	public FileConfiguration getKits() {
 		return kits;
 	}
@@ -149,7 +161,6 @@ public class SettingsManager {
 		//System.out.println("asdf"+messages.getString("prefix.main"));
 		return messages;
 	}
-
 
 	public void saveConfig() {
 		// p.saveConfig();
@@ -184,8 +195,7 @@ public class SettingsManager {
 			return getNextName(name, n+1);
 		}
 	}
-	
-	
+
 	public void reloadSpawns() {
 		spawns = YamlConfiguration.loadConfiguration(f);
 		if(spawns.getInt("version", 0) != SPAWN_VERSION){
@@ -194,6 +204,16 @@ public class SettingsManager {
 		}
 		spawns.set("version", SPAWN_VERSION);
 		saveSpawns();
+	}
+
+	public void reloadDMSpawns() {
+		dmspawns = YamlConfiguration.loadConfiguration(f5);
+		if(dmspawns.getInt("version", 0) != DMSPAWN_VERSION){
+			moveFile(f5);
+			reloadDMSpawns();
+		}
+		dmspawns.set("version", DMSPAWN_VERSION);
+		saveDMSpawns();
 	}
 
 	public void reloadSystem() {
@@ -245,6 +265,15 @@ public class SettingsManager {
 		}
 	}
 
+	public void saveDMSpawns() {
+		try {
+			dmspawns.save(f5);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void saveKits() {
 		try {
 			kits.save(f3);
@@ -271,7 +300,9 @@ public class SettingsManager {
 		return spawns.getInt("spawns." + gameid + ".count");
 	}
 
-
+	public int getDMSpawnCount(int gameid) {
+		return dmspawns.getInt("dmspawns." + gameid + ".count", 0);
+	}
 
 	//TODO: Implement per-arena settings aka flags
 	public HashMap < String, Object > getGameFlags(int a) {
@@ -342,6 +373,16 @@ public class SettingsManager {
 				);
 	}
 	
+	public Location getDMSpawnPoint(int gameid, int dmspawnid) {
+		return new Location(getGameWorld(gameid),
+				dmspawns.getDouble("dmspawns." + gameid + "." + dmspawnid + ".x"),
+				dmspawns.getDouble("dmspawns." + gameid + "." + dmspawnid + ".y"),
+				dmspawns.getDouble("dmspawns." + gameid + "." + dmspawnid + ".z"),
+				(float)dmspawns.getDouble("dmspawns." + gameid + "." + dmspawnid + ".yaw"),
+				(float)dmspawns.getDouble("dmspawns." + gameid + "." + dmspawnid + ".pitch")
+				);
+	}
+
 	public void setLobbySpawn(Location l) {
 		system.set("sg-system.lobby.spawn.world", l.getWorld().getName());
 		system.set("sg-system.lobby.spawn.x", l.getX());
@@ -350,7 +391,6 @@ public class SettingsManager {
 		system.set("sg-system.lobby.spawn.yaw", l.getYaw());
 		system.set("sg-system.lobby.spawn.pitch", l.getPitch());
 	}
-
 
 	public void setSpawn(int gameid, int spawnid, Location l) {
 		spawns.set("spawns." + gameid + "." + spawnid + ".x", l.getX());
@@ -365,19 +405,35 @@ public class SettingsManager {
 		try {
 			spawns.save(f);
 		} catch (IOException e) {
-
+			SurvivalGames.$("ERROR: Unable to save spawns file!");
+			e.printStackTrace();
 		}
 		GameManager.getInstance().getGame(gameid).addSpawn();
 		
 		LobbyManager.getInstance().updateWall(gameid);
+	}
 
+	public void setDMSpawn(int gameid, int spawnid, Location l) {
+		dmspawns.set("dmspawns." + gameid + "." + spawnid + ".x", l.getX());
+		dmspawns.set("dmspawns." + gameid + "." + spawnid + ".y", l.getY());
+		dmspawns.set("dmspawns." + gameid + "." + spawnid + ".z", l.getZ());
+		dmspawns.set("dmspawns." + gameid + "." + spawnid + ".yaw", l.getYaw());
+		dmspawns.set("dmspawns." + gameid + "." + spawnid + ".pitch", l.getPitch());
+
+		if (spawnid > dmspawns.getInt("dmspawns." + gameid + ".count")) {
+			dmspawns.set("dmspawns." + gameid + ".count", spawnid);
+		}
+		try {
+			dmspawns.save(f5);
+		} catch (IOException e) {
+			SurvivalGames.$("ERROR: Unable to save dmspawns file!");
+			e.printStackTrace();
+		}
 	}
 
 	public static String getSqlPrefix() {
-
 		return getInstance().getConfig().getString("sql.prefix");
 	}
-
 
 	public void loadFile(String file){
 		File t = new File(p.getDataFolder(), file);

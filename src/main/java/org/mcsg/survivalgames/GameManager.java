@@ -78,13 +78,14 @@ public class GameManager {
 					//SurvivalGames.$(c.getString("sg-system.arenas."+a+".enabled"));
 					//c.set("sg-system.arenas."+a+".vip",c.getBoolean("sg-system.arenas."+a+".vip", false));
 					SurvivalGames.$("Loading Arena: " + a);
+					SurvivalGames.$("  Spawn points: " + SettingsManager.getInstance().getSpawnCount(a));
+					SurvivalGames.$("  DM spawns   : " + SettingsManager.getInstance().getDMSpawnCount(a));
 					loaded++;
 					games.add(new Game(a));
 					StatsManager.getInstance().addArena(a);
 				}
 			}
 			a++;
-			
 		}		
 	}
 

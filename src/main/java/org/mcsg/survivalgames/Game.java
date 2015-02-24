@@ -1,6 +1,7 @@
 package org.mcsg.survivalgames;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -1080,8 +1081,13 @@ public class Game {
 			if (((remaining % 180) == 0)
 					|| (((remaining % 60) == 0) && (remaining <= 180))
 					|| (remaining == 30) || (remaining == 10) || (remaining <= 5)) {
-				if (remaining > 0) {
-					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60));
+				if (remaining > 60) {
+					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60) + " minutes(s)");
+					SurvivalGames.$("Deathmatch mode will begin in " + (remaining / 60) + " minute(s)");
+				}
+				else if (remaining > 0) {
+					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + remaining + " seconds");
+					SurvivalGames.$("Deathmatch mode will begin in " + remaining + " seconds");
 				}
 			}
 			
@@ -1094,16 +1100,41 @@ public class Game {
 				SurvivalGames.$("WARNING: DeathMatch task NOT removed!");
 			}
 
+			ArrayList<Location> dmspawns = new ArrayList<Location>();
+			boolean dmarena = false;
+			if (SettingsManager.getInstance().getDMSpawnCount(gameID) >= activePlayers.size()) {
+				// Death match arena mode (only if we have enough DM spawns for the number of players)
+				debug("Deathmatch mode: DM Arena");
+				dmarena = true;
+
+				// Build a random list of DM spawn locations
+				for(int x = 0; x < SettingsManager.getInstance().getDMSpawnCount(gameID); x++) {
+					dmspawns.add(SettingsManager.getInstance().getDMSpawnPoint(gameID, x));
+				}
+				Collections.shuffle(dmspawns);
+			} else {
+				// Death match spawn point mode
+				debug("Deathmatch mode: Spawn");
+			}
+
 			// Teleport everyone to their original spawn point
 			for(Map.Entry<Integer, Player> entry : spawns.entrySet()) {
 				Player p = entry.getValue();
 				Integer a = entry.getKey();
 				if (activePlayers.contains(p) && p.isOnline() && !p.isDead()) {
-					debug("Teleporting " + p.getName() + " (spawn " + a + ")");
-					p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a).add(0, 1.5, 0));
+					if (dmarena) {
+						// Teleport player to the next random DM spawn point on the list, then remove it
+						debug("Teleporting " + p.getName() + " to random DM spawn point");
+						p.teleport(dmspawns.get(0));
+						dmspawns.remove(0);
+					} else {
+						debug("Teleporting " + p.getName() + " to spawn point #" + a);
+						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a).add(0, 1.5, 0));
+					}
 					p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");
 				}
 			}
+			dmspawns.clear();
 
 			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
 				public void run() {

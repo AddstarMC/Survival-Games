@@ -26,7 +26,7 @@ messages:
     all: '&aAll arenas have been {$input}.'
     started: '&aStarted game {$arena}.'
     nopermission: '&cYou do not have permission to join arena {$arena}'
-    deathmatchwarning: '&cDeathMatch mode will begin in {$t} minute(s)!'
+    deathmatchwarning: '&cDeathMatch mode will begin in {$t}!'
   info:
     success: '&e{$command} &aexecuted successfuly.'
     unsuccess: '&e{$command} &cexecuted unsuccessfuly.'
@@ -34,6 +34,7 @@ messages:
     deleted: '&a{$input} deleted.'
     lobbyspawn: '&aLobby spawnpoint set.'
     spawnset: '&aSpawn &e{$num} &ain arena &e{$arena} &aset.'
+    dmspawnset: '&aDeath match spawn &e{$num} &ain arena &e{$arena} &aset.'
   words:
     points: 'Points'
     kills: 'Kills'
@@ -109,9 +110,11 @@ messages:
     lisarenas: 'List all available arenas'
     listplayers: 'List all players in the arena you are playing in'
     resetspawns: 'Resets spawns for Arena <id>'
+    resetdmspawns: 'Resets DM spawns for Arena <id>'
     setlobbyspawn: 'Set the lobby spawnpoint'
     addlobbywall: 'Add a lobby stats wall for Arena <id>'
     setspawn: 'Sets a spawn for the arena you are located in'
+    setdmspawn: 'Sets a DM spawn for the arena you are located in'
     setstatswall: 'Sets the stats wall'
     spectate: 'Spectate a running arena'
     stats: 'Shows you your own stats'
@@ -130,4 +133,3 @@ messages:
     gamedisabled_enabled: false
     gameenabled: '&bArena {$arena} was enabled'
     gameenabled_enabled: false
-    

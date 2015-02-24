@@ -24,7 +24,9 @@ import org.mcsg.survivalgames.commands.LeaveQueue;
 import org.mcsg.survivalgames.commands.ListArenas;
 import org.mcsg.survivalgames.commands.ListPlayers;
 import org.mcsg.survivalgames.commands.Reload;
+import org.mcsg.survivalgames.commands.ResetDMSpawns;
 import org.mcsg.survivalgames.commands.ResetSpawns;
+import org.mcsg.survivalgames.commands.SetDMSpawn;
 import org.mcsg.survivalgames.commands.SetLobbySpawn;
 import org.mcsg.survivalgames.commands.SetSpawn;
 import org.mcsg.survivalgames.commands.Spectate;
@@ -73,8 +75,10 @@ public class CommandHandler implements CommandExecutor {
 		// admin commands	
 		commands.put("createarena", new CreateArena());
 		commands.put("setspawn", new SetSpawn());
+		commands.put("setdmspawn", new SetDMSpawn());
 		commands.put("setlobbyspawn", new SetLobbySpawn());
 		commands.put("resetspawns", new ResetSpawns());
+		commands.put("resetdmspawns", new ResetDMSpawns());
 		commands.put("delarena", new DelArena());
 		commands.put("flag", new Flag());
 		commands.put("tp", new Teleport());
@@ -102,8 +106,10 @@ public class CommandHandler implements CommandExecutor {
 		// admin commands	
 		helpinfo.put("createarena", CommandGroup.Admin);
 		helpinfo.put("setspawn", CommandGroup.Admin);
+		helpinfo.put("setdmspawn", CommandGroup.Admin);
 		helpinfo.put("setlobbyspawn", CommandGroup.Admin);
 		helpinfo.put("resetspawns", CommandGroup.Admin);
+		helpinfo.put("resetdmspawns", CommandGroup.Admin);
 		helpinfo.put("delarena", CommandGroup.Admin);
 		helpinfo.put("flag", CommandGroup.Admin);
 		helpinfo.put("tp", CommandGroup.Admin);
