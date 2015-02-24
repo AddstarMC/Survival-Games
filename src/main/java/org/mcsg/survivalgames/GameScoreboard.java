@@ -126,13 +126,13 @@ public class GameScoreboard {
 		this.waitingTeam.addPlayer(player);
 		
 		// Set the players score to zero, then increase it
-		Score score = this.sidebarObjective.getScore(player);
+		Score score = this.sidebarObjective.getScore(player.getDisplayName());
 		score.setScore(1);
 		
 		final Objective sidebarObjective = this.sidebarObjective;
 		Bukkit.getScheduler().runTaskLater(GameManager.getInstance().getPlugin(), new Runnable() {
             public void run() {
-            	sidebarObjective.getScore(player).setScore(0);
+            	sidebarObjective.getScore(player.getDisplayName()).setScore(0);
             }
         }, 1L);
 		
@@ -150,7 +150,7 @@ public class GameScoreboard {
 		waitingTeam.removePlayer(player);
 		livingTeam.removePlayer(player);
 		deadTeam.removePlayer(player);
-		scoreboard.resetScores(player);
+		scoreboard.resetScores(player.getDisplayName());
 		
 		// Restore the players scoreboard
 		Scoreboard original = originalScoreboard.get(player.getName());
@@ -212,7 +212,7 @@ public class GameScoreboard {
 	 */
 	public void incScore(final Player player) {
 		// Set the players score to zero, then increase it
-		Score score = sidebarObjective.getScore(player);
+		Score score = sidebarObjective.getScore(player.getDisplayName());
 		if (score != null) {
 			score.setScore(score.getScore() + 1);
 		}
