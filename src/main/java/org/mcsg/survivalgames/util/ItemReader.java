@@ -53,7 +53,7 @@ public class ItemReader {
 		try {
 			mat = Material.valueOf(split[0]);
 		} catch(Exception e) {
-			SurvivalGames.$("ERROR: Unknown item named \"" + split[0] + "\"");
+			SurvivalGames.$(0, "ERROR: Unknown item named \"" + split[0] + "\"");
 			return null;
 		}
 		short data = 0; 
@@ -69,20 +69,20 @@ public class ItemReader {
 		// Create the item
 		i =  new ItemStack(mat, size, data);
 		ItemMeta im = i.getItemMeta();
-		SurvivalGames.$("Item: " + i);
+		SurvivalGames.$(0, "Item: " + i);
 
 		// Set item display name
 		if(split.length >= 5){
 			String name = MessageUtil.replaceColors(split[4]);
 			im.setDisplayName(name);
-			SurvivalGames.$("  Name: " + name);
+			SurvivalGames.$(0, "  Name: " + name);
 		}
 
 		// Set item lore
 		if(split.length == 6){
 			String[] l = split[5].split("\\|", -1);
 			for(int a = 0; a < l.length; a++){
-				SurvivalGames.$("  Lore "+(a+1)+": " + l[a]);
+				SurvivalGames.$(0, "  Lore "+(a+1)+": " + l[a]);
 			}
 			List<String> lore = new ArrayList<String>(Arrays.asList(l));
 			im.setLore(lore);
@@ -101,7 +101,7 @@ public class ItemReader {
 		}
 
 		for (Enchantment e : i.getEnchantments().keySet()) {
-			SurvivalGames.$("  Enchant: " + e.getName() + " = " + e.getStartLevel());
+			SurvivalGames.$(0, "  Enchant: " + e.getName() + " = " + e.getStartLevel());
 		}
 		return i;
 	}

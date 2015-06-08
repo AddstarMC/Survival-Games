@@ -85,14 +85,6 @@ public class Game {
 		system = SettingsManager.getInstance().getSystemConfig();
 	}
 
-	public void $(String msg){
-		SurvivalGames.$(msg);
-	}
-
-	public void debug(String msg){
-		SurvivalGames.debug(msg);
-	}
-
 	public void setup() {
 		mode = GameMode.LOADING;
 		int x = system.getInt("sg-system.arenas." + gameID + ".x1");
@@ -225,7 +217,7 @@ public class Game {
 			return false;
 		}
 		if(!p.hasPermission("sg.arena.join."+gameID)){
-			debug("permission needed to join arena: " + "sg.arena.join."+gameID);
+			SurvivalGames.debug(gameID, "permission needed to join arena: " + "sg.arena.join."+gameID);
 			msgmgr.sendFMessage(PrefixType.WARNING, "game.nopermission", p, "arena-"+gameID);
 			return false;
 		}
@@ -381,7 +373,7 @@ public class Game {
 			b++;
 		}
 		p.openInventory(i);
-		debug("Showing kit menu for: " + p.getName());
+		SurvivalGames.debug(gameID, "Showing kit menu for: " + p.getName());
 	}
 
 
@@ -491,7 +483,7 @@ public class Game {
 				}, config.getInt("grace-period") * 20);
 			}
 			if(config.getBoolean("deathmatch.enabled")) {
-				SurvivalGames.$("Launching deathmatch timer...");
+				SurvivalGames.$(gameID, "Launching deathmatch timer...");
 				dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 40L, 20L);
 				tasks.add(dmTaskID);
 			}
@@ -1083,28 +1075,28 @@ public class Game {
 					|| (remaining == 30) || (remaining == 10) || (remaining <= 5)) {
 				if (remaining > 60) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60) + " minutes(s)");
-					SurvivalGames.$("Deathmatch mode will begin in " + (remaining / 60) + " minute(s)");
+					SurvivalGames.$(gameID, "Deathmatch mode will begin in " + (remaining / 60) + " minute(s)");
 				}
 				else if (remaining > 0) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + remaining + " seconds");
-					SurvivalGames.$("Deathmatch mode will begin in " + remaining + " seconds");
+					SurvivalGames.$(gameID, "Deathmatch mode will begin in " + remaining + " seconds");
 				}
 			}
 			
 			// Death match time!!
 			if (remaining > 0) return;
-			debug("DeathMatch mode starting!");
+			SurvivalGames.debug(gameID, "DeathMatch mode starting!");
 			
 			Bukkit.getScheduler().cancelTask(dmTaskID);
 			if (!tasks.remove((Integer) dmTaskID)) {
-				SurvivalGames.$("WARNING: DeathMatch task NOT removed!");
+				SurvivalGames.$(gameID, "WARNING: DeathMatch task NOT removed!");
 			}
 
 			ArrayList<Location> dmspawns = new ArrayList<Location>();
 			boolean dmarena = false;
 			if (SettingsManager.getInstance().getDMSpawnCount(gameID) >= activePlayers.size()) {
 				// Death match arena mode (only if we have enough DM spawns for the number of players)
-				debug("Deathmatch mode: DM Arena");
+				SurvivalGames.debug(gameID, "Deathmatch mode: DM Arena");
 				dmarena = true;
 
 				// Build a random list of DM spawn locations
@@ -1114,7 +1106,7 @@ public class Game {
 				Collections.shuffle(dmspawns);
 			} else {
 				// Death match spawn point mode
-				debug("Deathmatch mode: Spawn");
+				SurvivalGames.debug(gameID, "Deathmatch mode: Spawn");
 			}
 
 			// Teleport everyone to their original spawn point
@@ -1124,11 +1116,11 @@ public class Game {
 				if (activePlayers.contains(p) && p.isOnline() && !p.isDead()) {
 					if (dmarena) {
 						// Teleport player to the next random DM spawn point on the list, then remove it
-						debug("Teleporting " + p.getName() + " to random DM spawn point");
+						SurvivalGames.debug(gameID, "Teleporting " + p.getName() + " to random DM spawn point");
 						p.teleport(dmspawns.get(0));
 						dmspawns.remove(0);
 					} else {
-						debug("Teleporting " + p.getName() + " to spawn point #" + a);
+						SurvivalGames.debug(gameID, "Teleporting " + p.getName() + " to spawn point #" + a);
 						p.teleport(SettingsManager.getInstance().getSpawnPoint(gameID, a).add(0, 1.5, 0));
 					}
 					p.sendMessage(ChatColor.RED + "DeathMatch mode has begun!! Attack!!");

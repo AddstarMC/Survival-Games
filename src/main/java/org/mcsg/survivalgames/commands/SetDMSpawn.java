@@ -40,7 +40,7 @@ public class SetDMSpawn implements SubCommand{
         loadDMNextSpawn();
         Location l = player.getLocation();
         int game = GameManager.getInstance().getBlockGameId(l);
-        SurvivalGames.$("Setting DM spawn for arena " + game + " (" + next.get(game) + ")");
+        SurvivalGames.$(0, "Setting DM spawn for arena " + game + " (" + next.get(game) + ")");
         if(game == -1){
             MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.notinarena", player);
             return true;

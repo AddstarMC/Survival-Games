@@ -77,9 +77,9 @@ public class GameManager {
 				if (c.getBoolean("sg-system.arenas." + a + ".enabled")) {
 					//SurvivalGames.$(c.getString("sg-system.arenas."+a+".enabled"));
 					//c.set("sg-system.arenas."+a+".vip",c.getBoolean("sg-system.arenas."+a+".vip", false));
-					SurvivalGames.$("Loading Arena: " + a);
-					SurvivalGames.$("  Spawn points: " + SettingsManager.getInstance().getSpawnCount(a));
-					SurvivalGames.$("  DM spawns   : " + SettingsManager.getInstance().getDMSpawnCount(a));
+					SurvivalGames.$(0, "Loading Arena: " + a);
+					SurvivalGames.$(0, "  Spawn points: " + SettingsManager.getInstance().getSpawnCount(a));
+					SurvivalGames.$(0, "  DM spawns   : " + SettingsManager.getInstance().getDMSpawnCount(a));
 					loaded++;
 					games.add(new Game(a));
 					StatsManager.getInstance().addArena(a);

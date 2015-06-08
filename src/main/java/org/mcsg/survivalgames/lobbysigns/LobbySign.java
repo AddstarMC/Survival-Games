@@ -42,7 +42,7 @@ public abstract class LobbySign {
 	public Sign getSign() {
 		
 		if (location.getBlock().getType() != Material.WALL_SIGN) {
-			SurvivalGames.$(Level.WARNING, "Lobby [" + gameId + "] " + type + " sign is not a sign! " + location.getX() + ", " + location.getY() + ", " + location.getZ());
+			SurvivalGames.$(0, Level.WARNING, "Lobby [" + gameId + "] " + type + " sign is not a sign! " + location.getX() + ", " + location.getY() + ", " + location.getZ());
 			return null;
 		}
 		

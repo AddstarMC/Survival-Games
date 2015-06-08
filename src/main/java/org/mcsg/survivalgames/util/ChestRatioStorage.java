@@ -44,7 +44,7 @@ public class ChestRatioStorage {
 				
 				JSONObject chest = (JSONObject)chestObject;
 				double chance = (Double) chest.get("chance");
-				SurvivalGames.$("Loading chest (" + chance + "):");
+				SurvivalGames.$(0, "Loading chest (" + chance + "):");
 				
 				ArrayList<ItemStack> chestContents = new ArrayList<ItemStack>();
 				JSONArray contents = (JSONArray) chest.get("items");
@@ -73,14 +73,14 @@ public class ChestRatioStorage {
 		Material itemMaterial = Material.AIR;
 		try {
 			if (!itemObject.containsKey("Material")) {
-				SurvivalGames.$(Level.SEVERE, "Item in chest does not have required material parameter!");
+				SurvivalGames.$(0, Level.SEVERE, "Item in chest does not have required material parameter!");
 				return null;
 			}
 			
 			itemMaterial = Material.valueOf((String)itemObject.get("Material"));
 			
 		} catch(Exception ex) {
-			SurvivalGames.$(Level.SEVERE, "Item \""+ (String)itemObject.get("Material") + "\" does not have required material parameter!");
+			SurvivalGames.$(0, Level.SEVERE, "Item \""+ (String)itemObject.get("Material") + "\" does not have required material parameter!");
 			return null;
 		}
 		
@@ -104,7 +104,7 @@ public class ChestRatioStorage {
 			dispname = " \"" + meta.getDisplayName() + "\"";
 		}
 
-		SurvivalGames.$("  Chest item (" + stackSize + "): " + itemMaterial + dispname);
+		SurvivalGames.$(0, "  Chest item (" + stackSize + "): " + itemMaterial + dispname);
 		
 		if (itemObject.containsKey("Damage")) {
 			Long damageValue = (Long)itemObject.get("Damage");
@@ -113,13 +113,13 @@ public class ChestRatioStorage {
 			short actualDurability = (short) (((float)maxDamage) * (damageValue.floatValue() / 100.0f));
 			item.setDurability(actualDurability);
 			
-			SurvivalGames.$("    Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
+			SurvivalGames.$(0, "    Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
 		}
 		
 		if (itemObject.containsKey("Data")) {
 			Long dataValue = (Long)itemObject.get("Data");
 			item.setDurability(dataValue.shortValue());
-			SurvivalGames.$("    Data: " + dataValue);
+			SurvivalGames.$(0, "    Data: " + dataValue);
 		}		
 		/////////////////////////////////////////
 		
@@ -131,7 +131,7 @@ public class ChestRatioStorage {
 			for (Object loreObject : loreArray) {
 				String loreLine = ChatColor.translateAlternateColorCodes('&', (String)loreObject);
 				lore.add(loreLine);
-				SurvivalGames.$("    Lore: " + loreLine);
+				SurvivalGames.$(0, "    Lore: " + loreLine);
 			}
 			
 			if (!lore.isEmpty()) {
@@ -151,7 +151,7 @@ public class ChestRatioStorage {
 				
 				Enchantment enchantment = Enchantment.getByName(enchantmentName);
 				if (enchantment != null && enchantmentLevel != null) {
-					SurvivalGames.$("    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
+					SurvivalGames.$(0, "    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);
 				}
 			}

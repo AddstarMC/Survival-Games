@@ -26,7 +26,7 @@ public class Kit {
 		cost = c.getDouble("kits."+name+".cost", 0);
 		
 		icon = ItemReader.read(c.getString("kits."+name+".icon"));
-		SurvivalGames.$("Kit Icon: "  + icon);
+		SurvivalGames.$(0, "Kit Icon: "  + icon);
 
 		List<String>cont = c.getStringList("kits."+name+".contents");
 		for(String s:cont){

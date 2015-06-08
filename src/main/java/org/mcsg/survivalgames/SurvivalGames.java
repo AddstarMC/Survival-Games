@@ -136,23 +136,27 @@ public class SurvivalGames extends JavaPlugin {
 		}
 	}
 
-	public static void $(String msg){
-		logger.log(Level.INFO, msg);
+	public static void $(int gameid, String msg){
+		$(gameid, Level.INFO, msg);
 	}
 
-	public static void $(Level l, String msg){
-		logger.log(l, msg);
+	public static void $(int gameid, Level l, String msg){
+		if (gameid == 0) {
+			logger.log(l, msg);
+		} else {
+			logger.log(l, "#" + String.valueOf(gameid) + ": " + msg);
+		}
 	}
 
-	public static void debug(String msg){
+	public static void debug(int gameid, String msg){
 		if(SettingsManager.getInstance().getConfig().getBoolean("debug", false))
-			$("[Debug] "+msg);
+			$(gameid, "[Debug] "+msg);
 	}
 
-	public static void debug(int a) {
-		if(SettingsManager.getInstance().getConfig().getBoolean("debug", false))
-			debug(a+"");
-	}
+	//public static void debug(int a) {
+	//	if(SettingsManager.getInstance().getConfig().getBoolean("debug", false))
+	//		debug(gameid, String.valueOf(a));
+	//}
 	
 	public LobbySignManager getLobbySignManager() {
 		return lobbySignManager;

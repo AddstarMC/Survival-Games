@@ -180,7 +180,7 @@ public class SettingsManager {
 	}
 	
 	public boolean moveFile(File ff){
-		SurvivalGames.$("Moving outdated config file. "+f.getName());
+		SurvivalGames.$(0, "Moving outdated config file. "+f.getName());
 		String name = ff.getName();
 		File ff2 = new File(SurvivalGames.getPluginDataFolder(), getNextName(name, 0));
 		return ff.renameTo(ff2);
@@ -405,7 +405,7 @@ public class SettingsManager {
 		try {
 			spawns.save(f);
 		} catch (IOException e) {
-			SurvivalGames.$("ERROR: Unable to save spawns file!");
+			SurvivalGames.$(0, "ERROR: Unable to save spawns file!");
 			e.printStackTrace();
 		}
 		GameManager.getInstance().getGame(gameid).addSpawn();
@@ -426,7 +426,7 @@ public class SettingsManager {
 		try {
 			dmspawns.save(f5);
 		} catch (IOException e) {
-			SurvivalGames.$("ERROR: Unable to save dmspawns file!");
+			SurvivalGames.$(0, "ERROR: Unable to save dmspawns file!");
 			e.printStackTrace();
 		}
 	}

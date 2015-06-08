@@ -186,7 +186,7 @@ public class QueueManager {
 				long t1 = new Date().getTime();
 				int pt = SettingsManager.getInstance().getConfig().getInt("rollback.per-tick", 100);
 
-				SurvivalGames.debug("Rollback: " + a + " changes remaining...");
+				SurvivalGames.debug(id, "Rollback: " + a + " changes remaining...");
 				while(a>=0 && (rb < pt|| shutdown)){
 					BlockData result = data.get(a);
 					if(result.getGameId() == game.getID()){
@@ -214,11 +214,11 @@ public class QueueManager {
 							new Rollback(id, shutdown, totalRollback + rb, iteration+1, time), 1);
 				}
 				else{
-					SurvivalGames.$ ("Arena "+id+" reset. Rolled back "+(totalRollback+rb)+" blocks in "+iteration+" iterations ("+pt+" blocks per iteration Total time spent rolling back was "+time+"ms)");
+					SurvivalGames.$(id, "Arena "+id+" reset. Rolled back "+(totalRollback+rb)+" blocks in "+iteration+" iterations ("+pt+" blocks per iteration Total time spent rolling back was "+time+"ms)");
 					game.resetCallback();
 				}
 			}else{
-				SurvivalGames.$ ("Arena "+id+" reset. Rolled back "+totalRollback+" blocks in "+iteration+" iterations. Total time spent rolling back was "+time+"ms");
+				SurvivalGames.$(id, "Arena "+id+" reset. Rolled back "+totalRollback+" blocks in "+iteration+" iterations. Total time spent rolling back was "+time+"ms");
 				game.resetCallback();
 			}
 		}
