@@ -26,7 +26,8 @@ public class DeathEvent implements Listener {
 
 		Game game = GameManager.getInstance().getGame(gameid);
 
-		if (game.isProtectionOn() || game.getMode() == GameMode.WAITING || game.getMode() == GameMode.STARTING) {
+		// Only allow players to be damaged while the game is in progress
+		if (game.isProtectionOn() || game.getMode() != GameMode.INGAME) {
 			event.setCancelled(true);
 			return;
 		}
