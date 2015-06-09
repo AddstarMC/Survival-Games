@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -737,6 +738,14 @@ public class Game {
 	 */
 	public void playerWin(Player p) {
 		if (GameMode.DISABLED == mode) return;
+
+		if (activePlayers.size() == 0) {
+			// No players left means this is the winner dying, just ignore it.
+			// The actual win task would have already been launched before this one.
+			SurvivalGames.$(gameID, Level.WARNING, "Last player (" + p.getName() + ") died in the arena!");
+			return;
+		}
+
 		Player win = activePlayers.get(0);
 		Inventory inv = p.getInventory();
 		inv.clear();
