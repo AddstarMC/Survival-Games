@@ -53,14 +53,14 @@ public class FireworkFactory {
 	 * Will use same fade color as color and have trail and flicker enabled
 	 */
 	static public void LaunchFirework(Location spawnLocation, FireworkEffect.Type type, int power, Color color, int launchdelay, int detonatedelay) {
-		ArrayList<Color> colors = new ArrayList<Color>();
+        ArrayList<Color> colors = new ArrayList<>();
 		colors.add(color);
 		
 		LaunchFirework(spawnLocation, type, power, colors, colors, true, true, launchdelay, detonatedelay);
 	}
 	
 	static public void LaunchFirework(Location spawnLocation, FireworkEffect.Type type, int power, Color[] colors, boolean flicker, boolean trail, int launchdelay, int detonatedelay) {
-		ArrayList<Color> colorlist = new ArrayList<Color>(Arrays.asList(colors));
+        ArrayList<Color> colorlist = new ArrayList<>(Arrays.asList(colors));
 		LaunchFirework(spawnLocation, type, power, colorlist, colorlist, flicker, trail, launchdelay, detonatedelay);
 	}
 }

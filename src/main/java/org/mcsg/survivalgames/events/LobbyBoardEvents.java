@@ -69,51 +69,46 @@ public class LobbyBoardEvents implements Listener {
 		LobbySign newLobbySign = null;
 		boolean validSign = false;
 		boolean validGameId = !(gameId == -1 || GameManager.getInstance().getGame(gameId) == null);
-		
-		// Join Sign
-		if (createLine.equalsIgnoreCase("[sg-join]")) {
-			validSign = true;
-			if (validGameId) {
-				newLobbySign = new LobbySignJoin(sign, gameId);
-			}
-		}
-		// State sign
-		else if (createLine.equalsIgnoreCase("[sg-state]")) {
-			validSign = true;
-			if (validGameId) {
-				newLobbySign = new LobbySignState(sign, gameId);
-			}
-		}
-		// Player sign
-		else if (createLine.equalsIgnoreCase("[sg-players]")) {
-			validSign = true;
-			if (validGameId) {
-				newLobbySign = new LobbySignPlayers(sign, gameId);
-			}
-		}
-		// Player list sign
-		else if (createLine.equalsIgnoreCase("[sg-playerlist]")) {
-			validSign = true;
-			if (validGameId) {
-				newLobbySign = new LobbySignPlayerList(sign, gameId);
-			}
-		}
-		// Player winner sign
-		else if (createLine.equalsIgnoreCase("[sg-winner]")) {
-			validSign = true;
-			if (validGameId) {
-				newLobbySign = new LobbySignWinner(sign, gameId);
-			}
-		}
-		// Player winner sign
-        else if (createLine.equalsIgnoreCase("[sg-winnersign]")) {
-            validSign = true;
-            if (validGameId) {
-                newLobbySign = new LobbySignWinnerSign(sign, gameId);
-            }
+        switch (createLine) {
+            case "[sg-join]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignJoin(sign, gameId);
+                }
+                break;
+            case "[sg-state]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignState(sign, gameId);
+                }
+                break;
+            case "[sg-playerlist]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignPlayerList(sign, gameId);
+                }
+                break;
+            case "[sg-players]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignPlayers(sign, gameId);
+                }
+                break;
+            case "[sg-winner]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignWinner(sign, gameId);
+                }
+                break;
+            case "[sg-winnersign]":
+                validSign = true;
+                if (validGameId) {
+                    newLobbySign = new LobbySignWinnerSign(sign, gameId);
+                }
+                break;
+            default:
+
         }
-		
-		
 		if (validSign && !validGameId) {
 			player.sendMessage(ChatColor.DARK_RED + "Could not create sign for arena " + gameId + ".");
 			return;

@@ -35,7 +35,7 @@ public class DeathEvent implements Listener {
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		Player player = (Player)event.getEntity();
+		Player player = event.getEntity();
 		GameManager gm = GameManager.getInstance();
 		int gameid = gm.getPlayerGameId(player);
 		if (gameid == -1) return;
@@ -44,8 +44,8 @@ public class DeathEvent implements Listener {
 		SurvivalGames.$(gameid, "Player died: " + player.getName() + " (" + event.getDeathMessage() + ")");
 
 		// Show alive/dead player lists, for troubleshooting/informational purposes
-		ArrayList <String> alive = new ArrayList <String>();
-		ArrayList <String> dead = new ArrayList <String>();
+		ArrayList<String> alive = new ArrayList<>();
+		ArrayList<String> dead = new ArrayList<>();
 		for (Player p : gm.getGame(gameid).getAllPlayers()) {
 			if (gm.isPlayerActive(p)) {
 				alive.add(p.getName());

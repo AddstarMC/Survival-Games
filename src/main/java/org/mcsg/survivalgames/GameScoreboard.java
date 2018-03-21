@@ -21,9 +21,9 @@ public class GameScoreboard {
 	private Team waitingTeam = null;
 	private Team livingTeam = null;
 	private Team deadTeam = null;
-	
-	private HashMap<String, Scoreboard> originalScoreboard = new HashMap<String, Scoreboard>();
-	private ArrayList<String> activePlayers = new ArrayList<String>();
+
+	private HashMap<String, Scoreboard> originalScoreboard = new HashMap<>();
+	private ArrayList<String> activePlayers = new ArrayList<>();
 	
 	/**
 	 * Class constructor
@@ -47,7 +47,7 @@ public class GameScoreboard {
 		
 		// Remove any players still on the scoreboard
 		if (!this.activePlayers.isEmpty()) {
-			ArrayList<String> players = new ArrayList<String>();
+			ArrayList<String> players = new ArrayList<>();
 			for (String playerName : this.activePlayers) {
 				players.add(playerName);
 			}
@@ -123,7 +123,7 @@ public class GameScoreboard {
 		
 		// Set the players scoreboard and and them too the team
 		player.setScoreboard(this.scoreboard);
-		this.waitingTeam.addPlayer(player);
+		this.waitingTeam.addEntry(player.getName());
 		
 		// Set the players score to zero, then increase it
 		Score score = this.sidebarObjective.getScore(player.getDisplayName());
@@ -147,9 +147,9 @@ public class GameScoreboard {
 	public void removePlayer(Player player) {
 		
 		// remove the player from the team
-		waitingTeam.removePlayer(player);
-		livingTeam.removePlayer(player);
-		deadTeam.removePlayer(player);
+		waitingTeam.removeEntry(player.getName());
+		livingTeam.removeEntry(player.getName());
+		deadTeam.removeEntry(player.getName());
 		scoreboard.resetScores(player.getDisplayName());
 		
 		// Restore the players scoreboard
@@ -219,9 +219,9 @@ public class GameScoreboard {
 	}
 	
 	public void playerLiving(Player player) {
-		waitingTeam.removePlayer(player);
-		deadTeam.removePlayer(player);
-		livingTeam.addPlayer(player);
+		waitingTeam.removeEntry(player.getName());
+		deadTeam.removeEntry(player.getName());
+		livingTeam.addEntry(player.getName());
 	}
 
 	public void playerDead(Player player) {
@@ -233,9 +233,9 @@ public class GameScoreboard {
 			removePlayer(player);
 		} else {
 			// Move player to "dead" team
-			waitingTeam.removePlayer(player);
-			livingTeam.removePlayer(player);
-			deadTeam.addPlayer(player);
+			waitingTeam.removeEntry(player.getName());
+			livingTeam.removeEntry(player.getName());
+			deadTeam.addEntry(player.getName());
 			
 			// Restore the players scoreboard
 			Scoreboard original = originalScoreboard.get(player.getName());

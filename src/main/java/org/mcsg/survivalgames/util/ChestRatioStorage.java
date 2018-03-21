@@ -20,7 +20,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 public class ChestRatioStorage {
 
 	public static ChestRatioStorage instance = new ChestRatioStorage();
-	private ArrayList<Chest> chests = new ArrayList<Chest>();
+	private ArrayList<Chest> chests = new ArrayList<>();
 
 	private ChestRatioStorage() { 
 		
@@ -45,8 +45,8 @@ public class ChestRatioStorage {
 				JSONObject chest = (JSONObject)chestObject;
 				double chance = (Double) chest.get("chance");
 				SurvivalGames.$(0, "Loading chest (" + chance + "):");
-				
-				ArrayList<ItemStack> chestContents = new ArrayList<ItemStack>();
+
+				ArrayList<ItemStack> chestContents = new ArrayList<>();
 				JSONArray contents = (JSONArray) chest.get("items");
 				for (Object itemObject : contents) {
 					ItemStack item = parseChestItem((JSONObject)itemObject);	
@@ -80,7 +80,7 @@ public class ChestRatioStorage {
 			itemMaterial = Material.valueOf((String)itemObject.get("Material"));
 			
 		} catch(Exception ex) {
-			SurvivalGames.$(0, Level.SEVERE, "Item \""+ (String)itemObject.get("Material") + "\" does not have required material parameter!");
+			SurvivalGames.$(0, Level.SEVERE, "Item \"" + itemObject.get("Material") + "\" does not have required material parameter!");
 			return null;
 		}
 		
@@ -125,7 +125,7 @@ public class ChestRatioStorage {
 		
 		// Set the item lore
 		if (itemObject.containsKey("Lore")) {
-			ArrayList<String> lore = new ArrayList<String>();
+			ArrayList<String> lore = new ArrayList<>();
 			
 			JSONArray loreArray = (JSONArray)itemObject.get("Lore");
 			for (Object loreObject : loreArray) {
@@ -166,8 +166,8 @@ public class ChestRatioStorage {
 		
 		Random random = new Random();
 		int noofItems = random.nextInt(5) + 1;
-		
-		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+
+		ArrayList<ItemStack> items = new ArrayList<>();
 		
 		int loopSafty = 200 / chests.size();
 		while (noofItems != 0) {

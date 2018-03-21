@@ -25,9 +25,9 @@ public class PlayerStatsSession {
     int position = 0;
     int pppoints = 0;
 
-    private ArrayList<UUID>killed = new ArrayList<UUID>();
+    private ArrayList<UUID> killed = new ArrayList<>();
 
-    private HashMap<Integer, Integer>kslist = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> kslist = new HashMap<>();
 
     public PlayerStatsSession(Player p, int arenaid ){
         this.player = p.getUniqueId();

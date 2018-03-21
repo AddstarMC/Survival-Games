@@ -22,34 +22,36 @@ public class LobbySignState extends LobbySign {
 		// output some help about the state and what it means
 		GameMode gameMode = getGame().getGameMode();
 		String infoMessage = "Unknown arena state";
-		
-		if (gameMode == GameMode.DISABLED) {
-			infoMessage = "This arena is currently disabled. This is normally due to arena maintenance.";
-		}
-		else if (gameMode == GameMode.ERROR) {
-			infoMessage = "There is an error with this arena! Please inform a Staff memeber.";
-		}
-		else if (gameMode == GameMode.FINISHING) {
-			infoMessage = "This arena is finishing. A new game will be ready shortly...";	
-		}
-		else if (gameMode == GameMode.INACTIVE) {
-			infoMessage = "This arena is currently inactive. Please play a different arena.";
-		}
-		else if (gameMode == GameMode.INGAME) {
-			infoMessage = "A game has already started. You can join the arena queue to take part in the next game.";
-		}
-		else if (gameMode == GameMode.LOADING) {
-			infoMessage = "This arena is loading. A game will be ready shortly...";
-		}
-		else if (gameMode == GameMode.RESETING) {
-			infoMessage = "This arena is resetting. A new game will be ready shortly...";	
-		}
-		else if (gameMode == GameMode.STARTING) {
-			infoMessage = "A game in this arena is about to start! Join quickly!";	
-		}
-		else if (gameMode == GameMode.WAITING) {
-			infoMessage = "This arena is waiting to start. You can join this arena and use '/sg vote' to ready up!";	
-		}
+
+        switch (gameMode) {
+            case DISABLED:
+                infoMessage = "This arena is currently disabled. This is normally due to arena maintenance.";
+                break;
+            case ERROR:
+                infoMessage = "There is an error with this arena! Please inform a Staff memeber.";
+                break;
+            case FINISHING:
+                infoMessage = "This arena is finishing. A new game will be ready shortly...";
+                break;
+            case INACTIVE:
+                infoMessage = "This arena is currently inactive. Please play a different arena.";
+                break;
+            case INGAME:
+                infoMessage = "A game has already started. You can join the arena queue to take part in the next game.";
+                break;
+            case LOADING:
+                infoMessage = "This arena is loading. A game will be ready shortly...";
+                break;
+            case RESETING:
+                infoMessage = "This arena is resetting. A new game will be ready shortly...";
+                break;
+            case STARTING:
+                infoMessage = "A game in this arena is about to start! Join quickly!";
+                break;
+            case WAITING:
+                infoMessage = "This arena is waiting to start. You can join this arena and use '/sg vote' to ready up!";
+                break;
+        }
 		
 		MessageManager.getInstance().sendMessage(MessageManager.PrefixType.INFO, infoMessage, player);
 	}

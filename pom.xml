@@ -2,20 +2,44 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>SurvivalGames</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
 	<name>SurvivalGames</name>
-
 	<properties>
-		<version.build>0.6.0-b${env.BUILD_NUMBER}</version.build>
+        <build.number/>
+        <plugin.version>${project.version}-${build.number}</plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
 	</properties>
-	
+    <scm>
+        <connection>scm:git:git@github.com:AddstarMC/Survival-Games.git</connection>
+        <developerConnection>scm:git:git@github.com:AddstarMC/Survival-Games.git</developerConnection>
+        <url>https://github.com/AddstarMC/Survival-Games</url>
+        <tag>HEAD</tag>
+    </scm>
+    <developers>
+        <developer>
+            <id>AddstarMC</id>
+            <name>AddstarMC</name>
+            <url>http://github.com/AddstarMC</url>
+            <roles>
+                <role>developer</role>
+                <role>maintainer</role>
+            </roles>
+            <timezone>10</timezone>
+        </developer>
+    </developers>
 	<repositories>
-		<!-- For spigot -->
+        <!-- Spigot repo -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+        </repository>
+
+        <!-- For Vault -->
 		<repository>
-			<id>md5-repo</id>
-			<url>http://repo.md-5.net/content/groups/public/</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
+            <id>vault-repo</id>
+            <name>Public Releases</name>
+            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
 		</repository>
 
 		<!-- Addstar repo -->
@@ -39,45 +63,39 @@
 			<id>sk89q-mvn2</id>
 			<url>http://maven.sk89q.com/repo</url>
 		</repository>
-
-		<!-- For Vault -->
-		<repository>
-			<id>theyeticave</id>
-			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
-		</repository>
 	</repositories>
-	
 	<dependencies>
 		<!-- We use Spigot now, not Bukkit -->
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.spigotmc</groupId>
-					<artifactId>sneaky-throw</artifactId>
-				</exclusion>
-			</exclusions>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.version}</version>
 		</dependency>
 
 		<!-- WorldEdit -->
 		<dependency>
-			<groupId>com.sk89q</groupId>
-			<artifactId>worldedit</artifactId>
-			<version>5.6.3</version>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>6.1.5</version>
+            <scope>provided</scope>
 		</dependency>
 
 		<!-- Used for Economy interop -->
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
-			<artifactId>Vault</artifactId>
-			<version>1.4.1</version>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>craftbukkit</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
 		</dependency>
 	</dependencies>
 	
@@ -88,14 +106,14 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.1</version>
+                <version>3.0.2</version>
 				<configuration>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>

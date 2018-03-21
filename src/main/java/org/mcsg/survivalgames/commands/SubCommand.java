@@ -4,10 +4,10 @@ import org.bukkit.command.CommandSender;
 
 public interface SubCommand {
 
-    public boolean onCommand(CommandSender sender, String[] args);
+    boolean onCommand(CommandSender sender, String[] args);
 
-    public String help(CommandSender p);
-    
-    public String permission();
+    String help(CommandSender p);
+
+    String permission();
     
 }

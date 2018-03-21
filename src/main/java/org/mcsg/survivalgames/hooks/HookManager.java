@@ -22,7 +22,7 @@ public class HookManager {
 	}
 
 
-	private HashMap<String, HookBase>hooks = new HashMap<String, HookBase>();
+    private HashMap<String, HookBase> hooks = new HashMap<>();
 
 	public void setup(){
 		hooks.put("c", new CommandHook());

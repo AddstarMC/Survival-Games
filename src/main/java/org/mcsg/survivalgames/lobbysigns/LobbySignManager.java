@@ -15,8 +15,8 @@ import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SurvivalGames;
 
 public class LobbySignManager {
-	
-	private HashMap<Vector, LobbySign> signs = new HashMap<Vector, LobbySign>();
+
+    private HashMap<Vector, LobbySign> signs = new HashMap<>();
 	private int noofPlayerListSigns = 0;
 	private File signFolder = null;
 	
@@ -71,7 +71,8 @@ public class LobbySignManager {
 				sign.save(config);
 				try {
 					config.save(signFile);
-				} catch (IOException e) {}
+                } catch (IOException ignored) {
+                }
 				continue;
 			}
 			
@@ -97,7 +98,8 @@ public class LobbySignManager {
 			sign.setSaveFile(signFile);
 			try {
 				config.save(signFile);
-			} catch (IOException e) {}
+            } catch (IOException ignored) {
+            }
 		}
 	}
 	
@@ -126,28 +128,29 @@ public class LobbySignManager {
 			LobbySignType signType = LobbySignType.valueOf(signTypeString);
 			
 			LobbySign sign = null;
-			
-			if (signType == LobbySignType.Join) {
-				sign = new LobbySignJoin(gameId);
-			}
-			else if (signType == LobbySignType.PlayerList) {
-				sign = new LobbySignPlayerList(gameId);
-			}
-			else if (signType == LobbySignType.Players) {
-				sign = new LobbySignPlayers(gameId);
-			}
-			else if (signType == LobbySignType.State) {
-				sign = new LobbySignState(gameId);
-			}
-			else if (signType == LobbySignType.Winner) {
-				sign = new LobbySignWinner(gameId);
-			}
-			else if (signType == LobbySignType.WinnerSign) {
-			    sign = new LobbySignWinnerSign(gameId);
-			}
-			else {
-				SurvivalGames.$(0, Level.SEVERE, "Invalid sign type! " + file.getName());
-				continue;
+
+            switch (signType) {
+                case Join:
+                    sign = new LobbySignJoin(gameId);
+                    break;
+                case PlayerList:
+                    sign = new LobbySignPlayerList(gameId);
+                    break;
+                case Players:
+                    sign = new LobbySignPlayers(gameId);
+                    break;
+                case State:
+                    sign = new LobbySignState(gameId);
+                    break;
+                case Winner:
+                    sign = new LobbySignWinner(gameId);
+                    break;
+                case WinnerSign:
+                    sign = new LobbySignWinnerSign(gameId);
+                    break;
+                default:
+                    SurvivalGames.$(0, Level.SEVERE, "Invalid sign type! " + file.getName());
+                    continue;
 			}
 			
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -183,7 +186,7 @@ public class LobbySignManager {
 	}
 
 	public List<LobbySign> getSignsByType(int gameID, LobbySignType type) {
-		ArrayList<LobbySign> typeSigns = new ArrayList<LobbySign>();
+        ArrayList<LobbySign> typeSigns = new ArrayList<>();
 		
 		for (LobbySign sign : signs.values()) {
 			if (sign.getGame().getID() == gameID && sign.getType() == type) {

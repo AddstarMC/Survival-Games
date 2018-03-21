@@ -18,7 +18,7 @@ import org.mcsg.survivalgames.lobbysigns.LobbySignWinnerSign;
 public class LobbyManager {
 
 	private static LobbyManager instance = null;
-	public static HashSet < Chunk > lobbychunks = new HashSet < Chunk > ();
+    public static HashSet<Chunk> lobbychunks = new HashSet<>();
 	LobbySignManager signManager = null;
 	
 	private LobbyManager(LobbySignManager signManager) {

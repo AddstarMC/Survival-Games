@@ -19,7 +19,7 @@ public class ItemReader {
 
 	
 	private static void loadIds(){
-		encids =  new HashMap<String, Enchantment>();
+        encids = new HashMap<>();
 		
 		for(Enchantment e:Enchantment.values()){
 			String name = e.getName().toLowerCase().replace("_", "");
@@ -84,7 +84,7 @@ public class ItemReader {
 			for(int a = 0; a < l.length; a++){
 				SurvivalGames.$(0, "  Lore "+(a+1)+": " + l[a]);
 			}
-			List<String> lore = new ArrayList<String>(Arrays.asList(l));
+            List<String> lore = new ArrayList<>(Arrays.asList(l));
 			im.setLore(lore);
 		}
 		i.setItemMeta(im);

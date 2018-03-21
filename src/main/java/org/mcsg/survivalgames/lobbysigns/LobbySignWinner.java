@@ -1,7 +1,9 @@
 package org.mcsg.survivalgames.lobbysigns;
 
 import java.io.IOException;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.Block;
@@ -16,6 +18,7 @@ import org.mcsg.survivalgames.MessageManager;
 public class LobbySignWinner extends LobbySign {
 	
 	private String m_lastWinnerName = null;
+	private UUID lastWinnerUUID = null;
 
 	public LobbySignWinner(Sign sign, int gameId) {
 		super(sign.getLocation(), gameId, LobbySignType.Winner);				
@@ -29,12 +32,20 @@ public class LobbySignWinner extends LobbySign {
 	public void save(FileConfiguration config) {
 		super.save(config);
 		config.set("lobby.sign.winnerName", m_lastWinnerName);
+		config.set("lobby.sign.winnerUUID", lastWinnerUUID.toString());
 	}
 	
 	@Override
 	public void load(FileConfiguration config) {
 		super.load(config);
 		m_lastWinnerName = config.getString("lobby.sign.winnerName", null);
+		String uuid = config.getString("lobby.sign.winnerUUID", null);
+		if (uuid != null) {
+			lastWinnerUUID = UUID.fromString(uuid);
+		} else {
+			//noinspection deprecation //todo
+			lastWinnerUUID = Bukkit.getOfflinePlayer(m_lastWinnerName).getUniqueId();
+		}
 	}
 	
 	@Override
@@ -59,19 +70,19 @@ public class LobbySignWinner extends LobbySign {
 
 	@Override
 	public void execute(Player player) {
-		if (m_lastWinnerName == null)
+		if (lastWinnerUUID == null)
 			return;
 		
 		MessageManager.getInstance().sendMessage(
-				MessageManager.PrefixType.INFO, 
-				"The last player to win '" + this.getGame().getName() + "' was " + m_lastWinnerName, 
+				MessageManager.PrefixType.INFO,
+				"The last player to win '" + this.getGame().getName() + "' was " + Bukkit.getOfflinePlayer(lastWinnerUUID).getName(),
 				player);
 	}
 
 	@Override
 	public void update() {
-		
-		if (m_lastWinnerName == null) {
+
+		if (lastWinnerUUID == null) {
 			return;
 		}
 
@@ -81,7 +92,7 @@ public class LobbySignWinner extends LobbySign {
 
 		Skull skull = (Skull)block.getState();
 		skull.setSkullType(SkullType.PLAYER);
-		skull.setOwner(m_lastWinnerName);
+		skull.setOwningPlayer(Bukkit.getOfflinePlayer(lastWinnerUUID));
 		BlockFace face = getDirectionFacing(block);
 		if (face != null) {
 			skull.setRotation(face);
@@ -107,7 +118,8 @@ public class LobbySignWinner extends LobbySign {
 		this.save(config);
 		try {
 			config.save(this.getSaveFile());
-		} catch (IOException e) {}
+		} catch (IOException ignored) {
+		}
 	}
 
 	public BlockFace getDirectionFacing(Block b) {

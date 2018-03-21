@@ -12,11 +12,11 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
@@ -58,7 +58,7 @@ public class SpectatorEvents implements Listener {
                 Player[] players = g.getPlayers()[0];
 
                 int i = g.getNextSpec().get(player);
-                ItemStack is = player.getItemInHand();
+                ItemStack is = player.getEquipment().getItemInMainHand();
                 if (is.getType() == SettingsManager.getInstance().getSpecItemNext().getType()) {
                 	// Next player
                 	i++;
@@ -99,8 +99,9 @@ public class SpectatorEvents implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
-    public void onSignChange(PlayerPickupItemEvent event) {
-        Player player = event.getPlayer();
+    public void onSignChange(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
         if (GameManager.getInstance().isSpectator(player)) {
             event.setCancelled(true);
         }

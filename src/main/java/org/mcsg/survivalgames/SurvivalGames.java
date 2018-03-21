@@ -29,7 +29,9 @@ public class SurvivalGames extends JavaPlugin {
 	public static boolean dbcon = false;
 	public static boolean config_todate = false;
 	public static int config_version = 3;
-	
+
+	public static SurvivalGames plugin;
+
 	private LobbySignManager lobbySignManager;
 	
 	SurvivalGames p = this;
@@ -48,9 +50,11 @@ public class SurvivalGames extends JavaPlugin {
 		}
 
 		logger.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " has now been disabled and reset");
+		plugin = null;
 	}
 
 	public void onEnable() {
+		plugin = this;
 		logger = p.getLogger();
 		datafolder = p.getDataFolder();
 		//ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started

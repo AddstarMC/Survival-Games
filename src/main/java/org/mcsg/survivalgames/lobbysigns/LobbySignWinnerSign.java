@@ -83,6 +83,7 @@ public class LobbySignWinnerSign extends LobbySign {
         this.save(config);
         try {
             config.save(this.getSaveFile());
-        } catch (IOException e) {}
+        } catch (IOException ignored) {
+        }
     }
 }

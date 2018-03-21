@@ -21,7 +21,7 @@ import org.mcsg.survivalgames.GameManager;
 
 @SuppressWarnings("deprecation")
 public class LoggingManager implements  Listener{
-	public static HashMap<String, Integer>i = new HashMap<String, Integer>();
+    public static HashMap<String, Integer> i = new HashMap<>();
 
 	private static LoggingManager instance = new LoggingManager();
 

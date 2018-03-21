@@ -14,7 +14,7 @@ import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.Game.GameMode;
 
 public class MoveEvent implements Listener{
-    HashMap<UUID, Vector>playerpos = new HashMap<UUID, Vector>();
+    HashMap<UUID, Vector> playerpos = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void frozenSpawnHandler(PlayerMoveEvent e) {

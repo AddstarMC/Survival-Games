@@ -25,11 +25,11 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 public class GameManager {
 
 	static GameManager instance = new GameManager();
-	private ArrayList < Game > games = new ArrayList < Game > ();
+    public static HashMap<Integer, HashSet<Block>> openedChest = new HashMap<>();
 	private SurvivalGames p;
-	public static HashMap < Integer, HashSet < Block >> openedChest = new HashMap < Integer, HashSet < Block >> ();
-	private ArrayList<Kit>kits = new ArrayList<Kit>();
-	private HashSet<UUID>kitsel = new HashSet<UUID>();
+    private ArrayList<Game> games = new ArrayList<>();
+    private ArrayList<Kit> kits = new ArrayList<>();
+    private HashSet<UUID> kitsel = new HashSet<>();
 	MessageManager msgmgr = MessageManager.getInstance();
 
 	private GameManager() {
@@ -45,7 +45,7 @@ public class GameManager {
 		LoadGames();
 		LoadKits();
 		for (Game g: getGames()) {
-			openedChest.put(g.getID(), new HashSet < Block > ());
+            openedChest.put(g.getID(), new HashSet<>());
 		}
 	}
 
@@ -224,7 +224,7 @@ public class GameManager {
 	}
 
 	public ArrayList<Kit> getKits(Player p){
-		ArrayList<Kit>k = new ArrayList<Kit>();
+        ArrayList<Kit> k = new ArrayList<>();
 		for(Kit kit: kits){
 			if(kit.canUse(p)){
 				k.add(kit);
@@ -248,7 +248,7 @@ public class GameManager {
 	}
 
 	public void autoAddPlayer(Player pl) {
-		ArrayList<Game> qg = new ArrayList<Game>();
+        ArrayList<Game> qg = new ArrayList<>();
 		for (Game g: games) {
 			if (g.getMode() == Game.GameMode.WAITING) {
 				qg.add(g);
@@ -326,7 +326,7 @@ public class GameManager {
 
 	public void gameEndCallBack(int id) {
 		getGame(id).setRBStatus("clearing chest");
-		openedChest.put(id, new HashSet < Block > ());
+        openedChest.put(id, new HashSet<>());
 	}
 
 	public String getStringList(int gid){
@@ -337,14 +337,14 @@ public class GameManager {
 		StringBuilder sb = new StringBuilder();
 		Player[][]players = g.getPlayers();
 
-		sb.append(ChatColor.GREEN+"<---------------------[ Alive: "+players[0].length+" ]--------------------->\n"+ChatColor.GREEN+" ");
+        sb.append(ChatColor.GREEN + "<---------------------[ Alive: ").append(players[0].length).append(" ]--------------------->\n").append(ChatColor.GREEN).append(" ");
 		for(Player p: players[0]){
-			sb.append(p.getName()+",");
+            sb.append(p.getName()).append(",");
 		}
 		sb.append("\n\n");
-		sb.append(ChatColor.RED+  "<---------------------[ Dead: "+players[1].length+" ]---------------------->\n"+ChatColor.GREEN+" ");
+        sb.append(ChatColor.RED + "<---------------------[ Dead: ").append(players[1].length).append(" ]---------------------->\n").append(ChatColor.GREEN).append(" ");
 		for(Player p: players[1]){
-			sb.append(p.getName()+",");
+            sb.append(p.getName()).append(",");
 		}
 		sb.append("\n\n");
 

@@ -12,7 +12,7 @@ import org.mcsg.survivalgames.SettingsManager;
 
 public class SetSpawn implements SubCommand{
 
-    HashMap<Integer, Integer>next = new HashMap<Integer,Integer>();
+    HashMap<Integer, Integer> next = new HashMap<>();
 
     public SetSpawn() {
     	

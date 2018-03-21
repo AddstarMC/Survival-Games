@@ -12,7 +12,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 public class FileCache {
 
     private static FileCache instance = new FileCache();
-    private static HashMap<String, String>html = new HashMap<String, String>();
+    private static HashMap<String, String> html = new HashMap<>();
     private FileCache(){
 
     }

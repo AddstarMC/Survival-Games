@@ -39,7 +39,7 @@ public class ChestReplaceEvent implements Listener{
     					// Grab the "opened chest" list or create an empty one
     					HashSet<Block>openedChest = GameManager.openedChest.get(gameid);
     					if (openedChest == null) {
-    						openedChest = new HashSet<Block>();
+                            openedChest = new HashSet<>();
     					}
 
     					// If chest hasn't been opened yet.. we have to fill it!

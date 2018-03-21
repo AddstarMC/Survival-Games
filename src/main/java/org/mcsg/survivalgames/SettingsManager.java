@@ -306,7 +306,7 @@ public class SettingsManager {
 
 	//TODO: Implement per-arena settings aka flags
 	public HashMap < String, Object > getGameFlags(int a) {
-		HashMap < String, Object > flags = new HashMap < String, Object > ();
+        HashMap<String, Object> flags = new HashMap<>();
 
 		flags.put("AUTOSTART_PLAYERS", system.getInt("sg-system.arenas." + a + ".flags.autostart"));
 		flags.put("AUTOSTART_VOTE", system.getInt("sg-system.arenas." + a + ".flags.vote"));

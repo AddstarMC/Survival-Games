@@ -50,8 +50,8 @@ public class CommandHandler implements CommandExecutor {
 	
 	public CommandHandler(Plugin plugin) {
 		this.plugin = plugin;
-		commands = new HashMap<String, SubCommand>();
-		helpinfo = new HashMap<String, CommandGroup>();
+		commands = new HashMap<>();
+		helpinfo = new HashMap<>();
 		loadCommands();
 		loadHelpInfo();
 	}
@@ -161,10 +161,9 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 			String sub = args[0];
-			Vector < String > l = new Vector < String > ();
-			l.addAll(Arrays.asList(args));
+			Vector<String> l = new Vector<>(Arrays.asList(args));
 			l.remove(0);
-			args = (String[]) l.toArray(new String[0]);
+			args = l.toArray(new String[0]);
 			if (!commands.containsKey(sub)) {
 				msgmgr.sendMessage(PrefixType.WARNING, "Command doesn't exist.", sender);
 				msgmgr.sendMessage(PrefixType.INFO, "Type /sg help for command information", sender);
@@ -198,7 +197,8 @@ public class CommandHandler implements CommandExecutor {
 				if (helpinfo.get(command) == group) {
 					msgmgr.sendMessage(PrefixType.INFO, commands.get(command).help(s), s);
 				}
-			}catch(Exception e){}
+			} catch (Exception ignored) {
+			}
 		}
 	}
 }

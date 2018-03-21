@@ -9,7 +9,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 
 public class MessageUtil {
 
-	private static HashMap<String, String>varcache = new HashMap<String, String>();
+    private static HashMap<String, String> varcache = new HashMap<>();
 
 
 	public static String replaceColors(String s){

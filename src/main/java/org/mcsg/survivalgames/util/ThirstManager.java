@@ -49,7 +49,7 @@ public class ThirstManager implements Listener {
 	@EventHandler
 	public void onPlayerDrinkWater(PlayerInteractEvent e) {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if (e.getPlayer().getItemInHand().getType() == Material.POTION) {
+			if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.POTION) {
 				e.getPlayer().getInventory().removeItem(new ItemStack(Material.POTION, 1));
 				addThirst(e.getPlayer(), 5);
 				e.getPlayer().sendMessage(ChatColor.GREEN + "You drank water.");

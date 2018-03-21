@@ -13,7 +13,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 
 public class SetDMSpawn implements SubCommand{
 
-    HashMap<Integer, Integer>next = new HashMap<Integer,Integer>();
+    HashMap<Integer, Integer> next = new HashMap<>();
 
     public SetDMSpawn() {
     	

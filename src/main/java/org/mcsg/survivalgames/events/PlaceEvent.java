@@ -14,7 +14,7 @@ import org.mcsg.survivalgames.SettingsManager;
 @SuppressWarnings("deprecation")
 public class PlaceEvent implements Listener {
 
-    public  ArrayList<Integer> allowedPlace = new ArrayList<Integer>();
+    public ArrayList<Integer> allowedPlace = new ArrayList<>();
 
     public PlaceEvent(){
         allowedPlace.addAll( SettingsManager.getInstance().getConfig().getIntegerList("block.place.whitelist"));

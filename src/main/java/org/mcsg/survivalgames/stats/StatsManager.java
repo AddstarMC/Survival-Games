@@ -17,7 +17,6 @@ import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.MessageManager;
 import org.mcsg.survivalgames.SettingsManager;
-import org.mcsg.survivalgames.SurvivalGames;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.util.DatabaseManager;
 
@@ -26,16 +25,16 @@ import org.mcsg.survivalgames.util.DatabaseManager;
 public class StatsManager {
 
     private static StatsManager instance = new StatsManager();
-    
-    private ArrayList<PreparedStatement> queue = new ArrayList<PreparedStatement>();
+
+    private ArrayList<PreparedStatement> queue = new ArrayList<>();
     private DatabaseDumper dumper = new DatabaseDumper();
     private DatabaseManager dbman = DatabaseManager.getInstance();
-    private HashMap<Integer, HashMap<UUID, PlayerStatsSession>>arenas  = new HashMap<Integer, HashMap<UUID, PlayerStatsSession>>();
+    private HashMap<Integer, HashMap<UUID, PlayerStatsSession>> arenas = new HashMap<>();
     private boolean enabled = true;
     MessageManager msgmgr;
 
     private StatsManager(){
-    	msgmgr = MessageManager.getInstance();;
+        msgmgr = MessageManager.getInstance();
     }
 
     public static StatsManager getInstance(){
@@ -87,7 +86,7 @@ public class StatsManager {
     }
 
     public void addArena(int arenaid){
-        arenas.put(arenaid, new HashMap<UUID, PlayerStatsSession>());
+        arenas.put(arenaid, new HashMap<>());
     }
 
 

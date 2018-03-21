@@ -24,7 +24,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 public class QueueManager {
 
 	private static QueueManager instance = new QueueManager();
-	private ConcurrentHashMap<Integer, ArrayList<BlockData>> queue = new ConcurrentHashMap<Integer, ArrayList<BlockData>>();
+    private ConcurrentHashMap<Integer, ArrayList<BlockData>> queue = new ConcurrentHashMap<>();
 	File baseDir;
 
 	private QueueManager(){
@@ -45,7 +45,8 @@ public class QueueManager {
 				ensureFile(g.getID());
 			}
 
-		}catch(Exception e){}
+        } catch (Exception ignored) {
+        }
 
 		Bukkit.getScheduler().runTaskTimerAsynchronously(GameManager.getInstance().getPlugin(), new DataDumper(), 100, 100);
 	}
@@ -69,33 +70,10 @@ public class QueueManager {
 		}
 	}
 
-	class RemoveEntities implements Runnable{
-		private int id;
-
-		protected RemoveEntities(int id){
-			this.id = id;
-		}
-
-		public void run(){
-			ArrayList<Entity>removelist = new ArrayList<Entity>();
-
-			for(Entity e:SettingsManager.getGameWorld(id).getEntities()){
-				if((!(e instanceof Player)) && (!(e instanceof HumanEntity))){
-					if(GameManager.getInstance().getBlockGameId(e.getLocation()) == id){
-						removelist.add(e);
-					}
-				}
-			}
-			for(int a = 0; a < removelist.size(); a = 0){
-				try{removelist.remove(0).remove();}catch(Exception e){}
-			}
-		}
-	}
-
 	public void add(BlockData data){
 		ArrayList<BlockData>dat = queue.get(data.getGameId());
 		if(dat == null){
-			dat = new ArrayList<BlockData>();
+            dat = new ArrayList<>();
 			ensureFile(data.getGameId());
 		}
 		dat.add(data);
@@ -109,24 +87,8 @@ public class QueueManager {
 			if(!f2.exists()){
 				f2.createNewFile();
 			}
-		}catch(Exception e){}
-	}
-
-	class DataDumper implements Runnable{
-		public void run(){
-			for(int id: queue.keySet()){
-				try{
-
-					ArrayList<BlockData>data = queue.get(id);
-					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(baseDir, "Arena"+id+".dat")));
-
-					out.writeObject(data);
-					out.flush();
-					out.close();
-
-				}catch(Exception e){}
-			}
-		}
+        } catch (Exception ignored) {
+        }
 	}
 
 	@SuppressWarnings("unchecked")
@@ -137,9 +99,9 @@ public class QueueManager {
 
 			ArrayList<BlockData>input = (ArrayList<BlockData>) in.readObject();
 
-			ArrayList<BlockData>data = queue.get(id); 
+            ArrayList<BlockData> data = queue.get(id);
 			if(data == null){
-				data = new ArrayList<BlockData>();
+                data = new ArrayList<>();
 			}
 
 			for(BlockData d:input){
@@ -150,7 +112,52 @@ public class QueueManager {
 
 			queue.put(id, data);
 			in.close();
-		}catch(Exception e){}
+        } catch (Exception ignored) {
+        }
+    }
+
+    class RemoveEntities implements Runnable {
+        private int id;
+
+        protected RemoveEntities(int id) {
+            this.id = id;
+        }
+
+        public void run() {
+            ArrayList<Entity> removelist = new ArrayList<>();
+
+            for (Entity e : SettingsManager.getGameWorld(id).getEntities()) {
+                if ((!(e instanceof Player)) && (!(e instanceof HumanEntity))) {
+                    if (GameManager.getInstance().getBlockGameId(e.getLocation()) == id) {
+                        removelist.add(e);
+                    }
+                }
+            }
+            for (int a = 0; a < removelist.size(); a = 0) {
+                try {
+                    removelist.remove(0).remove();
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
+    class DataDumper implements Runnable {
+        public void run() {
+            for (int id : queue.keySet()) {
+                try {
+
+                    ArrayList<BlockData> data = queue.get(id);
+                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(baseDir, "Arena" + id + ".dat")));
+
+                    out.writeObject(data);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception ignored) {
+                }
+            }
+        }
 	}
 
 

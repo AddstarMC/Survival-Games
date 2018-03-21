@@ -15,14 +15,15 @@ public class Connection extends Thread{
     BufferedReader in;
     DataOutputStream out;
     Socket skt;
-    HashMap<String, String>html = new HashMap<String, String>();
+    HashMap<String, String> html = new HashMap<>();
 
     public Connection(Socket skt){
         try{
             this.in = new BufferedReader(new InputStreamReader(skt.getInputStream()));
             this.out = new DataOutputStream(skt.getOutputStream());
             this.skt = skt;
-        }catch(Exception e){}
+        } catch (Exception ignored) {
+        }
     }
 
     public void run(){

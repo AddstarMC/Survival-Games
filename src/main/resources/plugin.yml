@@ -1,5 +1,5 @@
 name: SurvivalGames
-version: ${project.version}
+version: ${plugin.version}
 main: org.mcsg.survivalgames.SurvivalGames
 authors: [Double0negative, n3wton, TheFish97]
 description: Fully Automated Hunger Games Plugin!

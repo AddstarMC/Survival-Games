@@ -16,11 +16,21 @@ public class MessageManager {
 
 	public static MessageManager instance = new MessageManager();
 	public String pre = ChatColor.BLUE + "" + ChatColor.BOLD + "[" + ChatColor.GOLD + "" + ChatColor.BOLD + "SG" + ChatColor.BLUE + "" + ChatColor.BOLD + "] " + ChatColor.RESET;
-	private HashMap<PrefixType, String>prefix = new HashMap<PrefixType, String>();
-	public enum PrefixType {
+	private HashMap<PrefixType, String> prefix = new HashMap<>();
 
-		MAIN, INFO, WARNING, ERROR;
-		
+	/**
+	 * SendMessage
+	 * <p>
+	 * Loads a Message from messages.yml, converts its colors and replaces vars in the form of {$var} with its correct values,
+	 * then sends to the player, adding the correct prefix
+	 *
+	 * @param type
+	 * @param input
+	 * @param player
+	 * @param args
+	 */
+	public void sendFMessage(PrefixType type, String input, Player player, String... args) {
+		sendFMessage(type, input, (CommandSender) player, args);
 	}
 	
 	public static MessageManager getInstance() {
@@ -33,24 +43,21 @@ public class MessageManager {
 		prefix.put(PrefixType.INFO, MessageUtil.replaceColors(f.getString("prefix.states.info")));
 		prefix.put(PrefixType.WARNING, MessageUtil.replaceColors(f.getString("prefix.states.warning")));
 		prefix.put(PrefixType.ERROR, MessageUtil.replaceColors(f.getString("prefix.states.error")));
-		
+
 	}
-	
-	
+
 	/**
 	 * SendMessage
-	 * 
-	 * Loads a Message from messages.yml, converts its colors and replaces vars in the form of {$var} with its correct values, 
-	 * then sends to the player, adding the correct prefix 
-	 *  
+	 *
+	 * Sends a pre formated message from the plugin to a player, adding correct prefix first
+	 *
 	 * @param type
-	 * @param input
-	 * @param player
-	 * @param vars
+	 * @param msg
+	 * @param sender
 	 */
-	public void sendFMessage(PrefixType type, String input, Player player, String ... args) {
-		CommandSender sender = (CommandSender) player;
-		sendFMessage(type, input, sender, args);
+
+	public void sendMessage(PrefixType type, String msg, CommandSender sender) {
+		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
 	}
 	
 	public void sendFMessage(PrefixType type, String input, CommandSender sender, String ... args) {
@@ -60,21 +67,13 @@ public class MessageManager {
 		if(!enabled)return;
 		if(args != null && args.length != 0){msg = MessageUtil.replaceVars(msg, args);}
 		msg = MessageUtil.replaceColors(msg);
-		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
+		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " " + prefix.get(type) + msg);
 	}
-	
-	/**
-	 * SendMessage
-	 * 
-	 * Sends a pre formated message from the plugin to a player, adding correct prefix first
-	 * 
-	 * @param type
-	 * @param msg
-	 * @param p
-	 */
-	
-	public void sendMessage(PrefixType type, String msg, CommandSender sender){
-		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
+
+	public enum PrefixType {
+
+		MAIN, INFO, WARNING, ERROR
+
 	}
 	
 	public void logMessage(PrefixType type, String msg) {
