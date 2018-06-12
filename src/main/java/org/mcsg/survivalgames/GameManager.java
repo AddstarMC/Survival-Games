@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game.GameMode;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
+import org.mcsg.survivalgames.api.PlayerLeaveArenaEvent;
 import org.mcsg.survivalgames.stats.StatsManager;
 import org.mcsg.survivalgames.util.Kit;
 
@@ -196,6 +198,8 @@ public class GameManager {
 	public void removePlayer(Player p, boolean b) {
 		Game game = getGame(getPlayerGameId(p));
 		game.playerLeave(p, b);
+		PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(p, getGame(getPlayerGameId(p)), !p.isOnline());
+		Bukkit.getPluginManager().callEvent(event);
 	}
 
 	public void removeSpectator(Player p) {
