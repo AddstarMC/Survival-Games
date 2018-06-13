@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>SurvivalGames</artifactId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.6.2-SNAPSHOT</version>
 	<name>SurvivalGames</name>
 	<properties>
         <build.number/>
@@ -79,6 +79,12 @@
             <artifactId>worldedit-bukkit</artifactId>
             <version>6.1.9-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 
 		<!-- Used for Economy interop -->

@@ -133,6 +133,8 @@ sql:
   pass: ''
   database: 'survivalgames'
   prefix: 'sg_'
+  properties:
+    useSSL: false
 
 
 ###########################################################
