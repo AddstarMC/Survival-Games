@@ -2,10 +2,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>SurvivalGames</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>0.6.2</version>
 	<name>SurvivalGames</name>
 	<properties>
-        <build.number/>
+        <build.number />
         <plugin.version>${project.version}-${build.number}</plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
@@ -14,7 +14,7 @@
         <connection>scm:git:git@github.com:AddstarMC/Survival-Games.git</connection>
         <developerConnection>scm:git:git@github.com:AddstarMC/Survival-Games.git</developerConnection>
         <url>https://github.com/AddstarMC/Survival-Games</url>
-        <tag>HEAD</tag>
+        <tag>SurvivalGames-0.6.2</tag>
     </scm>
     <developers>
         <developer>
@@ -131,6 +131,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
+				<configuration>
+					<allowTimestampedSnapshots>true</allowTimestampedSnapshots>
+				</configuration>
 			</plugin>
 		</plugins>
 		
