@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mcsg</groupId>
 	<artifactId>SurvivalGames</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.3-SNAPSHOT</version>
 	<name>SurvivalGames</name>
 	<properties>
         <build.number />
@@ -14,7 +14,7 @@
         <connection>scm:git:git@github.com:AddstarMC/Survival-Games.git</connection>
         <developerConnection>scm:git:git@github.com:AddstarMC/Survival-Games.git</developerConnection>
         <url>https://github.com/AddstarMC/Survival-Games</url>
-        <tag>SurvivalGames-0.6.2</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
