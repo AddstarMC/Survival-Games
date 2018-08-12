@@ -23,15 +23,13 @@ public class ThirstManager implements Listener {
 	}
 	
 	public void startThirst() {
-		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(new SurvivalGames(), new Runnable() {
-    	public void run() {
-    		for (Game g : GameManager.getInstance().getGames()) {
-    			for (Player p : g.getAllPlayers()) {
-    				removeThirst(p, 1);
-    			}
-    		}
-    	}
-    }, 60L, 200L);
+		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(new SurvivalGames(), () -> {
+			for (Game g : GameManager.getInstance().getGames()) {
+				for (Player p : g.getAllPlayers()) {
+					removeThirst(p, 1);
+				}
+			}
+		}, 60L, 200L);
 	}
 	
 	public void removeThirst(Player p, int amount) {

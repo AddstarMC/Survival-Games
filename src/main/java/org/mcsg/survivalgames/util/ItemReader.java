@@ -22,7 +22,7 @@ public class ItemReader {
         encids = new HashMap<>();
 		
 		for(Enchantment e:Enchantment.values()){
-			String name = e.getName().toLowerCase().replace("_", "");
+			String name = e.getKey().getKey().toLowerCase().replace("_", "");
 			encids.put(name, e);
 		}
 		
@@ -51,36 +51,32 @@ public class ItemReader {
 		int size = 1;
 
 		try {
-			mat = Material.valueOf(split[0]);
+			mat = Material.matchMaterial(split[0]);
 		} catch(Exception e) {
 			SurvivalGames.$(0, "ERROR: Unknown item named \"" + split[0] + "\"");
 			return null;
 		}
-		short data = 0; 
 
 		// Grab item qty
 		if (split.length > 1)
 			size = Integer.parseInt(split[1]);
 
-		// Grab item data
-		if (split.length > 2)
-			data = Short.parseShort(split[2]);
 
 		// Create the item
-		i =  new ItemStack(mat, size, data);
+		i = new ItemStack(mat, size);
 		ItemMeta im = i.getItemMeta();
 		SurvivalGames.$(0, "Item: " + i);
 
 		// Set item display name
-		if(split.length >= 5){
-			String name = MessageUtil.replaceColors(split[4]);
+		if (split.length >= 3) {
+			String name = MessageUtil.replaceColors(split[3]);
 			im.setDisplayName(name);
 			SurvivalGames.$(0, "  Name: " + name);
 		}
 
 		// Set item lore
-		if(split.length == 6){
-			String[] l = split[5].split("\\|", -1);
+		if (split.length == 5) {
+			String[] l = split[4].split("\\|", -1);
 			for(int a = 0; a < l.length; a++){
 				SurvivalGames.$(0, "  Lore "+(a+1)+": " + l[a]);
 			}
@@ -90,8 +86,8 @@ public class ItemReader {
 		i.setItemMeta(im);
 
 		// Set enchantments
-		if (split.length > 3) {
-			String encs[] = split[3].split(" ");
+		if (split.length >= 2) {
+			String encs[] = split[2].split(" ");
 			for(String enc: encs){
 				if ((!enc.isEmpty()) && (!enc.equalsIgnoreCase("null"))) {
 					String e[] = enc.toLowerCase().split(":");
@@ -101,7 +97,7 @@ public class ItemReader {
 		}
 
 		for (Enchantment e : i.getEnchantments().keySet()) {
-			SurvivalGames.$(0, "  Enchant: " + e.getName() + " = " + e.getStartLevel());
+			SurvivalGames.$(0, "  Enchant: " + e.getKey().getKey() + " = " + e.getStartLevel());
 		}
 		return i;
 	}

@@ -24,10 +24,10 @@ public class MessageManager {
 	 * Loads a Message from messages.yml, converts its colors and replaces vars in the form of {$var} with its correct values,
 	 * then sends to the player, adding the correct prefix
 	 *
-	 * @param type
-	 * @param input
-	 * @param player
-	 * @param args
+	 * @param type The PrefixType
+	 * @param input The message id from the message.yml file
+	 * @param player the player to send
+	 * @param args the strings to use to format the message
 	 */
 	public void sendFMessage(PrefixType type, String input, Player player, String... args) {
 		sendFMessage(type, input, (CommandSender) player, args);
@@ -51,9 +51,9 @@ public class MessageManager {
 	 *
 	 * Sends a pre formated message from the plugin to a player, adding correct prefix first
 	 *
-	 * @param type
-	 * @param msg
-	 * @param sender
+	 * @param type The PrefixType
+	 * @param msg The message
+	 * @param sender the player to send
 	 */
 
 	public void sendMessage(PrefixType type, String msg, CommandSender sender) {
@@ -109,6 +109,12 @@ public class MessageManager {
 	
 	public void broadcastMessage(PrefixType type, String msg, Player player){
 		Bukkit.broadcastMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ " "+msg );
+	}
+
+	public void sendTitleMessage(PrefixType type, CommandSender sender, String message, String... args) {
+		if (sender instanceof Player) {
+			((Player) sender).sendTitle(getFMessage(type, message, args), null);
+		}
 	}
 
 }

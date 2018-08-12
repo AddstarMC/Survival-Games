@@ -2,6 +2,7 @@ package org.mcsg.survivalgames.logging;
 
 import java.util.HashMap;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -50,7 +51,7 @@ public class LoggingManager implements  Listener{
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockBreakEvent e){
 		if(e.isCancelled())return;
-		logBlockDestoryed(e.getBlock());
+        logBlockDestroyed(e.getBlock());
 		i.put("BCHANGE", i.get("BCHANGE")+1);
 		//    Sur(1);
 	}
@@ -72,7 +73,7 @@ public class LoggingManager implements  Listener{
 	public void blockChanged(BlockFadeEvent e){
 		if(e.isCancelled())return;
 
-		logBlockDestoryed(e.getBlock());
+        logBlockDestroyed(e.getBlock());
 		i.put("BFADE", i.get("BFADE")+1);
 
 		//    System.out.println(3);
@@ -84,7 +85,7 @@ public class LoggingManager implements  Listener{
 		if(e.isCancelled())return;
 
 		for(Block b :e.blockList()){
-			logBlockDestoryed(b);
+            logBlockDestroyed(b);
 			//        System.out.println(4);
 
 		}
@@ -108,7 +109,7 @@ public class LoggingManager implements  Listener{
 	public void blockChanged(BlockBurnEvent e){
 		if(e.isCancelled())return;
 
-		logBlockDestoryed(e.getBlock() );
+        logBlockDestroyed(e.getBlock());
 		i.put("BBURN", i.get("BBURN")+1);
 
 		//    System.out.println(6);
@@ -141,7 +142,7 @@ public class LoggingManager implements  Listener{
 	public void blockChanged(LeavesDecayEvent e){
 		if(e.isCancelled())return;
 
-		logBlockDestoryed(e.getBlock());
+        logBlockDestroyed(e.getBlock());
 		i.put("LDECAY", i.get("LDECAY")+1);
 
 		//    System.out.println(9);
@@ -165,13 +166,11 @@ public class LoggingManager implements  Listener{
 			return ;
 
 		QueueManager.getInstance().add(
-				new BlockData( 
+                new SgBlockData(
 						GameManager.getInstance().getBlockGameId(b.getLocation()),
 						b.getWorld().getName(),
-						0,
-						(byte)0,
-						b.getTypeId(),
-						b.getData(),
+                        Material.AIR.createBlockData(),
+                        b.getType().createBlockData(),
 						b.getX(),
 						b.getY(),
 						b.getZ(),
@@ -180,21 +179,19 @@ public class LoggingManager implements  Listener{
 	}
 
 
-	public void logBlockDestoryed(Block b){
+    public void logBlockDestroyed(Block b) {
 		if(GameManager.getInstance().getBlockGameId(b.getLocation()) == -1)
 			return;
 		if( GameManager.getInstance().getGameMode(GameManager.getInstance().getBlockGameId(b.getLocation())) == Game.GameMode.DISABLED)
 			return ;
-		if(b.getTypeId() == 51)
+        if (b.getType() == Material.FIRE)
 			return;
 		QueueManager.getInstance().add(
-				new BlockData( 
+                new SgBlockData(
 						GameManager.getInstance().getBlockGameId(b.getLocation()),
 						b.getWorld().getName(),
-						b.getTypeId(),
-						b.getData(),
-						0,
-						(byte)0,
+                        b.getType().createBlockData(),
+                        Material.AIR.createBlockData(),
 						b.getX(),
 						b.getY(),
 						b.getZ(),

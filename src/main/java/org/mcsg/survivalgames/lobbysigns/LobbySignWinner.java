@@ -5,11 +5,12 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.Skull;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -51,20 +52,12 @@ public class LobbySignWinner extends LobbySign {
 	@Override
 	public void postCreationFixup() {
 		Block block = this.getLocation().getBlock();
-		block.setType(Material.SKULL);
+        block.setType(Material.CREEPER_HEAD);
 
 		Skull skull = (Skull)block.getState();
-		skull.setSkullType(SkullType.CREEPER);
 		BlockFace face = getDirectionFacing(block);
-		if (face != null) {
-			skull.setRotation(face);
-			org.bukkit.material.Skull md = (org.bukkit.material.Skull)skull.getData();
-			if ((face == BlockFace.EAST) || (face == BlockFace.WEST))
-				md.setFacingDirection(face.getOppositeFace());
-			else
-				// North/South facing seems to be reversed for some reason (CB bug?)
-				md.setFacingDirection(face);
-		}
+        BlockData data = skull.getBlockData();
+        if (data instanceof Rotatable) ((Rotatable) data).setRotation(face);
 		skull.update();
 	}
 
@@ -88,20 +81,13 @@ public class LobbySignWinner extends LobbySign {
 
 		// Change the player head to the last known winner
 		Block block = this.getLocation().getBlock();
-		block.setType(Material.SKULL);
-
+        block.setType(Material.PLAYER_HEAD);
 		Skull skull = (Skull)block.getState();
-		skull.setSkullType(SkullType.PLAYER);
 		skull.setOwningPlayer(Bukkit.getOfflinePlayer(lastWinnerUUID));
 		BlockFace face = getDirectionFacing(block);
-		if (face != null) {
-			skull.setRotation(face);
-			org.bukkit.material.Skull md = (org.bukkit.material.Skull)skull.getData();
-			if ((face == BlockFace.EAST) || (face == BlockFace.WEST))
-				md.setFacingDirection(face.getOppositeFace());
-			else
-				// North/South facing seems to be reversed for some reason (CB bug?)
-				md.setFacingDirection(face);
+        BlockData data = skull.getBlockData();
+        if (data instanceof Rotatable) {
+            ((Rotatable) data).setRotation(face);
 		}
 		skull.update();
 	}

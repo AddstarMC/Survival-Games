@@ -27,12 +27,10 @@ public class JoinEvent implements Listener {
         	// Send to lobby if the player re-logs inside the arena
         	p.teleport(SettingsManager.getInstance().getLobbySpawn());
 
-        	Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                public void run() {
-                    if ((p.isOnline()) && (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1)) {
-                    	// Safe guard in case previous teleport didn't work (it sometimes leaves players in the arena after relogging)
-                    	p.teleport(SettingsManager.getInstance().getLobbySpawn());
-                    }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                if ((p.isOnline()) && (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1)) {
+                    // Safe guard in case previous teleport didn't work (it sometimes leaves players in the arena after relogging)
+                    p.teleport(SettingsManager.getInstance().getLobbySpawn());
                 }
             }, 15L);
         }

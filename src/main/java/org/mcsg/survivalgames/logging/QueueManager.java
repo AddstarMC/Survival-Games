@@ -24,7 +24,7 @@ import org.mcsg.survivalgames.SurvivalGames;
 public class QueueManager {
 
 	private static QueueManager instance = new QueueManager();
-    private ConcurrentHashMap<Integer, ArrayList<BlockData>> queue = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer, ArrayList<SgBlockData>> queue = new ConcurrentHashMap<>();
 	File baseDir;
 
 	private QueueManager(){
@@ -70,8 +70,8 @@ public class QueueManager {
 		}
 	}
 
-	public void add(BlockData data){
-		ArrayList<BlockData>dat = queue.get(data.getGameId());
+    public void add(SgBlockData data) {
+        ArrayList<SgBlockData> dat = queue.get(data.getGameId());
 		if(dat == null){
             dat = new ArrayList<>();
 			ensureFile(data.getGameId());
@@ -91,20 +91,19 @@ public class QueueManager {
         }
 	}
 
-	@SuppressWarnings("unchecked")
 	public void loadSave(int id){
 		ensureFile(id);
 		try{
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(baseDir, "Arena"+id+".dat")));
 
-			ArrayList<BlockData>input = (ArrayList<BlockData>) in.readObject();
+            ArrayList<SgBlockData> input = (ArrayList<SgBlockData>) in.readObject();
 
-            ArrayList<BlockData> data = queue.get(id);
+            ArrayList<SgBlockData> data = queue.get(id);
 			if(data == null){
                 data = new ArrayList<>();
 			}
 
-			for(BlockData d:input){
+            for (SgBlockData d : input) {
 				if(!data.contains(d)){
 					data.add(d);
 				}
@@ -147,7 +146,7 @@ public class QueueManager {
             for (int id : queue.keySet()) {
                 try {
 
-                    ArrayList<BlockData> data = queue.get(id);
+                    ArrayList<SgBlockData> data = queue.get(id);
                     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(baseDir, "Arena" + id + ".dat")));
 
                     out.writeObject(data);
@@ -186,7 +185,7 @@ public class QueueManager {
 
 		public void run(){
 
-			ArrayList<BlockData>data = queue.get(id);
+            ArrayList<SgBlockData> data = queue.get(id);
 			if(data != null){
 				int a = data.size()-1;
 				int rb = 0;
@@ -195,15 +194,14 @@ public class QueueManager {
 
 				SurvivalGames.debug(id, "Rollback: " + a + " changes remaining...");
 				while(a>=0 && (rb < pt|| shutdown)){
-					BlockData result = data.get(a);
+                    SgBlockData result = data.get(a);
 					if(result.getGameId() == game.getID()){
 
 						data.remove(a);
 						Location l = new Location(Bukkit.getWorld(result.getWorld()), result.getX(), result.getY(), result.getZ());
 						Block b = l.getBlock();
-						b.setTypeIdAndData(result.getPrevid(), result.getPrevdata(), false);
+                        b.setBlockData(result.getPrevBlockData(), false);
 						b.getState().update();
-
 						/*	if(result.getItems() != null){
 							Chest c = (Chest)b;
 							c.getBlockInventory().setContents(result.getItems());

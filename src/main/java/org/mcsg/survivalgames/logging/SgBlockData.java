@@ -2,39 +2,37 @@ package org.mcsg.survivalgames.logging;
 
 import java.io.Serializable;
 
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
-public class BlockData implements Serializable {
+public class SgBlockData implements Serializable {
 
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String world;
-    private int previd;
-    private int newid;
-    private byte prevdata,newdata;
+    private BlockData prevBlockData;
+    private BlockData newBlockData;
     private int x,y,z;
     private int gameid;
     private ItemStack[] items;
     
     /**
-     * 
-     * @param previd
-     * @param newid
-     * @param x
-     * @param y
-     * @param z
+     *
+     * @param prevMaterial the previous material
+     * @param newMaterial the new material
+     * @param x x loc
+     * @param y y loc
+     * @param z z loc
      * 
      * Provides a object for holding the data for block changes
      */
-    public BlockData(int gameid, String world, int previd,byte prevdata, int newid,byte newdata, int x, int y, int z, ItemStack[] items){
+    public SgBlockData(int gameid, String world, BlockData prevMaterial, BlockData newMaterial, int x, int y, int z, ItemStack[] items) {
         this.gameid = gameid;
         this.world = world;
-        this.previd = previd;
-        this.prevdata = prevdata;
-        this.newid = newid;
-        this.newdata = newdata;
+        this.prevBlockData = prevMaterial;
+        this.newBlockData = newMaterial;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -49,20 +47,12 @@ public class BlockData implements Serializable {
         return world;
     }
 
-    public byte getPrevdata() {
-        return prevdata;
+    public BlockData getPrevBlockData() {
+        return prevBlockData;
     }
 
-    public byte getNewdata() {
-        return newdata;
-    }
-
-    public int getPrevid() {
-        return previd;
-    }
-
-    public int getNewid() {
-        return newid;
+    public BlockData getNewBlockData() {
+        return newBlockData;
     }
 
     public int getX() {

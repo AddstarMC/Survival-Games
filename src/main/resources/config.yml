@@ -62,24 +62,12 @@ restock-chest: true
 block:
   place:
     whitelist:
-    - 18
-    - 105
-    - 31
-    - 37
-    - 38
-    - 50
-    - 103
-    - 43
+    - OAK_LOG
+    - ACACIA_LEAVES
   break:
     whitelist:
-    - 18
-    - 105
-    - 31
-    - 37
-    - 38
-    - 50
-    - 103
-    - 43
+    - ACACIA_LEAVES
+    - RED_WOOL
 
 #How many blocks to rollback per-tick
 #The higher this settings the fast each
@@ -114,9 +102,9 @@ deathmatch:
   killtime: 5
 
 spectate:
-  next-item: '262, 1, 0, null, &a&lNext Player, Left click to teleport|to the next player.'
-  prev-item: '288, 1, 0, null, &b&lPrevious Player, Left click to teleport|to the previous player.'
-  exit-item: '333, 1, 0, null, &c&lStop Spectating, Left click to stop spectating|and return to the lobby.'
+  next-item: 'RED_WOOL, 1, null, &a&lNext Player, Left click to teleport|to the next player.'
+  prev-item: 'GREEN_WOOL, 1, null, &b&lPrevious Player, Left click to teleport|to the previous player.'
+  exit-item: 'BARRIER, 1, 0, null, &c&lStop Spectating, Left click to stop spectating|and return to the lobby.'
 
 
 #Settings for connecting to and 

@@ -17,24 +17,11 @@ public class Spectate implements SubCommand{
     	}
     	Player player = (Player) sender;
         if(args.length == 0){
-            if(GameManager.getInstance().isSpectator(player)){
-                GameManager.getInstance().removeSpectator(player);
-                return true;
-            }
-            else{
-                MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Game ID");
-                return true;
-            }
+            return spectatorExit(player);
         } else {
         	if (args[0].equalsIgnoreCase("leave")) {
-                if(GameManager.getInstance().isSpectator(player)) {
-                    GameManager.getInstance().removeSpectator(player);
-                    return true;
-                } else {
-                        MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Game ID");
-                        return true;
-                }
-        	} else {
+                return spectatorExit(player);
+            } else {
 	        	if(SettingsManager.getInstance().getSpawnCount(Integer.parseInt(args[0])) == 0){
 		            MessageManager.getInstance().sendMessage(MessageManager.PrefixType.ERROR, "error.nospawns", player);
 		            return true;
@@ -47,6 +34,16 @@ public class Spectate implements SubCommand{
         	}
         }
         return true;
+    }
+
+    private boolean spectatorExit(Player player) {
+        if (GameManager.getInstance().isSpectator(player)) {
+            GameManager.getInstance().removeSpectator(player);
+            return true;
+        } else {
+            MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Game ID");
+            return true;
+        }
     }
 
     @Override

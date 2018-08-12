@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -76,8 +77,8 @@ public class ChestRatioStorage {
 				SurvivalGames.$(0, Level.SEVERE, "Item in chest does not have required material parameter!");
 				return null;
 			}
-			
-			itemMaterial = Material.valueOf((String)itemObject.get("Material"));
+
+			itemMaterial = Material.getMaterial((String) itemObject.get("Material"));
 			
 		} catch(Exception ex) {
 			SurvivalGames.$(0, Level.SEVERE, "Item \"" + itemObject.get("Material") + "\" does not have required material parameter!");
@@ -117,9 +118,7 @@ public class ChestRatioStorage {
 		}
 		
 		if (itemObject.containsKey("Data")) {
-			Long dataValue = (Long)itemObject.get("Data");
-			item.setDurability(dataValue.shortValue());
-			SurvivalGames.$(0, "    Data: " + dataValue);
+			SurvivalGames.logger.log(Level.FINE, "Data values in the Item.json are no longer supported.");
 		}		
 		/////////////////////////////////////////
 		
@@ -148,8 +147,8 @@ public class ChestRatioStorage {
 				
 				String enchantmentName = (String)jsonEnchantment.get("Name");
 				Long enchantmentLevel = (Long)jsonEnchantment.get("Level");
-				
-				Enchantment enchantment = Enchantment.getByName(enchantmentName);
+
+				Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentName));
 				if (enchantment != null && enchantmentLevel != null) {
 					SurvivalGames.$(0, "    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);

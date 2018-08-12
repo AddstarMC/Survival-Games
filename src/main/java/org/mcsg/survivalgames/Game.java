@@ -275,23 +275,21 @@ public class Game {
 							countdown(5);
 						}
 
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-							public void run() {
-								p.setFlying(false);
-								p.setAllowFlight(false);
-								p.setWalkSpeed(0.2F);
-								p.setFireTicks(0);
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+							p.setFlying(false);
+							p.setAllowFlight(false);
+							p.setWalkSpeed(0.2F);
+							p.setFireTicks(0);
 
-								p.getInventory().clear();
-								p.getEquipment().setArmorContents(null);
-								p.updateInventory();
-								showMenu(p);
-								
-								for (PotionEffect effect : p.getActivePotionEffects()) {
-                                    p.removePotionEffect(effect.getType());
-								}
+							p.getInventory().clear();
+							p.getEquipment().setArmorContents(null);
+							p.updateInventory();
+							showMenu(p);
 
+							for (PotionEffect effect : p.getActivePotionEffects()) {
+								p.removePotionEffect(effect.getType());
 							}
+
 						}, 5L);
 						
 						break;
@@ -445,11 +443,9 @@ public class Game {
 				for (Player play: activePlayers) {
 					msgmgr.sendMessage(PrefixType.INFO, "You have a " + config.getInt("grace-period") + " second grace period!", play);
 				}
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-					public void run() {
-						for (Player play: activePlayers) {
-							msgmgr.sendMessage(PrefixType.INFO, "Grace period has ended!", play);
-						}
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+					for (Player play : activePlayers) {
+						msgmgr.sendMessage(PrefixType.INFO, "Grace period has ended!", play);
 					}
 				}, config.getInt("grace-period") * 20);
 			}
@@ -509,29 +505,27 @@ public class Game {
 
 		if (mode == GameMode.WAITING || mode == GameMode.STARTING) {
 			mode  = GameMode.STARTING;
-			tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
-				public void run() {
-					// Fail safe to stop timer if game is ended or not in correct state
-					if (mode != GameMode.STARTING) {
-						Bukkit.getScheduler().cancelTask(tid);
-						return;
-					}
+			tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), () -> {
+				// Fail safe to stop timer if game is ended or not in correct state
+				if (mode != GameMode.STARTING) {
+					Bukkit.getScheduler().cancelTask(tid);
+					return;
+				}
 
-					if (count > 0) {
-						if (count % 10 == 0) {
-							msgFall(PrefixType.INFO, "game.countdown","t-"+count);
-						}
-						if (count < 6) {
-							msgFall(PrefixType.INFO, "game.countdown","t-"+count);
-
-						}
-						count--;
-						LobbyManager.getInstance().updateWall(gameID);
-					} else {
-						startGame();
-						Bukkit.getScheduler().cancelTask(tid);
-						countdownRunning = false;
+				if (count > 0) {
+					if (count % 10 == 0) {
+						msgFall(PrefixType.INFO, "game.countdown", "t-" + count);
 					}
+					if (count < 6) {
+						msgFall(PrefixType.INFO, "game.countdown", "t-" + count);
+
+					}
+					count--;
+					LobbyManager.getInstance().updateWall(gameID);
+				} else {
+					startGame();
+					Bukkit.getScheduler().cancelTask(tid);
+					countdownRunning = false;
 				}
 			}, 0, 20);
 
@@ -647,11 +641,9 @@ public class Game {
 		if (activePlayers.size() < 2 && mode == GameMode.INGAME) {
 			mode = GameMode.FINISHING;
 			LobbyManager.getInstance().updateWall(gameID);
-			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-				public void run(){
-					playerWin(p);
-					endGame();
-				}
+			tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+				playerWin(p);
+				endGame();
 			}, 10L));
 		}
 		LobbyManager.getInstance().updateWall(gameID);
@@ -704,11 +696,9 @@ public class Game {
 		if (activePlayers.size() < 2) {
 			if (mode == GameMode.INGAME) {
 				mode = GameMode.FINISHING;
-				tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-					public void run() {
-						playerWin(p);
-						endGame();
-					}
+				tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+					playerWin(p);
+					endGame();
 				}, 1L));
 			} else if (mode == GameMode.STARTING) {
 				if (activePlayers.size() == 1) {
@@ -719,11 +709,7 @@ public class Game {
 				} else {
 					// No players left so just end the game
 					mode = GameMode.FINISHING;
-					tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-						public void run() {
-							endGame();
-						}
-					}, 1L));
+					tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), this::endGame, 1L));
 				}
 			}
 		}
@@ -860,31 +846,28 @@ public class Game {
 			pl.hidePlayer(SurvivalGames.plugin, p);
 		}
 
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-			@SuppressWarnings("deprecation")
-			public void run() {
-				p.setGameMode(org.bukkit.GameMode.CREATIVE);
-				p.setAllowFlight(true);
-				p.setFlying(true);
-				p.setWalkSpeed(0.3F);
-				p.setFlySpeed(0.3F);
-				p.setFireTicks(0);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+			p.setGameMode(org.bukkit.GameMode.CREATIVE);
+			p.setAllowFlight(true);
+			p.setFlying(true);
+			p.setWalkSpeed(0.3F);
+			p.setFlySpeed(0.3F);
+			p.setFireTicks(0);
 
-				Inventory inv = p.getInventory();
-				inv.clear();
-				p.getInventory().setHeldItemSlot(0);
-				inv.setItem(0, SettingsManager.getInstance().getSpecItemNext());
-				inv.setItem(1, SettingsManager.getInstance().getSpecItemPrev());
-				inv.setItem(2, SettingsManager.getInstance().getSpecItemExit());
-				p.getEquipment().setArmorContents(null);
-				p.updateInventory();
+			Inventory inv = p.getInventory();
+			inv.clear();
+			p.getInventory().setHeldItemSlot(0);
+			inv.setItem(0, SettingsManager.getInstance().getSpecItemNext());
+			inv.setItem(1, SettingsManager.getInstance().getSpecItemPrev());
+			inv.setItem(2, SettingsManager.getInstance().getSpecItemExit());
+			p.getEquipment().setArmorContents(null);
+			p.updateInventory();
 
-				for (PotionEffect effect : p.getActivePotionEffects()) {
-					p.removePotionEffect(effect.getType());
-				}
-
-				scoreBoard.addScoreboard(p);
+			for (PotionEffect effect : p.getActivePotionEffects()) {
+				p.removePotionEffect(effect.getType());
 			}
+
+			scoreBoard.addScoreboard(p);
 		}, 10L);
 
 		msgFall(PrefixType.INFO, "game.spectatorjoin", "player-" + p.getDisplayName(), "spectators-" + (spectators.size() + 1));
@@ -1184,23 +1167,21 @@ public class Game {
 			}
 			dmspawns.clear();
 
-			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new Runnable() {
-				public void run() {
-					// Game could end (or players die) while inside this loop
-					// This must be carefully handled so we dont CME or damage a player that has already left the game
-					ArrayList<Player> players = new ArrayList<>(activePlayers);
-					for(Player p: players) {
-						// Verify they are still "alive" and still in the game
-						if ((mode == GameMode.INGAME) && (p != null) && (!p.isDead()) && (activePlayers.contains(p))) {
-							// Player out of arena or too high (towering to avoid players)
-							int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
-							double dist = dmspawn.distance(p.getLocation());
-							if ((dist > dmradius) || (ydiff > 4)) {
-								p.sendMessage(ChatColor.RED + "Return to the death match area!");
-								p.getLocation().getWorld().strikeLightningEffect(p.getLocation());
-								p.damage(5);
-								p.setFireTicks(60);
-							}
+			tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), () -> {
+				// Game could end (or players die) while inside this loop
+				// This must be carefully handled so we dont CME or damage a player that has already left the game
+				ArrayList<Player> players = new ArrayList<>(activePlayers);
+				for (Player p : players) {
+					// Verify they are still "alive" and still in the game
+					if ((mode == GameMode.INGAME) && (p != null) && (!p.isDead()) && (activePlayers.contains(p))) {
+						// Player out of arena or too high (towering to avoid players)
+						int ydiff = Math.abs(dmspawn.getBlockY() - p.getLocation().getBlockY());
+						double dist = dmspawn.distance(p.getLocation());
+						if ((dist > dmradius) || (ydiff > 4)) {
+							p.sendMessage(ChatColor.RED + "Return to the death match area!");
+							p.getLocation().getWorld().strikeLightningEffect(p.getLocation());
+							p.damage(5);
+							p.setFireTicks(60);
 						}
 					}
 				}

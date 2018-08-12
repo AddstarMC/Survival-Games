@@ -18,33 +18,26 @@ public class FireworkFactory {
 	 * Launch a firework at a given location with specified properties
 	 */
 	static public void LaunchFirework(final Location spawnLocation, final FireworkEffect.Type type, final int power, final ArrayList<Color> colors, final ArrayList<Color> fadecolors, final boolean flicker, final boolean trail, final int launchdelay, final int detonatedelay) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-			@Override
-			public void run() {
-		        final Firework firework = (Firework) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.FIREWORK);
-		        FireworkMeta metadata = firework.getFireworkMeta();
-		        
-		        Builder builder = FireworkEffect.builder();
-		        builder.with(type);
-		        builder.flicker(flicker);
-		        builder.trail(trail);
-		        builder.withColor(colors);
-		        builder.withFade(fadecolors);
-		        
-		        FireworkEffect effect = builder.build();
-		        metadata.addEffect(effect);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+			final Firework firework = (Firework) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.FIREWORK);
+			FireworkMeta metadata = firework.getFireworkMeta();
 
-		        metadata.setPower(power);
-		        firework.setFireworkMeta(metadata);
-		        if (detonatedelay > 0) {
-			        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-						@Override
-						public void run() {
-							firework.detonate();  // Detonate next tick
-						}
-			        }, detonatedelay);
-		        }
-	 		}
+			Builder builder = FireworkEffect.builder();
+			builder.with(type);
+			builder.flicker(flicker);
+			builder.trail(trail);
+			builder.withColor(colors);
+			builder.withFade(fadecolors);
+
+			FireworkEffect effect = builder.build();
+			metadata.addEffect(effect);
+
+			metadata.setPower(power);
+			firework.setFireworkMeta(metadata);
+			if (detonatedelay > 0) {
+				// Detonate next tick
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), firework::detonate, detonatedelay);
+			}
 		}, launchdelay);
 	}
 	

@@ -121,12 +121,12 @@ public class CommandHandler implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd1, String commandLabel, String[] args) {
 		PluginDescriptionFile pdfFile = plugin.getDescription();
 
-		if (SurvivalGames.config_todate == false) {
+		if (!SurvivalGames.config_todate) {
 			msgmgr.sendMessage(PrefixType.WARNING, "The config file is out of date. Please tell an administrator to reset the config.", sender);
 			return true;
 		}
 
-		if (SurvivalGames.dbcon == false) {
+		if (!SurvivalGames.dbcon) {
 			msgmgr.sendMessage(PrefixType.WARNING, "Could not connect to server. Plugin disabled.", sender);
 			return true;
 		}

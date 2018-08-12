@@ -70,15 +70,13 @@ public class LobbyManager {
 	}
 	
 	public static void launchEndFireworks(final Location loc) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), new Runnable() {
-			public void run() {
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.WHITE, Color.BLUE, Color.SILVER}, false, false, 1, 3);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 2, new Color[]{Color.ORANGE, Color.RED, Color.WHITE}, true, true, 10, 0);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, new Color[]{Color.RED, Color.YELLOW}, true, true, 10, 0);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 1, new Color[]{Color.SILVER, Color.RED}, true, true, 10, 0);
-				FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.YELLOW, Color.SILVER}, true, true, 20, 0);
-				//FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 1, Color.FUCHSIA);
-			}
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+            FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.WHITE, Color.BLUE, Color.SILVER}, false, false, 1, 3);
+            FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 2, new Color[]{Color.ORANGE, Color.RED, Color.WHITE}, true, true, 10, 0);
+            FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.STAR, 1, new Color[]{Color.RED, Color.YELLOW}, true, true, 10, 0);
+            FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 1, new Color[]{Color.SILVER, Color.RED}, true, true, 10, 0);
+            FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BALL_LARGE, 0, new Color[]{Color.YELLOW, Color.SILVER}, true, true, 20, 0);
+            //FireworkFactory.LaunchFirework(loc, FireworkEffect.Type.BURST, 1, Color.FUCHSIA);
 		}, 15);
 	}
 }

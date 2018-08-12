@@ -84,7 +84,7 @@ public class GameScoreboard {
 		}
 		
 		// Create the objective
-		this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy");
+        this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy", "");
 		this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		// Create the living team
@@ -130,11 +130,7 @@ public class GameScoreboard {
 		score.setScore(1);
 		
 		final Objective sidebarObjective = this.sidebarObjective;
-		Bukkit.getScheduler().runTaskLater(GameManager.getInstance().getPlugin(), new Runnable() {
-            public void run() {
-            	sidebarObjective.getScore(player.getDisplayName()).setScore(0);
-            }
-        }, 1L);
+        Bukkit.getScheduler().runTaskLater(GameManager.getInstance().getPlugin(), () -> sidebarObjective.getScore(player.getDisplayName()).setScore(0), 1L);
 		
 		updateSidebarTitle();	
 	}

@@ -37,7 +37,7 @@ public class LobbyBoardEvents implements Listener {
 		
 		// We only care about signs
 		final Material blockType = block.getType();
-		if (!(blockType == Material.SIGN || blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN || blockType == Material.SKULL))
+        if (!(blockType == Material.SIGN || blockType == Material.WALL_SIGN || blockType == Material.SKELETON_SKULL))
 			return;
 		
 		// See if a lobby sign at the blocks location exists

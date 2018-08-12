@@ -7,6 +7,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.RegionSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -22,7 +27,6 @@ import org.mcsg.survivalgames.stats.StatsManager;
 import org.mcsg.survivalgames.util.Kit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class GameManager {
 
@@ -166,7 +170,6 @@ public class GameManager {
 		kitsel.add(p.getUniqueId());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void selectKit(Player p, int i) {
 		p.getInventory().clear();
 		p.getEquipment().setArmorContents(null);
@@ -238,8 +241,8 @@ public class GameManager {
 	}
 
 	//TODO: Actually make this countdown correctly
-	public void startGame(int a) {
-		getGame(a).countdown(10);
+	public void startGame(int gameId) {
+		getGame(gameId).countdown(10);
 	}
 
 	public void addPlayer(Player p, int g) {
@@ -279,14 +282,23 @@ public class GameManager {
 		//SettingsManager s = SettingsManager.getInstance();
 
 		WorldEditPlugin we = p.getWorldEdit();
-		Selection sel = we.getSelection(pl);
-		if (sel == null) {
+		LocalSession session = we.getSession(pl);
+		RegionSelector selector = session.getRegionSelector(we.wrapPlayer(pl).getWorld());
+		Region region = null;
+		try {
+			region = selector.getRegion();
+		} catch (IncompleteRegionException ignored) {
+		}
+		if (region == null) {
 			msgmgr.sendMessage(PrefixType.WARNING, "You must make a WorldEdit Selection first!", pl);
 			return;
 		}
-		Location max = sel.getMaximumPoint();
-		Location min = sel.getMinimumPoint();
-
+		Vector max = region.getMaximumPoint();
+		Vector min = region.getMinimumPoint();
+		if (region.getWorld() == null) {
+			msgmgr.sendMessage(PrefixType.WARNING, "Selection did not have a valid world !!", pl);
+			return;
+		}
 		/* if(max.getWorld()!=SettingsManager.getGameWorld() || min.getWorld()!=SettingsManager.getGameWorld()){
             pl.sendMessage(ChatColor.RED+"Wrong World!");
             return;
@@ -298,7 +310,7 @@ public class GameManager {
 			no = 1;
 		} else no = games.get(games.size() - 1).getID() + 1;
 		SettingsManager.getInstance().getSpawns().set(("spawns." + no), null);
-		c.set("sg-system.arenas." + no + ".world", max.getWorld().getName());
+		c.set("sg-system.arenas." + no + ".world", region.getWorld().getName());
 		c.set("sg-system.arenas." + no + ".x1", max.getBlockX());
 		c.set("sg-system.arenas." + no + ".y1", max.getBlockY());
 		c.set("sg-system.arenas." + no + ".z1", max.getBlockZ());
@@ -333,6 +345,17 @@ public class GameManager {
         openedChest.put(id, new HashSet<>());
 	}
 
+	public boolean checkGameDisabled(Location loc, Player player) {
+		int gameID = getPlayerGameId(player);
+		if (gameID == -1) {
+			int blockgameid = GameManager.getInstance().getBlockGameId(loc);
+			if (blockgameid != -1) {
+				return GameManager.getInstance().getGame(blockgameid).getGameMode() != GameMode.DISABLED;
+			}
+			return false;
+		}
+		return false;
+	}
 	public String getStringList(int gid){
 		Game g = getGame(gid);
 		if (g == null)

@@ -1,7 +1,9 @@
 package org.mcsg.survivalgames.events;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,28 +16,24 @@ import org.mcsg.survivalgames.SettingsManager;
 @SuppressWarnings("deprecation")
 public class PlaceEvent implements Listener {
 
-    public ArrayList<Integer> allowedPlace = new ArrayList<>();
+    public ArrayList<Material> allowedPlace = new ArrayList<>();
 
     public PlaceEvent(){
-        allowedPlace.addAll( SettingsManager.getInstance().getConfig().getIntegerList("block.place.whitelist"));
+        List<String> materialList = SettingsManager.getInstance().getConfig().getStringList("block.place.whitelist");
+        for (String matName : materialList) {
+            allowedPlace.add(Material.getMaterial(matName));
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void onBlockPlace(BlockPlaceEvent event) {
         Player p = event.getPlayer();
-        int id  = GameManager.getInstance().getPlayerGameId(p);
-
-        if(id == -1){
-            int gameblockid = GameManager.getInstance().getBlockGameId(event.getBlock().getLocation());
-            if(gameblockid != -1){
-                if(GameManager.getInstance().getGame(gameblockid).getGameMode() != Game.GameMode.DISABLED){
-                    event.setCancelled(true);
-                }
-            }
+        if (GameManager.getInstance().checkGameDisabled(event.getBlock().getLocation(), p)) {
+            event.setCancelled(true);
             return;
         }
 
-        Game g = GameManager.getInstance().getGame(id);
+        Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerGameId(p));
         if(g.isPlayerinactive(p)){
             return;
         }
@@ -48,7 +46,7 @@ public class PlaceEvent implements Listener {
 
         }
 
-        if(!allowedPlace.contains(event.getBlock().getTypeId())){
+        if (!allowedPlace.contains(event.getBlock().getType())) {
             event.setCancelled(true);
         }
 
