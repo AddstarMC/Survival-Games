@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ public class SurvivalGames extends JavaPlugin {
 	public static boolean dbcon = false;
 	public static boolean config_todate = false;
 	public static int config_version = 3;
+	private Metrics metrics;
 
 	public static SurvivalGames plugin;
 
@@ -57,6 +59,7 @@ public class SurvivalGames extends JavaPlugin {
 		plugin = this;
 		logger = p.getLogger();
 		datafolder = p.getDataFolder();
+		metrics = new Metrics(this);
 		//ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Startup(), 10);
 	}

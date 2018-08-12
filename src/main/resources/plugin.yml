@@ -1,11 +1,12 @@
 name: SurvivalGames
 version: ${plugin.version}
 main: org.mcsg.survivalgames.SurvivalGames
-authors: [Double0negative, n3wton, TheFish97]
+authors: [Narimm, Addstar, Double0Negative]
+api: ${spigot.api.version}
 description: Fully Automated Hunger Games Plugin!
 load: POSTWORLD
-softdepend: [TabAPI]
-
+depend: WorldEdit
+api: 1.13
 commands:
     survivalgames:
         description: Survival Games Command
