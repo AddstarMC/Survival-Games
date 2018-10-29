@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.mcsg.survivalgames.SurvivalGames;
@@ -32,6 +34,37 @@ public class ItemReader {
 		encids.put("sharpness", Enchantment.DAMAGE_ALL);
 		encids.put("dmg", Enchantment.DAMAGE_ALL);
 		encids.put("fire", Enchantment.FIRE_ASPECT);
+		encids.put("curse", Enchantment.BINDING_CURSE);
+		encids.put("riptide", Enchantment.RIPTIDE);
+		encids.put("channeling", Enchantment.CHANNELING);
+		encids.put("knockback", Enchantment.KNOCKBACK);
+		encids.put("punch", Enchantment.ARROW_KNOCKBACK);
+		encids.put("fireprotection", Enchantment.PROTECTION_FIRE);
+		encids.put("blastprotection", Enchantment.PROTECTION_EXPLOSIONS);
+		encids.put("projectileprotection", Enchantment.PROTECTION_PROJECTILE);
+		encids.put("featherfall", Enchantment.PROTECTION_FALL);
+		encids.put("frostwalker", Enchantment.FROST_WALKER);
+		encids.put("smiting", Enchantment.DAMAGE_UNDEAD);
+		encids.put("thorns", Enchantment.THORNS);
+		encids.put("infiniteammo", Enchantment.ARROW_INFINITE);
+		encids.put("loyalty", Enchantment.LOYALTY);
+		encids.put("spiderdamage", Enchantment.DAMAGE_ARTHROPODS);
+		encids.put("sweeping", Enchantment.SWEEPING_EDGE);
+		encids.put("oxygen", Enchantment.OXYGEN);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	public static ItemStack read(String str){
@@ -84,7 +117,6 @@ public class ItemReader {
 			im.setLore(lore);
 		}
 		i.setItemMeta(im);
-
 		// Set enchantments
 		if (split.length >= 2) {
 			String encs[] = split[2].split(" ");
