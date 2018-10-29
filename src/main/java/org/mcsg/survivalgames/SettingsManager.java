@@ -15,7 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.mcsg.survivalgames.util.ItemReader;
+import org.mcsg.survivalgames.util.ItemUtility;
 
 public class SettingsManager {
 
@@ -73,9 +73,9 @@ public class SettingsManager {
 		f5 = new File(p.getDataFolder(), "dmspawns.yml");
 		chestFile = new File(p.getDataFolder(), "items.json");
 
-		specItemNext = ItemReader.read(getConfig().getString("spectate.next-item"));
-		specItemPrev = ItemReader.read(getConfig().getString("spectate.prev-item"));
-		specItemExit = ItemReader.read(getConfig().getString("spectate.exit-item"));
+		specItemNext = ItemUtility.fromString(getConfig().getString("spectate.next-item"));
+		specItemPrev = ItemUtility.fromString(getConfig().getString("spectate.prev-item"));
+		specItemExit = ItemUtility.fromString(getConfig().getString("spectate.exit-item"));
 
 		try {
 			if (!f.exists()) 	f.createNewFile();
@@ -180,7 +180,7 @@ public class SettingsManager {
 	}
 	
 	public boolean moveFile(File ff){
-		SurvivalGames.$(0, "Moving outdated config file. "+f.getName());
+		SurvivalGames.log(0, "Moving outdated config file. " + f.getName());
 		String name = ff.getName();
 		File ff2 = new File(SurvivalGames.getPluginDataFolder(), getNextName(name, 0));
 		return ff.renameTo(ff2);
@@ -405,7 +405,7 @@ public class SettingsManager {
 		try {
 			spawns.save(f);
 		} catch (IOException e) {
-			SurvivalGames.$(0, "ERROR: Unable to save spawns file!");
+			SurvivalGames.log(0, "ERROR: Unable to save spawns file!");
 			e.printStackTrace();
 		}
 		GameManager.getInstance().getGame(gameid).addSpawn();
@@ -426,7 +426,7 @@ public class SettingsManager {
 		try {
 			dmspawns.save(f5);
 		} catch (IOException e) {
-			SurvivalGames.$(0, "ERROR: Unable to save dmspawns file!");
+			SurvivalGames.log(0, "ERROR: Unable to save dmspawns file!");
 			e.printStackTrace();
 		}
 	}

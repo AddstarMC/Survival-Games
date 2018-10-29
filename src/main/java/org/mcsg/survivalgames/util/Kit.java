@@ -24,13 +24,13 @@ public class Kit {
 	public void load(){
 		FileConfiguration c = SettingsManager.getInstance().getKits();
 		cost = c.getDouble("kits."+name+".cost", 0);
-		
-		icon = ItemReader.read(c.getString("kits."+name+".icon"));
-		SurvivalGames.$(0, "Kit Icon: "  + icon);
+
+		icon = ItemUtility.fromString(c.getString("kits." + name + ".icon"));
+		SurvivalGames.log(0, "Kit Icon: " + icon);
 
 		List<String>cont = c.getStringList("kits."+name+".contents");
 		for(String s:cont){
-			items.add(ItemReader.read(s));
+			items.add(ItemUtility.fromString(s));
 		}
 	}
 	

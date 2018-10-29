@@ -13,10 +13,11 @@
 # contents: the contents of this kit
 #
 # Items are defined as 
-#    itemnumber, amount, durabilty, enchantments, name
-# Example: diamond sword with 1 item, full durabilty, shaprness 4, knockback 2 and the name killer
-#     276, 1, 0, sharpness: 4 knockback: 2, killer
-#
+#    material, amount, durability, enchantments, name, Lore , Flags, Attributes:modifier_name|modifier_value|modifier_operator|<slot>
+# Example: diamond sword with 1 item, full durabilty, shaprness 4, knockback 2 and the name killer with enchantments hidden and the attribute that
+#   increases attack speed plus 5 called Speed of God
+#     diamond_sword, 1, 0, sharpness: 4 knockback: 2, killer, The sword of doom|A killer weapon, hide_enchants, attack_speed:Speed of God|5|add|hand
+# Everything after material is optional. ItemFlags, and Attributes names can be found in code or a wiki maybe
 
 #DONT TOUCH THIS
 version: 1

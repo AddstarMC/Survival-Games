@@ -28,7 +28,7 @@ import org.mcsg.survivalgames.api.PlayerWinEvent;
 import org.mcsg.survivalgames.hooks.HookManager;
 import org.mcsg.survivalgames.logging.QueueManager;
 import org.mcsg.survivalgames.stats.StatsManager;
-import org.mcsg.survivalgames.util.ItemReader;
+import org.mcsg.survivalgames.util.ItemUtility;
 import org.mcsg.survivalgames.util.Kit;
 
 //Data container for a game
@@ -450,7 +450,7 @@ public class Game {
 				}, config.getInt("grace-period") * 20);
 			}
 			if(config.getBoolean("deathmatch.enabled")) {
-				SurvivalGames.$(gameID, "Launching deathmatch timer...");
+				SurvivalGames.log(gameID, "Launching deathmatch timer...");
 				dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 40L, 20L);
 				tasks.add(dmTaskID);
 			}
@@ -588,7 +588,7 @@ public class Game {
 
 					String itemname = "Unknown Item";
 					if (killer != null) {
-						itemname = ItemReader.getFriendlyItemName(killer.getEquipment().getItemInMainHand().getType());
+						itemname = ItemUtility.getFriendlyItemName(killer.getEquipment().getItemInMainHand().getType());
 					}
 
 					msgFall(PrefixType.INFO, "death."+enttype, "player-"+p.getDisplayName(), "killer-"+killername, "item-"+itemname);
@@ -731,7 +731,7 @@ public class Game {
 		if (activePlayers.size() == 0) {
 			// No players left means this is the winner dying, just ignore it.
 			// The actual win task would have already been launched before this one.
-			SurvivalGames.$(gameID, Level.WARNING, "Last player (" + p.getName() + ") died in the arena!");
+			SurvivalGames.log(gameID, Level.WARNING, "Last player (" + p.getName() + ") died in the arena!");
 			return;
 		}
 
@@ -1114,11 +1114,11 @@ public class Game {
 					|| (remaining == 30) || (remaining == 10) || (remaining <= 5)) {
 				if (remaining > 60) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + (remaining / 60) + " minutes(s)");
-					SurvivalGames.$(gameID, "Deathmatch mode will begin in " + (remaining / 60) + " minute(s)");
+					SurvivalGames.log(gameID, "Deathmatch mode will begin in " + (remaining / 60) + " minute(s)");
 				}
 				else if (remaining > 0) {
 					msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + remaining + " seconds");
-					SurvivalGames.$(gameID, "Deathmatch mode will begin in " + remaining + " seconds");
+					SurvivalGames.log(gameID, "Deathmatch mode will begin in " + remaining + " seconds");
 				}
 			}
 
@@ -1128,7 +1128,7 @@ public class Game {
 
 			Bukkit.getScheduler().cancelTask(dmTaskID);
 			if (!tasks.remove((Integer) dmTaskID)) {
-				SurvivalGames.$(gameID, "WARNING: DeathMatch task NOT removed!");
+				SurvivalGames.log(gameID, "WARNING: DeathMatch task NOT removed!");
 			}
 
 			ArrayList<Location> dmspawns = new ArrayList<>();

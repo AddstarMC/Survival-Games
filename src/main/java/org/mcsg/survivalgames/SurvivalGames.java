@@ -143,11 +143,11 @@ public class SurvivalGames extends JavaPlugin {
 		}
 	}
 
-	public static void $(int gameid, String msg){
-		$(gameid, Level.INFO, msg);
+	public static void log(int gameid, String msg) {
+		log(gameid, Level.INFO, msg);
 	}
 
-	public static void $(int gameid, Level l, String msg){
+	public static void log(int gameid, Level l, String msg) {
 		if (gameid == 0) {
 			logger.log(l, msg);
 		} else {
@@ -157,7 +157,7 @@ public class SurvivalGames extends JavaPlugin {
 
 	public static void debug(int gameid, String msg){
 		if(SettingsManager.getInstance().getConfig().getBoolean("debug", false))
-			$(gameid, "[Debug] "+msg);
+			log(gameid, "[Debug] " + msg);
 	}
 
 	//public static void debug(int a) {
