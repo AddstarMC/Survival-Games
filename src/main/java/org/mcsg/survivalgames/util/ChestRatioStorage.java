@@ -79,7 +79,11 @@ public class ChestRatioStorage {
 			}
 
 			itemMaterial = Material.getMaterial((String) itemObject.get("Material"));
-			
+			if (itemMaterial == null) {
+				SurvivalGames.$(0, "ERROR: Unable to convert chest item \"" + itemObject.get("Material") + "\" to Material");
+				return null;
+			}
+
 		} catch(Exception ex) {
 			SurvivalGames.$(0, Level.SEVERE, "Item \"" + itemObject.get("Material") + "\" does not have required material parameter!");
 			return null;
