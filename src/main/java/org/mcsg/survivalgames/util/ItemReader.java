@@ -25,7 +25,7 @@ public class ItemReader {
 			String name = e.getKey().getKey().toLowerCase().replace("_", "");
 			encids.put(name, e);
 		}
-		
+
         encids.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
         encids.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
 		
@@ -80,7 +80,7 @@ public class ItemReader {
 			for(int a = 0; a < l.length; a++){
 				SurvivalGames.$(0, "  Lore "+(a+1)+": " + l[a]);
 			}
-            List<String> lore = new ArrayList<>(Arrays.asList(l));
+			List<String> lore = new ArrayList<>(Arrays.asList(l));
 			im.setLore(lore);
 		}
 		i.setItemMeta(im);
@@ -91,7 +91,13 @@ public class ItemReader {
 			for(String enc: encs){
 				if ((!enc.isEmpty()) && (!enc.equalsIgnoreCase("null"))) {
 					String e[] = enc.toLowerCase().split(":");
-					i.addUnsafeEnchantment(encids.get(e[0]), Integer.parseInt(e[1]));
+					Enchantment enchant = encids.get(e[0]);
+					if (enchant == null) {
+						SurvivalGames.$(0, "  INVALID ENCHANT: " + e[0]);
+					} else {
+						int level = Integer.parseInt(e[1]);
+						i.addUnsafeEnchantment(enchant, level);
+					}
 				}
 			}
 		}
