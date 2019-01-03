@@ -52,15 +52,18 @@ public class ItemReader {
 
 		try {
 			mat = Material.matchMaterial(split[0]);
+			if (mat == null) {
+				SurvivalGames.$(0, "ERROR: Unable to match item \"" + split[0] + "\" to Material");
+				return null;
+			}
 		} catch(Exception e) {
 			SurvivalGames.$(0, "ERROR: Unknown item named \"" + split[0] + "\"");
 			return null;
 		}
 
 		// Grab item qty
-		if (split.length > 1)
+		if (split.length >= 2)
 			size = Integer.parseInt(split[1]);
-
 
 		// Create the item
 		i = new ItemStack(mat, size);
@@ -68,7 +71,7 @@ public class ItemReader {
 		SurvivalGames.$(0, "Item: " + i);
 
 		// Set item display name
-		if (split.length >= 3) {
+		if (split.length >= 4) {
 			String name = MessageUtil.replaceColors(split[3]);
 			im.setDisplayName(name);
 			SurvivalGames.$(0, "  Name: " + name);
@@ -86,7 +89,7 @@ public class ItemReader {
 		i.setItemMeta(im);
 
 		// Set enchantments
-		if (split.length >= 2) {
+		if (split.length >= 3) {
 			String encs[] = split[2].split(" ");
 			for(String enc: encs){
 				if ((!enc.isEmpty()) && (!enc.equalsIgnoreCase("null"))) {
