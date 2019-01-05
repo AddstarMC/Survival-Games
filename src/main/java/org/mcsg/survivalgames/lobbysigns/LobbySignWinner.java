@@ -33,7 +33,8 @@ public class LobbySignWinner extends LobbySign {
 	public void save(FileConfiguration config) {
 		super.save(config);
 		config.set("lobby.sign.winnerName", m_lastWinnerName);
-		config.set("lobby.sign.winnerUUID", lastWinnerUUID.toString());
+		if (lastWinnerUUID != null)
+			config.set("lobby.sign.winnerUUID", lastWinnerUUID.toString());
 	}
 	
 	@Override
