@@ -144,7 +144,7 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>org.bstats.bukkit</pattern>
+                            <pattern>org.bstats</pattern>
                             <shadedPattern>org.mcsg.survivalgames</shadedPattern>
                         </relocation>
                     </relocations>
