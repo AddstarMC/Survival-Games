@@ -853,6 +853,7 @@ public class Game {
 			p.setWalkSpeed(0.3F);
 			p.setFlySpeed(0.3F);
 			p.setFireTicks(0);
+            p.setCollidable(false);
 
 			Inventory inv = p.getInventory();
 			inv.clear();
@@ -979,6 +980,7 @@ public class Game {
 		p.setGameMode(org.bukkit.GameMode.SURVIVAL);
 		p.setWalkSpeed(0.2F);
 		p.setFlySpeed(0.2F);
+        p.setCollidable(true);
 		spectators.remove(p.getName());
 		nextspec.remove(p);
 		msgFall(PrefixType.INFO, "game.spectatorleave", "player-"+p.getDisplayName(), "spectators-"+spectators.size());
