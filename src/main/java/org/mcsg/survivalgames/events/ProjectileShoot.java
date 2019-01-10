@@ -35,7 +35,7 @@ public class ProjectileShoot implements Listener {
                 MessageManager.getInstance().broadcastFMessage(MessageManager.PrefixType.INFO, "game.projectilewarning", "player-" + hit.getDisplayName());
                 g.removeSpectator(hit);
                 hit.teleport(SettingsManager.getInstance().getLobbySpawn());
-                MessageManager.getInstance().logMessage(MessageManager.PrefixType.INFO, hit.getDisplayName() + " was teleported for projectile interferance");
+                MessageManager.getInstance().logMessage(MessageManager.PrefixType.INFO, hit.getDisplayName() + " was teleported for projectile interference");
             }
         }
         
