@@ -63,6 +63,40 @@ public class SurvivalGames extends JavaPlugin {
 		//ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Startup(), 10);
 	}
+	
+	public static void $(int gameid, Level l, String msg) {
+		if (gameid == 0) {
+			logger.log(l, msg);
+		} else {
+			logger.log(l, "#" + gameid + ": " + msg);
+		}
+	}
+	
+	public void setCommands() {
+		getCommand("survivalgames").setExecutor(new CommandHandler(p));
+	}
+	
+	
+	public static File getPluginDataFolder() {
+		return datafolder;
+	}
+	
+	public static boolean isDisabling() {
+		return disabling;
+	}
+	
+	public WorldEditPlugin getWorldEdit() {
+		Plugin worldEdit = getServer().getPluginManager().getPlugin("WorldEdit");
+		if (worldEdit instanceof WorldEditPlugin) {
+			return (WorldEditPlugin) worldEdit;
+		} else {
+			return null;
+		}
+	}
+	
+	public static void $(int gameid, String msg) {
+		$(gameid, Level.INFO, msg);
+	}
 
 	class Startup implements Runnable {
 		public void run() {
@@ -75,8 +109,8 @@ public class SurvivalGames extends JavaPlugin {
 			
 			lobbySignManager = new LobbySignManager();
 			lobbySignManager.loadSigns();
-
-			try { // try loading everything that uses SQL. 
+			
+			try { // try loading everything that uses SQL.
 				FileConfiguration c = SettingsManager.getInstance().getConfig();
 				if (c.getBoolean("stats.enabled")) DatabaseManager.getInstance().setup(p);
 				QueueManager.getInstance().setup();
@@ -110,48 +144,13 @@ public class SurvivalGames extends JavaPlugin {
 			pm.registerEvents(new BandageUse(), p);
 			pm.registerEvents(new RespawnEvent(), p);
 			pm.registerEvents(new DropItemEvent(), p);
+			pm.registerEvents(new ProjectileShoot(), p);
 
 			for (Player p: Bukkit.getOnlinePlayers()) {
 				if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
 					p.teleport(SettingsManager.getInstance().getLobbySpawn());
 				}
 			}
-		}
-	}
-
-	public void setCommands() {
-		getCommand("survivalgames").setExecutor(new CommandHandler(p));
-	}
-
-
-
-
-	public static File getPluginDataFolder() {
-		return datafolder;
-	}
-
-	public static boolean isDisabling() {
-		return disabling;
-	}
-
-	public WorldEditPlugin getWorldEdit() {
-		Plugin worldEdit = getServer().getPluginManager().getPlugin("WorldEdit");
-		if (worldEdit instanceof WorldEditPlugin) {
-			return (WorldEditPlugin) worldEdit;
-		} else {
-			return null;
-		}
-	}
-
-	public static void $(int gameid, String msg){
-		$(gameid, Level.INFO, msg);
-	}
-
-	public static void $(int gameid, Level l, String msg){
-		if (gameid == 0) {
-			logger.log(l, msg);
-		} else {
-			logger.log(l, "#" + String.valueOf(gameid) + ": " + msg);
 		}
 	}
 
