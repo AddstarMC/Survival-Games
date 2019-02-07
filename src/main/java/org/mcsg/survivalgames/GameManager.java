@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 import org.bukkit.Bukkit;
@@ -293,8 +293,8 @@ public class GameManager {
 			msgmgr.sendMessage(PrefixType.WARNING, "You must make a WorldEdit Selection first!", pl);
 			return;
 		}
-		Vector max = region.getMaximumPoint();
-		Vector min = region.getMinimumPoint();
+		BlockVector3 max = region.getMaximumPoint();
+		BlockVector3 min = region.getMinimumPoint();
 		if (region.getWorld() == null) {
 			msgmgr.sendMessage(PrefixType.WARNING, "Selection did not have a valid world !!", pl);
 			return;

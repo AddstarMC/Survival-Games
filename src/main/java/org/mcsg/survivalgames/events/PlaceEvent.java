@@ -34,7 +34,7 @@ public class PlaceEvent implements Listener {
         }
 
         Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerGameId(p));
-        if(g.isPlayerinactive(p)){
+        if(g == null || g.isPlayerinactive(p)){
             return;
         }
         if(g.getMode() == Game.GameMode.DISABLED){

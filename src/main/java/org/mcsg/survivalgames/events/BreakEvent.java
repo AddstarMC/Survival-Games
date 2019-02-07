@@ -34,7 +34,7 @@ public class BreakEvent implements Listener {
             return;
         }
         Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerGameId(p));
-        if(g.getMode() == Game.GameMode.DISABLED){
+        if(g == null || g.getMode() == Game.GameMode.DISABLED){
             return;
         }
         if(g.getMode() != Game.GameMode.INGAME){
