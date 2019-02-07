@@ -67,7 +67,6 @@ public class Game {
 	private HashMap<String, String> hookvars = new HashMap<>();
 	private MessageManager msgmgr = MessageManager.getInstance();
 	private GameScoreboard scoreBoard = null;
-
 	public Game(int gameid) {
 		gameID = gameid;
 		name = "Arena " + gameID;
