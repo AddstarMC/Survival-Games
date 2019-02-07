@@ -34,7 +34,7 @@ public class GameManager {
     public static HashMap<Integer, HashSet<Block>> openedChest = new HashMap<>();
 	private SurvivalGames p;
     private ArrayList<Game> games = new ArrayList<>();
-    private ArrayList<Kit> kits = new ArrayList<>();
+    ArrayList<Kit> kits = new ArrayList<>();
     private HashSet<UUID> kitsel = new HashSet<>();
 	MessageManager msgmgr = MessageManager.getInstance();
 
@@ -170,19 +170,30 @@ public class GameManager {
 		kitsel.add(p.getUniqueId());
 	}
 
+    public void selectKit(Player p, Game g, int i) {
+        p.getInventory().clear();
+        p.getEquipment().setArmorContents(null);
+        p.updateInventory();
+        ArrayList<Kit> kits = getKits(p, g);
+        if ((i >= 0) && (i < kits.size())) {
+            Kit k = kits.get(i);
+            if (k != null) {
+                p.getInventory().setContents(k.getContents().toArray(new ItemStack[0]));
+            }
+        }
+        p.updateInventory();
+    }
 	public void selectKit(Player p, int i) {
-		p.getInventory().clear();
-		p.getEquipment().setArmorContents(null);
-		p.updateInventory();
-		ArrayList<Kit>kits = getKits(p);
-		if ((i >= 0) && (i < kits.size())) {
-			Kit k = kits.get(i);
-			if (k != null) {
-				p.getInventory().setContents(k.getContents().toArray(new ItemStack[0]));
-			}
-		}
-		p.updateInventory();
-	}
+        selectKit(p, null, i);
+    }
+
+    public Game getGame(Player p) {
+        for (Game g : games) {
+            if (g.isInQueue(p) || g.isPlayerActive(p) || g.isPlayerinactive(p))
+                return g;
+        }
+        return null;
+    }
 
 	public int getGameCount() {
 		return games.size();
@@ -230,15 +241,26 @@ public class GameManager {
 		return null;
 	}
 
-	public ArrayList<Kit> getKits(Player p){
+    public ArrayList<Kit> getKits(Player p){
+        return getKits(p, null);
+    }
+
+    public ArrayList<Kit> getKits(Player p, Game g) {
         ArrayList<Kit> k = new ArrayList<>();
-		for(Kit kit: kits){
-			if(kit.canUse(p)){
-				k.add(kit);
-			}
-		}
-		return k;
-	}
+        if (g != null) {
+            for (Kit kit : g.getKits()) {
+                if (kit.canUse(p)) {
+                    k.add(kit);
+                }
+            }
+        } else
+            for (Kit kit : kits) {
+                if (kit.canUse(p)) {
+                    k.add(kit);
+                }
+            }
+        return k;
+    }
 
 	//TODO: Actually make this countdown correctly
 	public void startGame(int gameId) {

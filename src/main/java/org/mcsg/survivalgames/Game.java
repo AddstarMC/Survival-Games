@@ -1,10 +1,6 @@
 package org.mcsg.survivalgames;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -45,6 +41,7 @@ public class Game {
 	private ArrayList<Player> queue = new ArrayList<>();
 	private HashMap<String, Object> flags = new HashMap<>();
 	private ArrayList<Integer> tasks = new ArrayList<>();
+    private List<Kit> kits = new ArrayList<>();
 
 	private Arena arena;
 	private int gameID;
@@ -114,7 +111,16 @@ public class Game {
 		float winyaw = system.getInt("sg-system.arenas." + gameID + ".win.yaw", 0);
 		float winp = system.getInt("sg-system.arenas." + gameID + ".win.pitch", 0);
 		winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
-		
+        List<String> kitNames = system.getStringList("sg-system.areana" + gameID + ".kits");
+        if (kitNames.size() > 0) {
+            for (String kit : kitNames) {
+                for (Kit k : GameManager.getInstance().kits) {
+                    if (k.getName().equals(kit)) {
+                        kits.add(k);
+                    }
+                }
+            }
+        } else kits.addAll(GameManager.getInstance().kits);
 		loadspawns();
 
 		hookvars.put("arena", gameID + "");
@@ -158,6 +164,9 @@ public class Game {
 		return arena;
 	}
 
+    public List<Kit> getKits() {
+        return kits;
+    }
 
 	/*
 	 * 
@@ -353,7 +362,7 @@ public class Game {
 		int b = 0;
 
 
-		ArrayList<Kit>kits = GameManager.getInstance().getKits(p);
+        ArrayList<Kit> kits = GameManager.getInstance().getKits(p, this);
 		if(kits == null || kits.size() == 0 || !SettingsManager.getInstance().getKits().getBoolean("enabled")){
 			GameManager.getInstance().leaveKitMenu(p);
 			return;
