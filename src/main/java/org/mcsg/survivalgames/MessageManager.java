@@ -16,7 +16,7 @@ public class MessageManager {
 
 	public static MessageManager instance = new MessageManager();
 	public String pre = ChatColor.BLUE + "" + ChatColor.BOLD + "[" + ChatColor.GOLD + "" + ChatColor.BOLD + "SG" + ChatColor.BLUE + "" + ChatColor.BOLD + "] " + ChatColor.RESET;
-	private HashMap<PrefixType, String> prefix = new HashMap<>();
+	private final HashMap<PrefixType, String> prefix = new HashMap<>();
 
 	/**
 	 * SendMessage
@@ -29,8 +29,8 @@ public class MessageManager {
 	 * @param player the player to send
 	 * @param args the strings to use to format the message
 	 */
-	public void sendFMessage(PrefixType type, String input, Player player, String... args) {
-		sendFMessage(type, input, (CommandSender) player, args);
+	public void sendFMessage(final PrefixType type, final String input, final Player player, final String... args) {
+        this.sendFMessage(type, input, (CommandSender) player, args);
 	}
 	
 	public static MessageManager getInstance() {
@@ -38,11 +38,11 @@ public class MessageManager {
 	}
 	
 	public void setup() {
-		FileConfiguration f = SettingsManager.getInstance().getMessageConfig();
-		prefix.put(PrefixType.MAIN, MessageUtil.replaceColors(f.getString("prefix.main")));
-		prefix.put(PrefixType.INFO, MessageUtil.replaceColors(f.getString("prefix.states.info")));
-		prefix.put(PrefixType.WARNING, MessageUtil.replaceColors(f.getString("prefix.states.warning")));
-		prefix.put(PrefixType.ERROR, MessageUtil.replaceColors(f.getString("prefix.states.error")));
+		final FileConfiguration f = SettingsManager.getInstance().getMessageConfig();
+        this.prefix.put(PrefixType.MAIN, MessageUtil.replaceColors(f.getString("prefix.main")));
+        this.prefix.put(PrefixType.INFO, MessageUtil.replaceColors(f.getString("prefix.states.info")));
+        this.prefix.put(PrefixType.WARNING, MessageUtil.replaceColors(f.getString("prefix.states.warning")));
+        this.prefix.put(PrefixType.ERROR, MessageUtil.replaceColors(f.getString("prefix.states.error")));
 
 	}
 
@@ -56,18 +56,18 @@ public class MessageManager {
 	 * @param sender the player to send
 	 */
 
-	public void sendMessage(PrefixType type, String msg, CommandSender sender) {
-		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ msg );
+	public void sendMessage(final PrefixType type, final String msg, final CommandSender sender) {
+		sender.sendMessage(this.prefix.get(PrefixType.MAIN)+ " "+ this.prefix.get(type)+ msg );
 	}
 	
-	public void sendFMessage(PrefixType type, String input, CommandSender sender, String ... args) {
+	public void sendFMessage(final PrefixType type, final String input, final CommandSender sender, final String ... args) {
 		String msg = SettingsManager.getInstance().getMessageConfig().getString("messages."+input);
-		boolean enabled = SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true);
+		final boolean enabled = SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true);
 		if(msg == null){sender.sendMessage(ChatColor.RED+"Failed to load message for messages."+input); return;}
 		if(!enabled)return;
 		if(args != null && args.length != 0){msg = MessageUtil.replaceVars(msg, args);}
 		msg = MessageUtil.replaceColors(msg);
-		sender.sendMessage(prefix.get(PrefixType.MAIN)+ " " + prefix.get(type) + msg);
+		sender.sendMessage(this.prefix.get(PrefixType.MAIN)+ " " + this.prefix.get(type) + msg);
 	}
 
 	public enum PrefixType {
@@ -76,18 +76,18 @@ public class MessageManager {
 
 	}
 	
-	public void logMessage(PrefixType type, String msg) {
-		Logger logger = Bukkit.getServer().getLogger();
+	public void logMessage(final PrefixType type, final String msg) {
+		final Logger logger = Bukkit.getServer().getLogger();
 		switch (type) {
-		case INFO:  logger.info(prefix.get(type)+ msg); break;
-		case WARNING: logger.warning(prefix.get(type) + msg); break;
-		case ERROR: logger.severe(prefix.get(type) + msg); break;
+		case INFO:  logger.info(this.prefix.get(type)+ msg); break;
+		case WARNING: logger.warning(this.prefix.get(type) + msg); break;
+		case ERROR: logger.severe(this.prefix.get(type) + msg); break;
 		default:
 			break;
 		}
 	}
 	
-	public String getFMessage(PrefixType type, String input, String ...args ) {
+	public String getFMessage(final PrefixType type, final String input, final String ...args ) {
 		String msg = SettingsManager.getInstance().getMessageConfig().getString("messages."+input);
 		if(msg == null){
 			Bukkit.broadcastMessage(ChatColor.RED+"Failed to load message for messages." + input);
@@ -96,24 +96,24 @@ public class MessageManager {
 		if (args != null && args.length != 0) {
 			msg = MessageUtil.replaceVars(msg, args);
 		}
-		msg = prefix.get(PrefixType.MAIN) + prefix.get(type) + " " + MessageUtil.replaceColors(msg);
+		msg = this.prefix.get(PrefixType.MAIN) + this.prefix.get(type) + " " + MessageUtil.replaceColors(msg);
 		return msg;
 	}
 
-	public void broadcastFMessage(PrefixType type, String input, String ...args ) {
+	public void broadcastFMessage(final PrefixType type, final String input, final String ...args ) {
 		if (SettingsManager.getInstance().getMessageConfig().getBoolean("messages."+input+"_enabled", true)) {
-			String msg = getFMessage(type, input, args);
+			final String msg = this.getFMessage(type, input, args);
 			Bukkit.broadcastMessage(msg);
 		}
 	}
 	
-	public void broadcastMessage(PrefixType type, String msg, Player player){
-		Bukkit.broadcastMessage(prefix.get(PrefixType.MAIN)+ " "+prefix.get(type)+ " "+msg );
+	public void broadcastMessage(final PrefixType type, final String msg, final Player player){
+		Bukkit.broadcastMessage(this.prefix.get(PrefixType.MAIN)+ " "+ this.prefix.get(type)+ " "+msg );
 	}
 
-	public void sendTitleMessage(PrefixType type, CommandSender sender, String message, String... args) {
+	public void sendTitleMessage(final PrefixType type, final CommandSender sender, final String message, final String... args) {
 		if (sender instanceof Player) {
-			((Player) sender).sendTitle(getFMessage(type, message, args), null);
+			((Player) sender).sendTitle(this.getFMessage(type, message, args), null);
 		}
 	}
 

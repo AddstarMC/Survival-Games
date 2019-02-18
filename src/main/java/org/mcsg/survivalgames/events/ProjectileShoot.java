@@ -17,10 +17,10 @@ import org.mcsg.survivalgames.*;
 public class ProjectileShoot implements Listener {
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onProjectileShoot(ProjectileHitEvent event) {
-        ProjectileSource source = event.getEntity().getShooter();
+    public void onProjectileShoot(final ProjectileHitEvent event) {
+        final ProjectileSource source = event.getEntity().getShooter();
         if (source instanceof Player && event.getHitEntity() instanceof Player) {
-            Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerGameId((Player) source));
+            final Game g = GameManager.getInstance().getGame(GameManager.getInstance().getPlayerGameId((Player) source));
             if (g == null || g.isPlayerinactive((Player) source)) {
                 return;
             }
@@ -30,7 +30,7 @@ public class ProjectileShoot implements Listener {
             if (g.getMode() != Game.GameMode.INGAME) {
                 return;
             }
-            Player hit = (Player) event.getHitEntity();
+            final Player hit = (Player) event.getHitEntity();
             if (g.isSpectator(hit)) {
                 MessageManager.getInstance().broadcastFMessage(MessageManager.PrefixType.INFO, "game.projectilewarning", "player-" + hit.getDisplayName());
                 g.removeSpectator(hit);

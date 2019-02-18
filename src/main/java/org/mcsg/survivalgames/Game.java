@@ -39,7 +39,7 @@ public class Game {
     private final List<Kit> kits = new ArrayList<>();
     private final int gameID;
     private final HashMap<Integer, Player> spawns = new HashMap<>();
-    private final int endgameTaskID;
+    private int endgameTaskID = 0;
     private final StatsManager sm = StatsManager.getInstance();
     private final HashMap<String, String> hookvars = new HashMap<>();
     private final MessageManager msgmgr = MessageManager.getInstance();

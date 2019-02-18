@@ -17,17 +17,17 @@ import org.mcsg.survivalgames.lobbysigns.LobbySignWinnerSign;
 
 public class LobbyManager {
 
-	private static LobbyManager instance = null;
+	private static LobbyManager instance;
     public static HashSet<Chunk> lobbychunks = new HashSet<>();
-	LobbySignManager signManager = null;
+	LobbySignManager signManager;
 	
-	private LobbyManager(LobbySignManager signManager) {
+	private LobbyManager(final LobbySignManager signManager) {
 		this.signManager = signManager;
 		signManager.loadSigns();
-		updateAll();
+        this.updateAll();
 	}
 	
-	public static void createInstance(LobbySignManager signManager) {
+	public static void createInstance(final LobbySignManager signManager) {
 		instance = new LobbyManager(signManager);
 	}
 
@@ -36,23 +36,23 @@ public class LobbyManager {
 	}
 
 	public void updateAll() {
-		signManager.updateSigns();
+        this.signManager.updateSigns();
 	}
 
-	public void updateWall(int gameId) {
-		signManager.updateSigns(gameId);
+	public void updateWall(final int gameId) {
+        this.signManager.updateSigns(gameId);
 	}
 
-	public void removeSignsForArena(int arena) {
-		signManager.removeArena(arena);
+	public void removeSignsForArena(final int arena) {
+        this.signManager.removeArena(arena);
 	}
 	
-	public void gameEnd(int gameID, Player winner) {
+	public void gameEnd(final int gameID, final Player winner) {
 		final Location loc = winner.getLocation();
 		launchEndFireworks(loc);
 				
-		List<LobbySign> winnerSign = signManager.getSignsByType(gameID, LobbySignType.Winner);
-		for (LobbySign sign : winnerSign) {
+		final List<LobbySign> winnerSign = this.signManager.getSignsByType(gameID, LobbySignType.Winner);
+		for (final LobbySign sign : winnerSign) {
 			
 			if (!(sign instanceof LobbySignWinner))
 				continue;
@@ -61,8 +61,8 @@ public class LobbyManager {
 			sign.update();
 		}
 
-        List<LobbySign> winnerSigns = signManager.getSignsByType(gameID, LobbySignType.WinnerSign);
-        for (LobbySign sign : winnerSigns) {
+        final List<LobbySign> winnerSigns = this.signManager.getSignsByType(gameID, LobbySignType.WinnerSign);
+        for (final LobbySign sign : winnerSigns) {
             ((LobbySignWinnerSign)sign).setWinner(winner.getDisplayName());
             sign.update();
         }
