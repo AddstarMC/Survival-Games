@@ -28,7 +28,7 @@ public class ItemReader {
 
         encids.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
         encids.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
-		
+		encids.put("protectionfire", Enchantment.PROTECTION_FIRE);
 		encids.put("sharpness", Enchantment.DAMAGE_ALL);
 		encids.put("dmg", Enchantment.DAMAGE_ALL);
 		encids.put("fire", Enchantment.FIRE_ASPECT);
@@ -38,7 +38,7 @@ public class ItemReader {
 		if(encids == null){
 			loadIds();
 		}
-		String split[] = str.split(",");
+		String[] split = str.split(",");
 		for(int a = 0; a < split.length; a++){
 			split[a] = split[a].trim();
 		}
@@ -90,10 +90,10 @@ public class ItemReader {
 
 		// Set enchantments
 		if (split.length >= 3) {
-			String encs[] = split[2].split(" ");
+			String[] encs = split[2].split(" ");
 			for(String enc: encs){
 				if ((!enc.isEmpty()) && (!enc.equalsIgnoreCase("null"))) {
-					String e[] = enc.toLowerCase().split(":");
+					String[] e = enc.toLowerCase().split(":");
 					Enchantment enchant = encids.get(e[0]);
 					if (enchant == null) {
 						SurvivalGames.$(0, "  INVALID ENCHANT: " + e[0]);

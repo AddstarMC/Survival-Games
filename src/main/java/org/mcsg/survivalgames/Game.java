@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -114,14 +115,14 @@ public class Game {
         final List<String> kitNames = this.system.getStringList("sg-system.arenas." + this.gameID + ".kits");
         if (!kitNames.isEmpty()) {
             for (final String kit : kitNames) {
-                for (final Kit k : GameManager.getInstance().kits) {
+                for (final Kit k : SurvivalGames.plugin.getGameManager().kits) {
                     if (k.getName().equals(kit)) {
                         this.kits.add(k);
                     }
                 }
             }
         } else {
-            this.kits.addAll(GameManager.getInstance().kits);
+            this.kits.addAll(SurvivalGames.plugin.getGameManager().kits);
         }
         this.loadspawns();
         
@@ -287,7 +288,7 @@ public class Game {
         
         if (this.mode == GameMode.WAITING || this.mode == GameMode.STARTING) {
             this.mode = GameMode.STARTING;
-            this.tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), () -> {
+            this.tid = Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                 // Fail safe to stop timer if game is ended or not in correct state
                 if (this.mode != GameMode.STARTING) {
                     Bukkit.getScheduler().cancelTask(this.tid);
@@ -351,7 +352,7 @@ public class Game {
             if (this.config.getBoolean("restock-chest")) {
                 SettingsManager.getGameWorld(this.gameID).setTime(0);
                 this.gcount++;
-                this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(),
+                this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(),
                         new NightChecker(),
                         14400));
             }
@@ -359,7 +360,7 @@ public class Game {
                 for (final Player play : this.activePlayers) {
                     this.msgmgr.sendMessage(PrefixType.INFO, "You have a " + this.config.getInt("grace-period") + " second grace period!", play);
                 }
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                     for (final Player play : this.activePlayers) {
                         this.msgmgr.sendMessage(PrefixType.INFO, "Grace period has ended!", play);
                     }
@@ -367,7 +368,7 @@ public class Game {
             }
             if (this.config.getBoolean("deathmatch.enabled")) {
                 SurvivalGames.$(this.gameID, "Launching deathmatch timer...");
-                this.dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), new DeathMatchTimer(), 40L, 20L);
+                this.dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.plugin.getGameManager().getPlugin(), new DeathMatchTimer(), 40L, 20L);
                 this.tasks.add(this.dmTaskID);
             }
         }
@@ -474,8 +475,8 @@ public class Game {
         }
         
         if (this.getActivePlayers() <= this.config.getInt("endgame.players") && this.config.getBoolean("endgame.fire-lighting.enabled") && !this.endgameRunning) {
-            
-            this.tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(),
+
+            this.tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.plugin.getGameManager().getPlugin(),
                     new EndgameManager(),
                     0,
                     this.config.getInt("endgame.fire-lighting.interval") * 20));
@@ -484,7 +485,7 @@ public class Game {
         if (this.activePlayers.size() < 2 && this.mode == GameMode.INGAME) {
             this.mode = GameMode.FINISHING;
             LobbyManager.getInstance().updateWall(this.gameID);
-            this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+            this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                 this.playerWin(p);
                 this.endGame();
             }, 10L));
@@ -614,7 +615,7 @@ public class Game {
         this.endgameRunning = false;
         
         Bukkit.getScheduler().cancelTask(this.endgameTaskID);
-        GameManager.getInstance().gameEndCallBack(this.gameID);
+        SurvivalGames.plugin.getGameManager().gameEndCallBack(this.gameID);
         QueueManager.getInstance().rollback(this.gameID, false);
         LobbyManager.getInstance().updateWall(this.gameID);
         
@@ -700,7 +701,7 @@ public class Game {
         if (this.activePlayers.size() < 2) {
             if (this.mode == GameMode.INGAME) {
                 this.mode = GameMode.FINISHING;
-                this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+                this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                     this.playerWin(p);
                     this.endGame();
                 }, 1L));
@@ -713,7 +714,7 @@ public class Game {
                 } else {
                     // No players left so just end the game
                     this.mode = GameMode.FINISHING;
-                    this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), this::endGame, 1L));
+                    this.tasks.add(Bukkit.getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), this::endGame, 1L));
                 }
             }
         }
@@ -807,8 +808,8 @@ public class Game {
         for (final Player pl : Bukkit.getOnlinePlayers()) {
             pl.hidePlayer(SurvivalGames.plugin, p);
         }
-        
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
             p.setGameMode(org.bukkit.GameMode.CREATIVE);
             p.setAllowFlight(true);
             p.setFlying(true);
@@ -917,11 +918,11 @@ public class Game {
             return false;
         }
         HookManager.getInstance().runHook("GAME_PRE_ADDPLAYER", "arena-" + this.gameID, "player-" + p.getDisplayName(), "maxplayers-" + this.spawns.size(), "players-" + this.activePlayers.size());
-        
-        GameManager.getInstance().removeFromOtherQueues(p, this.gameID);
-        
-        if (GameManager.getInstance().getPlayerGameId(p) != -1) {
-            if (GameManager.getInstance().isPlayerActive(p)) {
+
+        SurvivalGames.plugin.getGameManager().removeFromOtherQueues(p, this.gameID);
+
+        if (SurvivalGames.plugin.getGameManager().getPlayerGameId(p) != -1) {
+            if (SurvivalGames.plugin.getGameManager().isPlayerActive(p)) {
                 this.msgmgr.sendMessage(PrefixType.ERROR, "Cannot join multiple games!", p);
                 return false;
             }
@@ -933,7 +934,7 @@ public class Game {
         if (this.mode == GameMode.WAITING || this.mode == GameMode.STARTING) {
             if (this.activePlayers.size() < SettingsManager.getInstance().getSpawnCount(this.gameID)) {
                 this.msgmgr.sendMessage(PrefixType.INFO, "Joining Arena '" + this.name + "'", p);
-                final PlayerJoinArenaEvent joinarena = new PlayerJoinArenaEvent(p, GameManager.getInstance().getGame(this.gameID));
+                final PlayerJoinArenaEvent joinarena = new PlayerJoinArenaEvent(p, SurvivalGames.plugin.getGameManager().getGame(this.gameID));
                 Bukkit.getServer().getPluginManager().callEvent(joinarena);
                 if (joinarena.isCancelled()) return false;
                 boolean placed = false;
@@ -971,8 +972,8 @@ public class Game {
                         if (spawnCount == this.activePlayers.size()) {
                             this.countdown(5);
                         }
-                        
-                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GameManager.getInstance().getPlugin(), () -> {
+
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                             p.setFlying(false);
                             p.setAllowFlight(false);
                             p.setWalkSpeed(0.2F);
@@ -1043,21 +1044,23 @@ public class Game {
     }
     
     public void showMenu(final Player p) {
-        GameManager.getInstance().openKitMenu(p);
+        SurvivalGames.plugin.getGameManager().openKitMenu(p);
         final Inventory i = Bukkit.getServer().createInventory(p, 45, ChatColor.RED + "" + ChatColor.BOLD + "Please select a kit:");
         
         int a = 0;
         int b = 0;
-        
-        
-        final ArrayList<Kit> kits = GameManager.getInstance().getKits(p, this);
+
+
+        final ArrayList<Kit> kits = SurvivalGames.plugin.getGameManager().getKits(p, this);
         if (kits == null || kits.size() == 0 || !SettingsManager.getInstance().getKits().getBoolean("enabled")) {
-            GameManager.getInstance().leaveKitMenu(p);
+            SurvivalGames.plugin.getGameManager().leaveKitMenu(p);
             return;
         }
         
         for (final Kit k : kits) {
-            final ItemStack i1 = k.getIcon();
+            ItemStack i1 = k.getIcon();
+            if (i1 == null)
+                i1 = new ItemStack(Material.WHITE_WOOL, 1);
             final ItemMeta im = i1.getItemMeta();
             
             im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + k.getName());
@@ -1256,8 +1259,8 @@ public class Game {
                 }
             }
             dmspawns.clear();
-            
-            Game.this.tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(GameManager.getInstance().getPlugin(), () -> {
+
+            Game.this.tasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.plugin.getGameManager().getPlugin(), () -> {
                 // Game could end (or players die) while inside this loop
                 // This must be carefully handled so we dont CME or damage a player that has already left the game
                 final ArrayList<Player> players = new ArrayList<>(Game.this.activePlayers);

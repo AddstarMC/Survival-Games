@@ -152,7 +152,7 @@ public class ChestRatioStorage {
 				String enchantmentName = (String)jsonEnchantment.get("Name");
 				Long enchantmentLevel = (Long)jsonEnchantment.get("Level");
 
-				Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentName));
+                Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentName.toLowerCase()));
 				if (enchantment != null && enchantmentLevel != null) {
 					SurvivalGames.$(0, "    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);

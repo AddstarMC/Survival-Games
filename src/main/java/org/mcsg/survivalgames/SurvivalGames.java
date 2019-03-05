@@ -34,6 +34,12 @@ public class SurvivalGames extends JavaPlugin {
     SurvivalGames p = this;
     private Metrics metrics;
     private LobbySignManager lobbySignManager;
+
+    private GameManager gameManager;
+
+    public GameManager getGameManager() {
+        return gameManager;
+    }
     
     public static File getPluginDataFolder() {
         return datafolder;
@@ -113,10 +119,10 @@ public class SurvivalGames extends JavaPlugin {
         public void run() {
             final PluginManager pm = SurvivalGames.this.getServer().getPluginManager();
             SurvivalGames.this.setCommands();
-            
+            gameManager = GameManager.getInstance();
             SettingsManager.getInstance().setup(SurvivalGames.this.p);
             MessageManager.getInstance().setup();
-            GameManager.getInstance().setup(SurvivalGames.this.p);
+            gameManager.setup(SurvivalGames.this.p);
             
             SurvivalGames.this.lobbySignManager = new LobbySignManager();
             SurvivalGames.this.lobbySignManager.loadSigns();
