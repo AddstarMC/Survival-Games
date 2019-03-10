@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,13 +14,12 @@ import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SettingsManager;
 
-@SuppressWarnings("deprecation")
 public class BreakEvent implements Listener {
 
     public ArrayList<Material> allowedBreak = new ArrayList<>();
 
-    public BreakEvent(){
-        List<String> materials = SettingsManager.getInstance().getConfig().getStringList("block.break.whitelist");
+    public BreakEvent(FileConfiguration config) {
+        List<String> materials = config.getStringList("block.break.whitelist");
         for (String mat : materials) {
             Material m = Material.getMaterial(mat);
             if (m != null) allowedBreak.add(m);

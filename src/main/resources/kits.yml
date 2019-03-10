@@ -16,7 +16,11 @@
 #    Name, amount , enchantments/potion effects, name, Lore
 # Example: diamond sword with 1 item, full durabilty, shaprness 4, knockback 2 and the name killer
 #     DIAMOND_SWORD, 1, sharpness: 4 knockback: 2, killer
-#
+# Potion Data is recorded as its usually best to set the base data as a mundane or thick and then override it in the
+#     second effect.  This is due to a limit where the base data cannot have a custom duration.  The last entry can be a custom color.
+# Example:
+#       potionEffectType:duration(secs):amplitude(int):boolean(overwrite base data) potionEffectType:duration(secs):amplitude(int):boolean(overwrite base data) color:red:green:blue
+
 
 #DONT TOUCH THIS
 version: 2
@@ -36,14 +40,14 @@ kits:
     cost: 0
     icon: WOOD_SWORD
     contents:
-    - 'WOODEN_SWORD, 1, 0, knockback:1, Blade, A dangerous tool'
+    - 'WOODEN_SWORD, 1, knockback:1, Blade, A dangerous tool'
     - 'LEATHER_BOOTS'
   Tank:
     cost: 0
     icon: LEATHER_CHESTPLATE
     contents:
-    - 'LEATHER_CHESTPLATE, 1, 0, protection:4, Tank Vest'
-    - 'LEATHER_LEGGINGS, 1, 0, protection:4, Tank Pants'
+    - 'LEATHER_CHESTPLATE, 1, protection:4, Tank Vest'
+    - 'LEATHER_LEGGINGS, 1, protection:4, Tank Pants'
   Archer:
     cost: 0
     icon: BOW
@@ -54,11 +58,11 @@ kits:
     cost: 0
     icon: POTION
     contents:
-    - 'POTION, 2, luck:1:2'
+    - 'POTION, 2, mundane:1:1 regeneration:60:2:true color:0:0:0, Firebelly, Puts a Fire in your belly.'
     - 'GOLDEN_HELMET'
   Pyro:
     cost: 0
     icon: BLAZE_ROD
     contents:
-    - 'BLAZE_ROD, 1, 0, fireaspect:2, Fire Stick'
-    - 'LEATHER_LEGGINGS, 1, 0, protectionfire:2, Fire Pants'
+    - 'BLAZE_ROD, 1, fireaspect:2, Fire Stick'
+    - 'LEATHER_LEGGINGS, 1, protectionfire:2, Fire Pants'

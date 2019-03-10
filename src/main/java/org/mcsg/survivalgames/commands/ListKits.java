@@ -35,7 +35,8 @@ public class ListKits implements SubCommand {
             sender.sendMessage("Cost:" + k.getCost());
             sender.sendMessage("............");
             for (ItemStack i : k.getContents()) {
-                sender.sendMessage(i.toString());
+                if (i != null)
+                    sender.sendMessage(i.toString());
             }
             sender.sendMessage("---------------");
         }

@@ -146,7 +146,7 @@ public class SurvivalGames extends JavaPlugin {
             ChestRatioStorage.getInstance().setup();
             HookManager.getInstance().setup();
             pm.registerEvents(new PlaceEvent(), SurvivalGames.this.p);
-            pm.registerEvents(new BreakEvent(), SurvivalGames.this.p);
+            pm.registerEvents(new BreakEvent(SettingsManager.getInstance().getConfig()), SurvivalGames.this.p);
             pm.registerEvents(new DeathEvent(), SurvivalGames.this.p);
             pm.registerEvents(new MoveEvent(), SurvivalGames.this.p);
             pm.registerEvents(new CommandCatch(), SurvivalGames.this.p);

@@ -113,6 +113,7 @@ public class Game {
         final float winp = this.system.getInt("sg-system.arenas." + this.gameID + ".win.pitch", 0);
         this.winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
         final List<String> kitNames = this.system.getStringList("sg-system.arenas." + this.gameID + ".kits");
+        this.kits.clear();
         if (!kitNames.isEmpty()) {
             SurvivalGames.debug(1, "Kits List found...");
             for (final String kit : kitNames) {
