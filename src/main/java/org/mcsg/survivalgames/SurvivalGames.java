@@ -31,6 +31,7 @@ public class SurvivalGames extends JavaPlugin {
     public static SurvivalGames plugin;
     private static File datafolder;
     private static boolean disabling;
+    private static boolean debug;
     SurvivalGames p = this;
     private Metrics metrics;
     private LobbySignManager lobbySignManager;
@@ -50,15 +51,15 @@ public class SurvivalGames extends JavaPlugin {
     }
     
     public static void debug(final int gameid, final String msg) {
-        if (SettingsManager.getInstance().getConfig().getBoolean("debug", false))
-            $(gameid, "[Debug] " + msg);
+        if (debug)
+            info(gameid, "[INFO] " + msg);
     }
-    
-    public static void $(final int gameid, final String msg) {
-        $(gameid, Level.INFO, msg);
+
+    public static void info(final int gameid, final String msg) {
+        log(gameid, Level.INFO, msg);
     }
-    
-    public static void $(final int gameid, final Level l, final String msg) {
+
+    public static void log(final int gameid, final Level l, final String msg) {
         if (gameid == 0) {
             logger.log(l, msg);
         } else {
@@ -119,11 +120,11 @@ public class SurvivalGames extends JavaPlugin {
         public void run() {
             final PluginManager pm = SurvivalGames.this.getServer().getPluginManager();
             SurvivalGames.this.setCommands();
-            gameManager = GameManager.getInstance();
             SettingsManager.getInstance().setup(SurvivalGames.this.p);
+            debug = SettingsManager.getInstance().getConfig().getBoolean("debug", false);
+            gameManager = GameManager.getInstance();
             MessageManager.getInstance().setup();
             gameManager.setup(SurvivalGames.this.p);
-            
             SurvivalGames.this.lobbySignManager = new LobbySignManager();
             SurvivalGames.this.lobbySignManager.loadSigns();
             

@@ -35,8 +35,8 @@ public class SettingsManager {
 	private File f4; //messages
 	private File f5; //deathmatch spawns
 	private File chestFile; //chest
-	
-	private static final int KIT_VERSION = 1;
+
+	private static final int KIT_VERSION = 2;
 	private static final int MESSAGE_VERSION = 1;
 	private static final int SPAWN_VERSION = 0;
 	private static final int DMSPAWN_VERSION = 0;
@@ -172,6 +172,7 @@ public class SettingsManager {
 			return null;
 
 		}
+
 		return p.getServer().getWorld(SettingsManager.getInstance().getSystemConfig().getString("sg-system.arenas." + game + ".world"));
 	}
 
@@ -180,7 +181,7 @@ public class SettingsManager {
 	}
 	
 	public boolean moveFile(File ff){
-		SurvivalGames.$(0, "Moving outdated config file. "+f.getName());
+		SurvivalGames.info(0, "Moving outdated config file. " + f.getName());
 		String name = ff.getName();
 		File ff2 = new File(SurvivalGames.getPluginDataFolder(), getNextName(name, 0));
 		return ff.renameTo(ff2);
@@ -405,7 +406,7 @@ public class SettingsManager {
 		try {
             this.spawns.save(this.f);
 		} catch (final IOException e) {
-			SurvivalGames.$(0, "ERROR: Unable to save spawns file!");
+			SurvivalGames.info(0, "ERROR: Unable to save spawns file!");
 			e.printStackTrace();
 		}
 		GameManager.getInstance().getGame(gameid).addSpawn();
@@ -426,7 +427,7 @@ public class SettingsManager {
 		try {
             this.dmspawns.save(this.f5);
 		} catch (final IOException e) {
-			SurvivalGames.$(0, "ERROR: Unable to save dmspawns file!");
+			SurvivalGames.info(0, "ERROR: Unable to save dmspawns file!");
 			e.printStackTrace();
 		}
 	}

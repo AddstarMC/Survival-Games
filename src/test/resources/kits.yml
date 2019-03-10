@@ -13,13 +13,13 @@
 # contents: the contents of this kit
 #
 # Items are defined as 
-#    Name, amount , enchantments/potion effects, name, Lore
+#    itemnumber, amount, durabilty, enchantments, name
 # Example: diamond sword with 1 item, full durabilty, shaprness 4, knockback 2 and the name killer
-#     DIAMOND_SWORD, 1, sharpness: 4 knockback: 2, killer
+#     276, 1, 0, sharpness: 4 knockback: 2, killer
 #
 
 #DONT TOUCH THIS
-version: 2
+version: 1
 
 enabled: true
 
@@ -36,7 +36,7 @@ kits:
     cost: 0
     icon: WOOD_SWORD
     contents:
-    - 'WOODEN_SWORD, 1, 0, knockback:1, Blade, A dangerous tool'
+    - 'WOOD_SWORD, 1, 0, knockback:1, Blade'
     - 'LEATHER_BOOTS'
   Tank:
     cost: 0
@@ -54,8 +54,8 @@ kits:
     cost: 0
     icon: POTION
     contents:
-    - 'POTION, 2, luck:1:2'
-    - 'GOLDEN_HELMET'
+    - 'POTION, 2, 16453'
+    - 'GOLD_HELMET'
   Pyro:
     cost: 0
     icon: BLAZE_ROD

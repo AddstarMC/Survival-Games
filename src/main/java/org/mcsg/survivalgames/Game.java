@@ -114,18 +114,22 @@ public class Game {
         this.winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
         final List<String> kitNames = this.system.getStringList("sg-system.arenas." + this.gameID + ".kits");
         if (!kitNames.isEmpty()) {
+            SurvivalGames.debug(1, "Kits List found...");
             for (final String kit : kitNames) {
+                SurvivalGames.debug(1, "Matching Kit : " + kit);
                 for (final Kit k : SurvivalGames.plugin.getGameManager().kits) {
+                    SurvivalGames.debug(1, "Checking Kit " + k.getName());
                     if (k.getName().equals(kit)) {
+                        SurvivalGames.debug(1, "Adding Kit " + k.getName());
                         this.kits.add(k);
                     }
                 }
             }
         } else {
+            SurvivalGames.debug(1, "Game Kit : no kits found - adding all");
             this.kits.addAll(SurvivalGames.plugin.getGameManager().kits);
         }
         this.loadspawns();
-        
         this.hookvars.put("arena", this.gameID + "");
         this.hookvars.put("maxplayers", this.spawnCount + "");
         this.hookvars.put("activeplayers", "0");
@@ -367,7 +371,7 @@ public class Game {
                 }, this.config.getInt("grace-period") * 20);
             }
             if (this.config.getBoolean("deathmatch.enabled")) {
-                SurvivalGames.$(this.gameID, "Launching deathmatch timer...");
+                SurvivalGames.info(this.gameID, "Launching deathmatch timer...");
                 this.dmTaskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.plugin.getGameManager().getPlugin(), new DeathMatchTimer(), 40L, 20L);
                 this.tasks.add(this.dmTaskID);
             }
@@ -528,7 +532,7 @@ public class Game {
         if (this.activePlayers.size() == 0) {
             // No players left means this is the winner dying, just ignore it.
             // The actual win task would have already been launched before this one.
-            SurvivalGames.$(this.gameID, Level.WARNING, "Last player (" + p.getName() + ") died in the arena!");
+            SurvivalGames.log(this.gameID, Level.WARNING, "Last player (" + p.getName() + ") died in the arena!");
             return;
         }
         
@@ -1208,10 +1212,10 @@ public class Game {
                     || remaining == 30 || remaining == 10 || remaining <= 5) {
                 if (remaining > 60) {
                     Game.this.msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + remaining / 60 + " minutes(s)");
-                    SurvivalGames.$(Game.this.gameID, "Deathmatch mode will begin in " + remaining / 60 + " minute(s)");
+                    SurvivalGames.info(Game.this.gameID, "Deathmatch mode will begin in " + remaining / 60 + " minute(s)");
                 } else if (remaining > 0) {
                     Game.this.msgFall(PrefixType.INFO, "game.deathmatchwarning", "t-" + remaining + " seconds");
-                    SurvivalGames.$(Game.this.gameID, "Deathmatch mode will begin in " + remaining + " seconds");
+                    SurvivalGames.info(Game.this.gameID, "Deathmatch mode will begin in " + remaining + " seconds");
                 }
             }
             
@@ -1221,7 +1225,7 @@ public class Game {
             
             Bukkit.getScheduler().cancelTask(Game.this.dmTaskID);
             if (!Game.this.tasks.remove((Integer) Game.this.dmTaskID)) {
-                SurvivalGames.$(Game.this.gameID, "WARNING: DeathMatch task NOT removed!");
+                SurvivalGames.info(Game.this.gameID, "WARNING: DeathMatch task NOT removed!");
             }
             
             final ArrayList<Location> dmspawns = new ArrayList<>();

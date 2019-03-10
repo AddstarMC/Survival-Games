@@ -219,11 +219,11 @@ public class QueueManager {
 							new Rollback(id, shutdown, totalRollback + rb, iteration+1, time), 1);
 				}
 				else{
-					SurvivalGames.$(id, "Arena "+id+" reset. Rolled back "+(totalRollback+rb)+" blocks in "+iteration+" iterations ("+pt+" blocks per iteration Total time spent rolling back was "+time+"ms)");
+                    SurvivalGames.info(id, "Arena " + id + " reset. Rolled back " + (totalRollback + rb) + " blocks in " + iteration + " iterations (" + pt + " blocks per iteration Total time spent rolling back was " + time + "ms)");
 					game.resetCallback();
 				}
 			}else{
-				SurvivalGames.$(id, "Arena "+id+" reset. Rolled back "+totalRollback+" blocks in "+iteration+" iterations. Total time spent rolling back was "+time+"ms");
+                SurvivalGames.info(id, "Arena " + id + " reset. Rolled back " + totalRollback + " blocks in " + iteration + " iterations. Total time spent rolling back was " + time + "ms");
 				game.resetCallback();
 			}
 		}

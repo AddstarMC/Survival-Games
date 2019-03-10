@@ -11,29 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
-import org.mcsg.survivalgames.commands.CreateArena;
-import org.mcsg.survivalgames.commands.DelArena;
-import org.mcsg.survivalgames.commands.Disable;
-import org.mcsg.survivalgames.commands.Enable;
-import org.mcsg.survivalgames.commands.Flag;
-import org.mcsg.survivalgames.commands.ForceStart;
-import org.mcsg.survivalgames.commands.Join;
-import org.mcsg.survivalgames.commands.Kit;
-import org.mcsg.survivalgames.commands.Leave;
-import org.mcsg.survivalgames.commands.LeaveQueue;
-import org.mcsg.survivalgames.commands.ListArenas;
-import org.mcsg.survivalgames.commands.ListPlayers;
-import org.mcsg.survivalgames.commands.Reload;
-import org.mcsg.survivalgames.commands.ResetDMSpawns;
-import org.mcsg.survivalgames.commands.ResetSpawns;
-import org.mcsg.survivalgames.commands.SetDMSpawn;
-import org.mcsg.survivalgames.commands.SetLobbySpawn;
-import org.mcsg.survivalgames.commands.SetSpawn;
-import org.mcsg.survivalgames.commands.Spectate;
-import org.mcsg.survivalgames.commands.SubCommand;
-import org.mcsg.survivalgames.commands.Teleport;
-import org.mcsg.survivalgames.commands.Test;
-import org.mcsg.survivalgames.commands.Vote;
+import org.mcsg.survivalgames.commands.*;
 
 public class CommandHandler implements CommandExecutor {
 	
@@ -85,6 +63,8 @@ public class CommandHandler implements CommandExecutor {
         this.commands.put("reload", new Reload());
         this.commands.put("kit", new Kit());
         this.commands.put("test", new Test());
+        this.commands.put("listkit", new ListKits());
+
 	}
 
 	private void loadHelpInfo() {
@@ -115,6 +95,8 @@ public class CommandHandler implements CommandExecutor {
         this.helpinfo.put("tp", CommandGroup.Admin);
         this.helpinfo.put("reload", CommandGroup.Admin);
         this.helpinfo.put("test", CommandGroup.Admin);
+        this.helpinfo.put("listkit", CommandGroup.Admin);
+
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class ChestRatioStorage {
 				
 				JSONObject chest = (JSONObject)chestObject;
 				double chance = (Double) chest.get("chance");
-				SurvivalGames.$(0, "Loading chest (" + chance + "):");
+                SurvivalGames.info(0, "Loading chest (" + chance + "):");
 
 				ArrayList<ItemStack> chestContents = new ArrayList<>();
 				JSONArray contents = (JSONArray) chest.get("items");
@@ -74,18 +74,18 @@ public class ChestRatioStorage {
 		Material itemMaterial = Material.AIR;
 		try {
 			if (!itemObject.containsKey("Material")) {
-				SurvivalGames.$(0, Level.SEVERE, "Item in chest does not have required material parameter!");
+                SurvivalGames.log(0, Level.SEVERE, "Item in chest does not have required material parameter!");
 				return null;
 			}
 
 			itemMaterial = Material.getMaterial((String) itemObject.get("Material"));
 			if (itemMaterial == null) {
-				SurvivalGames.$(0, "ERROR: Unable to convert chest item \"" + itemObject.get("Material") + "\" to Material");
+                SurvivalGames.info(0, "ERROR: Unable to convert chest item \"" + itemObject.get("Material") + "\" to Material");
 				return null;
 			}
 
 		} catch(Exception ex) {
-			SurvivalGames.$(0, Level.SEVERE, "Item \"" + itemObject.get("Material") + "\" does not have required material parameter!");
+            SurvivalGames.log(0, Level.SEVERE, "Item \"" + itemObject.get("Material") + "\" does not have required material parameter!");
 			return null;
 		}
 		
@@ -109,7 +109,7 @@ public class ChestRatioStorage {
 			dispname = " \"" + meta.getDisplayName() + "\"";
 		}
 
-		SurvivalGames.$(0, "  Chest item (" + stackSize + "): " + itemMaterial + dispname);
+        SurvivalGames.info(0, "  Chest item (" + stackSize + "): " + itemMaterial + dispname);
 		
 		if (itemObject.containsKey("Damage")) {
 			Long damageValue = (Long)itemObject.get("Damage");
@@ -117,8 +117,8 @@ public class ChestRatioStorage {
 			
 			short actualDurability = (short) (((float)maxDamage) * (damageValue.floatValue() / 100.0f));
 			item.setDurability(actualDurability);
-			
-			SurvivalGames.$(0, "    Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
+
+            SurvivalGames.info(0, "    Damage: " + damageValue + " / " + maxDamage + " (" + actualDurability + ")");
 		}
 		
 		if (itemObject.containsKey("Data")) {
@@ -134,7 +134,7 @@ public class ChestRatioStorage {
 			for (Object loreObject : loreArray) {
 				String loreLine = ChatColor.translateAlternateColorCodes('&', (String)loreObject);
 				lore.add(loreLine);
-				SurvivalGames.$(0, "    Lore: " + loreLine);
+                SurvivalGames.info(0, "    Lore: " + loreLine);
 			}
 			
 			if (!lore.isEmpty()) {
@@ -154,7 +154,7 @@ public class ChestRatioStorage {
 
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentName.toLowerCase()));
 				if (enchantment != null && enchantmentLevel != null) {
-					SurvivalGames.$(0, "    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
+                    SurvivalGames.info(0, "    Enchantment (Lvl " + enchantmentLevel + "): " + enchantmentName);
 					meta.addEnchant(enchantment, enchantmentLevel.intValue(), true);
 				}
 			}

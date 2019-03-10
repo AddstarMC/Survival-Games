@@ -89,7 +89,7 @@ public class LobbySignManager {
 			try {
 				signFile.createNewFile();
 			} catch(Exception ex) {
-				SurvivalGames.$(0, Level.SEVERE, "Could not create sign at '" + signFile.getAbsolutePath() + "'.");
+                SurvivalGames.log(0, Level.SEVERE, "Could not create sign at '" + signFile.getAbsolutePath() + "'.");
 				return;
 			}
 			
@@ -121,7 +121,7 @@ public class LobbySignManager {
 			try {
 				gameId = Integer.parseInt(gameIdString);
 			} catch(Exception ex) {
-				SurvivalGames.$(0, Level.SEVERE, "Failed to '" + file.getName() + "' invalid game id.");
+                SurvivalGames.log(0, Level.SEVERE, "Failed to '" + file.getName() + "' invalid game id.");
 				continue;
 			}
 			
@@ -149,7 +149,7 @@ public class LobbySignManager {
                     sign = new LobbySignWinnerSign(gameId);
                     break;
                 default:
-                    SurvivalGames.$(0, Level.SEVERE, "Invalid sign type! " + file.getName());
+                    SurvivalGames.log(0, Level.SEVERE, "Invalid sign type! " + file.getName());
                     continue;
 			}
 			

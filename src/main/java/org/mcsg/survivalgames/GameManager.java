@@ -39,8 +39,8 @@ public class GameManager {
     
     public void setup(final SurvivalGames plugin) {
         this.p = plugin;
-        this.LoadGames();
         this.LoadKits();
+        this.LoadGames();
         for (final Game g : this.getGames()) {
             openedChest.put(g.getID(), new HashSet<>());
         }
@@ -58,9 +58,9 @@ public class GameManager {
                 if (c.getBoolean("sg-system.arenas." + a + ".enabled")) {
                     //SurvivalGames.$(c.getString("sg-system.arenas."+a+".enabled"));
                     //c.set("sg-system.arenas."+a+".vip",c.getBoolean("sg-system.arenas."+a+".vip", false));
-                    SurvivalGames.$(0, "Loading Arena: " + a);
-                    SurvivalGames.$(0, "  Spawn points: " + SettingsManager.getInstance().getSpawnCount(a));
-                    SurvivalGames.$(0, "  DM spawns   : " + SettingsManager.getInstance().getDMSpawnCount(a));
+                    SurvivalGames.info(0, "Loading Arena: " + a);
+                    SurvivalGames.info(0, "  Spawn points: " + SettingsManager.getInstance().getSpawnCount(a));
+                    SurvivalGames.info(0, "  DM spawns   : " + SettingsManager.getInstance().getDMSpawnCount(a));
                     loaded++;
                     this.games.add(new Game(a));
                     StatsManager.getInstance().addArena(a);
@@ -163,12 +163,13 @@ public class GameManager {
                     k.add(kit);
                 }
             }
-        } else
+        } else {
             for (final Kit kit : this.kits) {
                 if (kit.canUse(p)) {
                     k.add(kit);
                 }
             }
+        }
         return k;
     }
     
