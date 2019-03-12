@@ -19,15 +19,14 @@ import org.mcsg.survivalgames.SurvivalGames;
 
 public class ItemReader {
 
-	
-	private static HashMap<String, Enchantment>encids;
-	private static HashMap<String, PotionEffectType> potionEffects;
+
+    private final static HashMap<String, Enchantment> encids = new HashMap<>();
+    private final static HashMap<String, PotionEffectType> potionEffects = new HashMap<>();
 
 
-
-	private static void loadIds(){
-        encids = new HashMap<>();
-		potionEffects = new HashMap<>();
+    public static void loadIds() {
+        encids.clear();
+        potionEffects.clear();
 		for(Enchantment e:Enchantment.values()){
 			String name = e.getKey().getKey().toLowerCase().replace("_", "");
 			encids.put(name, e);
@@ -50,10 +49,8 @@ public class ItemReader {
 	}
 
 	public static ItemStack read(String str) {
-		if (encids == null) {
-			loadIds();
-		}
-		String[] split = str.split(",");
+
+        String[] split = str.split(",");
 		for (int a = 0; a < split.length; a++) {
 			split[a] = split[a].trim();
 		}

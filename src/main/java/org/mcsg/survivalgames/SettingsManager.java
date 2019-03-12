@@ -62,10 +62,10 @@ public class SettingsManager {
 			File config = new File(p.getDataFolder(), "config.yml");
 			config.delete();
 		}
-		
+		ItemReader.loadIds();
 		p.getConfig().options().copyDefaults(true);
 		p.saveDefaultConfig();
-		
+
 		f = new File(p.getDataFolder(), "spawns.yml");
 		f2 = new File(p.getDataFolder(), "system.yml");
 		f3 = new File(p.getDataFolder(), "kits.yml");
