@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -15,6 +16,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.bukkit.util.StringUtil;
 import org.mcsg.survivalgames.SurvivalGames;
 
 public class ItemReader {
@@ -42,7 +44,10 @@ public class ItemReader {
 			encids.put(val.getKey().getKey(), val);
 		}
 		for (PotionEffectType type : PotionEffectType.values()) {
-			potionEffects.put(type.getName().toLowerCase(), type);
+            if (type != null) {
+                String name = type.getName();
+                potionEffects.put(StringUtils.lowerCase(name), type);
+            }
 		}
 		SurvivalGames.debug(0, "Available PotionEffects: " + potionEffects.keySet().toString());
 
