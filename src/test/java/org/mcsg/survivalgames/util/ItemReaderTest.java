@@ -2,6 +2,8 @@ package org.mcsg.survivalgames.util;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConfigurationOptions;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
@@ -20,6 +22,7 @@ import static org.junit.Assert.*;
 public class ItemReaderTest {
 
     public void read() {
+
         String name = "Archer";
         File resourcesDirectory = new File("src/test/resources");
         File kits = new File(resourcesDirectory, "kits.yml");

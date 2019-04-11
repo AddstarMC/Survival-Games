@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game.GameMode;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
@@ -22,6 +23,7 @@ import org.mcsg.survivalgames.stats.StatsManager;
 import org.mcsg.survivalgames.util.Kit;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import org.mcsg.survivalgames.util.KitInventory;
 
 public class GameManager {
     
@@ -149,8 +151,16 @@ public class GameManager {
         if (i >= 0 && i < kits.size()) {
             final Kit k = kits.get(i);
             if (k != null) {
-                p.getInventory().setContents(k.getContents().toArray(new ItemStack[0]));
-            }
+                final PlayerInventory inv = p.getInventory();
+                final KitInventory kitInv = k.getKitInventory();
+                inv.setBoots(kitInv.getFeet());
+                inv.setChestplate(kitInv.getChest());
+                inv.setLeggings(kitInv.getLegs());
+                inv.setItemInMainHand(kitInv.getRightHand());
+                inv.setItemInOffHand(kitInv.getLeftHand());
+                inv.setHelmet(kitInv.getHead());
+                inv.setContents(kitInv.getContents());
+                }
         }
         p.updateInventory();
     }
