@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -22,6 +23,7 @@ import org.mcsg.survivalgames.util.ChestRatioStorage;
 import org.mcsg.survivalgames.util.DatabaseManager;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import org.mcsg.survivalgames.util.KitInventory;
 
 public class SurvivalGames extends JavaPlugin {
     public static Logger logger;
@@ -92,6 +94,7 @@ public class SurvivalGames extends JavaPlugin {
         this.metrics = new Metrics(this);
         //ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Startup(), 10);
+        ConfigurationSerialization.registerClass(KitInventory.class);
     }
     
     public void setCommands() {

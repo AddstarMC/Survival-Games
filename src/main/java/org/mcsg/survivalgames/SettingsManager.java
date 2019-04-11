@@ -11,11 +11,13 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.util.ItemReader;
+import org.mcsg.survivalgames.util.Kit;
 
 public class SettingsManager {
 
@@ -31,7 +33,7 @@ public class SettingsManager {
 
 	private File f; //spawns
 	private File f2; //system
-	private File f3; //kits
+	private File kitFile; //kits
 	private File f4; //messages
 	private File f5; //deathmatch spawns
 	private File chestFile; //chest
@@ -68,7 +70,7 @@ public class SettingsManager {
 
 		f = new File(p.getDataFolder(), "spawns.yml");
 		f2 = new File(p.getDataFolder(), "system.yml");
-		f3 = new File(p.getDataFolder(), "kits.yml");
+		kitFile = new File(p.getDataFolder(), "kits.yml");
 		f4 = new File(p.getDataFolder(), "messages.yml");
 		f5 = new File(p.getDataFolder(), "dmspawns.yml");
 		chestFile = new File(p.getDataFolder(), "items.json");
@@ -80,7 +82,7 @@ public class SettingsManager {
 		try {
 			if (!f.exists()) 	f.createNewFile();
 			if (!f2.exists())	f2.createNewFile();
-			if (!f3.exists()) 	loadFile("kits.yml");
+			if (!kitFile.exists()) loadFile("kits.yml");
 			if (!f4.exists()) 	loadFile("messages.yml");
 			if (!f5.exists()) 	f5.createNewFile();
 			if (!chestFile.exists()) 	loadFile("items.json");
@@ -248,9 +250,9 @@ public class SettingsManager {
 	}
 
 	public void reloadKits() {
-        this.kits = YamlConfiguration.loadConfiguration(this.f3);
+		this.kits = YamlConfiguration.loadConfiguration(this.kitFile);
 		if(this.kits.getInt("version", 0) != KIT_VERSION){
-            this.moveFile(this.f3);
+			this.moveFile(this.kitFile);
             this.loadFile("kits.yml");
             this.reloadKits();
 		}
@@ -277,7 +279,25 @@ public class SettingsManager {
 
 	public void saveKits() {
 		try {
-            this.kits.save(this.f3);
+			for (Kit kit : GameManager.instance.kits) {
+				ConfigurationSection kits = this.kits.getConfigurationSection("kits");
+				ConfigurationSection kitConfig;
+				if (kits.contains(kit.getName())) {
+					kitConfig = kits.getConfigurationSection(kit.getName());
+				} else {
+					kitConfig = kits.createSection(kit.getName());
+				}
+
+				if (kit.getIcon() != null) {
+					kitConfig.set("icon", kit.getIcon().getType().name());
+				} else {
+					kitConfig.set("icon", "null");
+				}
+				kitConfig.set("cost", kit.getCost());
+				kitConfig.set("kitInventory", kit.getKitInventory());
+				kits.set(kit.getName(), kitConfig);
+			}
+			this.kits.save(this.kitFile);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

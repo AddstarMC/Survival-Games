@@ -1,14 +1,11 @@
 package org.mcsg.survivalgames.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.mcsg.survivalgames.SettingsManager;
 import org.mcsg.survivalgames.SurvivalGames;
@@ -23,7 +20,27 @@ public class Kit {
     }
 
     private KitInventory kitInventory = new KitInventory();
+
+    public Kit() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public void setKitInventory(KitInventory kitInventory) {
+        this.kitInventory = kitInventory;
+    }
+
     private ItemStack icon;
+
+    public void setIcon(ItemStack icon) {
+        this.icon = icon;
+    }
 
     public Kit(String name){
         this.name = name;

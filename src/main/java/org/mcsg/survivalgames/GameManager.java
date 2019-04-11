@@ -13,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game.GameMode;
@@ -156,8 +155,8 @@ public class GameManager {
                 inv.setBoots(kitInv.getFeet());
                 inv.setChestplate(kitInv.getChest());
                 inv.setLeggings(kitInv.getLegs());
-                inv.setItemInMainHand(kitInv.getRightHand());
-                inv.setItemInOffHand(kitInv.getLeftHand());
+                inv.setItemInMainHand(kitInv.getMainHand());
+                inv.setItemInOffHand(kitInv.getOffHand());
                 inv.setHelmet(kitInv.getHead());
                 inv.setContents(kitInv.getContents());
                 }
@@ -423,4 +422,20 @@ public class GameManager {
     }
 
 
+    public void createKit(String name, PlayerInventory inventory) {
+        Kit kit = new Kit();
+        kit.setName(name);
+        kit.setCost(0);
+        kit.setIcon(inventory.getItemInMainHand());
+        KitInventory kitInventory = new KitInventory();
+        kitInventory.setMainHand(inventory.getItemInMainHand());
+        kitInventory.setOffHand((inventory.getItemInOffHand()));
+        kitInventory.setChest(inventory.getChestplate());
+        kitInventory.setFeet(inventory.getBoots());
+        kitInventory.setLegs(inventory.getLeggings());
+        kitInventory.setHead(inventory.getHelmet());
+        kit.setKitInventory(kitInventory);
+        GameManager.instance.kits.add(kit);
+        SettingsManager.getInstance().saveKits();
+    }
 }

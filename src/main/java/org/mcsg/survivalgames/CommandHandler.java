@@ -52,6 +52,7 @@ public class CommandHandler implements CommandExecutor {
 		
 		// admin commands	
         this.commands.put("createarena", new CreateArena());
+        this.commands.put("createkit", new CreateKit());
         this.commands.put("setspawn", new SetSpawn());
         this.commands.put("setdmspawn", new SetDMSpawn());
         this.commands.put("setlobbyspawn", new SetLobbySpawn());
@@ -85,6 +86,7 @@ public class CommandHandler implements CommandExecutor {
 		
 		// admin commands	
         this.helpinfo.put("createarena", CommandGroup.Admin);
+        this.helpinfo.put("createkit", CommandGroup.Admin);
         this.helpinfo.put("setspawn", CommandGroup.Admin);
         this.helpinfo.put("setdmspawn", CommandGroup.Admin);
         this.helpinfo.put("setlobbyspawn", CommandGroup.Admin);

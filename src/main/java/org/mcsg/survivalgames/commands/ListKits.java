@@ -7,6 +7,7 @@ import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.MessageManager;
 import org.mcsg.survivalgames.SurvivalGames;
 import org.mcsg.survivalgames.util.Kit;
+import org.mcsg.survivalgames.util.KitInventory;
 
 import java.util.List;
 
@@ -15,6 +16,28 @@ import java.util.List;
  * Created by benjamincharlton on 6/03/2019.
  */
 public class ListKits implements SubCommand {
+    public static void listKit(CommandSender sender, Kit k) {
+        sender.sendMessage("---------------");
+        sender.sendMessage(k.getName());
+        sender.sendMessage("Icon: " + k.getIcon());
+        sender.sendMessage("Cost:" + k.getCost());
+        sender.sendMessage("............");
+        KitInventory kInv = k.getKitInventory();
+        sender.sendMessage("Equipment");
+        sender.sendMessage("Head: " + kInv.getHead());
+        sender.sendMessage("Chest: " + kInv.getChest());
+        sender.sendMessage("Legs: " + kInv.getLegs());
+        sender.sendMessage("Boots: " + kInv.getFeet());
+        sender.sendMessage("Main Hand: " + kInv.getMainHand());
+        sender.sendMessage("Off Hand: " + kInv.getOffHand());
+        sender.sendMessage("Other Gear: ");
+        for (ItemStack i : kInv.getContents()) {
+            if (i != null)
+                sender.sendMessage(i.toString());
+        }
+        sender.sendMessage("---------------");
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         Game game = null;
@@ -29,19 +52,11 @@ public class ListKits implements SubCommand {
         if (game != null) sender.sendMessage("Showing Kits for:" + game.getName());
         else sender.sendMessage("Showing All Kits");
         for (Kit k : kits) {
-            sender.sendMessage("---------------");
-            sender.sendMessage(k.getName());
-            sender.sendMessage(k.getIcon().toString());
-            sender.sendMessage("Cost:" + k.getCost());
-            sender.sendMessage("............");
-            for (ItemStack i : k.getContents()) {
-                if (i != null)
-                    sender.sendMessage(i.toString());
-            }
-            sender.sendMessage("---------------");
+            listKit(sender, k);
         }
         return true;
     }
+
 
     @Override
     public String help(CommandSender p) {

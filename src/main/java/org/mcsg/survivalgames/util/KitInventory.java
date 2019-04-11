@@ -4,6 +4,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -18,75 +19,107 @@ public class KitInventory implements ConfigurationSerializable {
     private ItemStack chest = null;
     private ItemStack legs = null;
     private ItemStack feet = null;
-    private ItemStack leftHand = null;
-    private ItemStack rightHand = null;
+    private ItemStack offHand = null;
+    private ItemStack mainHand = null;
 
     public static KitInventory deserialize(Map<String, Object> map){
         KitInventory inv = new KitInventory();
-        inv.setHead((ItemStack) map.get("head"));
-        inv.setChest((ItemStack) map.get("chest"));
-        inv.setFeet((ItemStack) map.get("feet"));
-        inv.setLegs((ItemStack) map.get("legs"));
-        inv.setRightHand((ItemStack) map.get("mainHand"));
-        inv.setLeftHand((ItemStack) map.get("offHand"));
-        ItemStack[] contents = (ItemStack[]) map.get("contents");
+        inv.setHead(creatItemStack(map.get("head")));
+        inv.setChest(creatItemStack(map.get("chest")));
+        inv.setFeet(creatItemStack(map.get("feet")));
+        inv.setLegs(creatItemStack(map.get("legs")));
+        inv.setMainHand(creatItemStack(map.get("mainHand")));
+        inv.setOffHand(creatItemStack(map.get("offHand")));
+        List<ItemStack> contents = (List<ItemStack>) map.get("contents");
         int i = 0;
-        while(i < contents.length){
-            inv.addContent(i,contents[i]);
-            i++;
+        for (ItemStack item : contents) {
+            if (item != null) {
+                inv.addContent(i, item);
+                i++;
+            }
         }
         return inv;
     }
 
+    public static ItemStack creatItemStack(Object object) {
+        if (object == null) return null;
+        if (object instanceof ItemStack)
+            return (ItemStack) object;
+        if (object instanceof Map) {
+            Map map = (Map) object;
+            return ItemStack.deserialize(map);
+        }
+        return null;
+    }
+
     public ItemStack getHead() {
-        return this.head.clone();
+        if (head != null) {
+            return this.head.clone();
+        } else return null;
+
     }
 
     public void setHead(final ItemStack head) {
-        this.head = head.clone();
+        if (head != null)
+            this.head = head.clone();
     }
 
     public ItemStack getChest() {
-        return this.chest.clone();
+        if (chest != null) {
+            return this.chest.clone();
+        } else return null;
     }
 
     public void setChest(final ItemStack chest) {
-        this.chest = chest.clone();
+        if (chest != null)
+            this.chest = chest.clone();
     }
 
     public ItemStack getLegs() {
-        return this.legs.clone();
+        if (legs != null) {
+            return this.legs.clone();
+        } else return null;
     }
 
     public void setLegs(final ItemStack legs) {
-        this.legs = legs.clone();
+        if (legs != null)
+            this.legs = legs.clone();
     }
 
     public ItemStack getFeet() {
-        return this.feet;
+        if (feet != null) {
+            return this.feet.clone();
+        } else return null;
     }
 
     public void setFeet(final ItemStack feet) {
-        this.feet = feet.clone();
+        if (feet != null)
+            this.feet = feet.clone();
     }
 
-    public ItemStack getLeftHand() {
-        return this.leftHand;
+    public ItemStack getOffHand() {
+        if (offHand != null) {
+            return this.offHand.clone();
+        } else return null;
     }
 
-    public void setLeftHand(final ItemStack leftHand) {
-        this.leftHand = leftHand.clone();
+    public void setOffHand(final ItemStack offHand) {
+        if (offHand != null)
+            this.offHand = offHand.clone();
     }
 
-    public ItemStack getRightHand() {
-        return this.rightHand;
+    public ItemStack getMainHand() {
+        if (mainHand != null) {
+            return this.mainHand.clone();
+        } else return null;
     }
 
-    public void setRightHand(final ItemStack rightHand) {
-        this.rightHand = rightHand.clone();
+    public void setMainHand(final ItemStack mainHand) {
+        if (mainHand != null)
+            this.mainHand = mainHand.clone();
     }
 
-    public void addContent(int pos, ItemStack i){
+    public void addContent(int pos, ItemStack i) {
         contents[pos] = i.clone();
     }
 
@@ -107,8 +140,8 @@ public class KitInventory implements ConfigurationSerializable {
         out.put("chest",chest);
         out.put("feet",feet);
         out.put("legs",legs);
-        out.put("mainHand",rightHand);
-        out.put("offHand",leftHand);
+        out.put("mainHand", mainHand);
+        out.put("offHand", offHand);
         out.put("contents",contents);
         return out;
     }

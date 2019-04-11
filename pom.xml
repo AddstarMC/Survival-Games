@@ -8,7 +8,7 @@
         <build.number />
         <plugin.version>${project.version}-${build.number}</plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>${spigot.api.version}.1-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>${spigot.api.version}.2-R0.1-SNAPSHOT</spigot.version>
         <spigot.api.version>1.13</spigot.api.version>
 	</properties>
     <scm>
@@ -46,11 +46,11 @@
 		<!-- Addstar repo -->
 		<repository>
 			<id>addstar-release</id>
-			<url>http://maven.addstar.com.au/artifactory/ext-release-local</url>
+            <url>https://maven.addstar.com.au/artifactory/ext-release-local</url>
 		</repository>
 		<repository>
 			<id>addstar-snapshot</id>
-			<url>http://maven.addstar.com.au/artifactory/ext-snapshot-local</url>
+            <url>https://maven.addstar.com.au/artifactory/ext-snapshot-local</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
