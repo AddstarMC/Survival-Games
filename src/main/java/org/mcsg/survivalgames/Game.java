@@ -3,21 +3,26 @@ package org.mcsg.survivalgames;
 import java.util.*;
 import java.util.logging.Level;
 
+import com.google.common.collect.Multimap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.api.PlayerJoinArenaEvent;
 import org.mcsg.survivalgames.api.PlayerKilledEvent;
@@ -1066,7 +1071,10 @@ public class Game {
             ItemStack i1 = k.getIcon();
             if (i1 == null)
                 i1 = new ItemStack(Material.WHITE_WOOL, 1);
-            final ItemMeta im = i1.getItemMeta();
+            ItemMeta im = i1.getItemMeta();
+            if (im == null) {
+                im = Bukkit.getItemFactory().getItemMeta(i1.getType());
+            }
             im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + k.getName());
             i1.setItemMeta(im);
             i.setItem(9 * a + b, i1);
