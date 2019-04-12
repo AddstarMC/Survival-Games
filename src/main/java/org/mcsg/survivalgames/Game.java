@@ -1067,7 +1067,6 @@ public class Game {
             if (i1 == null)
                 i1 = new ItemStack(Material.WHITE_WOOL, 1);
             final ItemMeta im = i1.getItemMeta();
-            
             im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + k.getName());
             i1.setItemMeta(im);
             i.setItem(9 * a + b, i1);
@@ -1075,7 +1074,10 @@ public class Game {
             
             for (final ItemStack s2 : k.getContents()) {
                 if (s2 != null) {
-                    i.setItem(9 * a + b, s2);
+                    int index = 9 * a + b;
+                    if (index < i.getSize()) {
+                        i.setItem(9 * a + b, s2);
+                    }
                     a++;
                 }
             }
