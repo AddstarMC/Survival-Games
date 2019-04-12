@@ -43,8 +43,10 @@ public class ItemReader {
             ENCIDS.put(val.getKey().getKey(), val);
         }
         for (final PotionEffectType type : PotionEffectType.values()) {
-            final String name = type.getName();
-            POTION_EFFECTS.put(StringUtils.lowerCase(name), type);
+            if (type != null) {
+                final String name = type.getName();
+                POTION_EFFECTS.put(StringUtils.lowerCase(name), type);
+            }
         }
         SurvivalGames.debug(0, "Available PotionEffects: " + POTION_EFFECTS.keySet());
 
