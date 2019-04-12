@@ -49,7 +49,7 @@ public class Kit {
 
     private void load(){
         final FileConfiguration c = SettingsManager.getInstance().getKits();
-        if(!c.contains("kits"+this.name)){
+        if (!c.contains("kits." + this.name)) {
             this.cost = 0;
             this.icon = null;
             this.kitInventory = new KitInventory();
