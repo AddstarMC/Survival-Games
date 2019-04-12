@@ -23,13 +23,13 @@ public class ItemReaderTest {
 
     public void read() {
 
-        String name = "Archer";
-        File resourcesDirectory = new File("src/test/resources");
-        File kits = new File(resourcesDirectory, "kits.yml");
-        FileConfiguration f = YamlConfiguration.loadConfiguration(kits);
-        Double cost = f.getDouble("kits." + name + ".cost", 0);
+        final String name = "Archer";
+        final File resourcesDirectory = new File("src/test/resources");
+        final File kits = new File(resourcesDirectory, "kits.yml");
+        final FileConfiguration f = YamlConfiguration.loadConfiguration(kits);
+        final Double cost = f.getDouble("kits." + name + ".cost", 0);
         assertNotNull(cost);
-        ItemStack icon = ItemReader.read(f.getString("kits." + name + ".icon"));
+        final ItemStack icon = ItemReader.read(f.getString("kits." + name + ".icon"));
         assertNotNull(icon);
     }
 

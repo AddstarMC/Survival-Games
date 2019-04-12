@@ -2,7 +2,9 @@ package org.mcsg.survivalgames.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.mcsg.survivalgames.*;
+import org.mcsg.survivalgames.GameManager;
+import org.mcsg.survivalgames.MessageManager;
+import org.mcsg.survivalgames.SettingsManager;
 import org.mcsg.survivalgames.util.Kit;
 
 /**
@@ -11,13 +13,13 @@ import org.mcsg.survivalgames.util.Kit;
  */
 public class CreateKit implements SubCommand {
     @Override
-    public boolean onCommand(CommandSender sender, String[] args) {
+    public boolean onCommand(final CommandSender sender, final String[] args) {
         if (!(sender instanceof Player)) {
             MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notingame", sender);
             return true;
         }
-        Player player = (Player) sender;
-        if (!player.hasPermission(permission()) && !player.isOp()) {
+        final Player player = (Player) sender;
+        if (!player.hasPermission(this.permission()) && !player.isOp()) {
             MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.nopermission", player);
             return true;
         }
@@ -25,16 +27,16 @@ public class CreateKit implements SubCommand {
             MessageManager.getInstance().sendFMessage(MessageManager.PrefixType.ERROR, "error.notspecified", player, "input-Kit");
             return true;
         }
-        String name = args[0];
+        final String name = args[0];
         GameManager.getInstance().createKit(name, player.getInventory());
-        for (Kit k : GameManager.getInstance().getKits(player)) {
+        for (final Kit k : GameManager.getInstance().getKits(player)) {
             ListKits.listKit(sender, k);
         }
         return true;
     }
 
     @Override
-    public String help(CommandSender p) {
+    public String help(final CommandSender p) {
         return "/sg createKit - " + SettingsManager.getInstance().getMessageConfig().getString("messages.help.createKit", "Create a kit");
     }
 

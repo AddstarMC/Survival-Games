@@ -24,39 +24,45 @@ public class Kit {
     public Kit() {
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void setCost(double cost) {
+    public void setCost(final double cost) {
         this.cost = cost;
     }
 
-    public void setKitInventory(KitInventory kitInventory) {
+    public void setKitInventory(final KitInventory kitInventory) {
         this.kitInventory = kitInventory;
     }
 
     private ItemStack icon;
 
-    public void setIcon(ItemStack icon) {
+    public void setIcon(final ItemStack icon) {
         this.icon = icon;
     }
 
-    public Kit(String name){
+    public Kit(final String name){
         this.name = name;
-        load();
+        this.load();
     }
 
-    public void load(){
-        FileConfiguration c = SettingsManager.getInstance().getKits();
+    private void load(){
+        final FileConfiguration c = SettingsManager.getInstance().getKits();
+        if(!c.contains("kits"+this.name)){
+            this.cost = 0;
+            this.icon = null;
+            this.kitInventory = new KitInventory();
+            return;
+        }
         final ConfigurationSection section = c.getConfigurationSection("kits."+this.name);
         this.cost = section.getDouble("cost",0);
         this.icon = ItemReader.read(section.getString("icon"));
         SurvivalGames.info(0, "Kit Icon: " + this.icon);
         if(section.contains("contents")) {
-            List<String> cont = section.getStringList("contents");
+            final List<String> cont = section.getStringList("contents");
             int i = 0;
-            for (String s : cont) {
+            for (final String s : cont) {
                 this.kitInventory.addContent(i, ItemReader.read(s));
                 i++;
             }
@@ -72,23 +78,22 @@ public class Kit {
     }
 
     public List<ItemStack> getContents(){
-        List<ItemStack> items = Arrays.asList(kitInventory.getContents());
-        return items;
+        return Arrays.asList(this.kitInventory.getContents());
     }
 
-    public boolean canUse(Player p){
-        return p.hasPermission("sg.kit."+name);
+    public boolean canUse(final Player p){
+        return p.hasPermission("sg.kit."+this.name);
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public ItemStack getIcon(){
-        return icon;
+        return this.icon;
     }
 
     public double getCost(){
-        return cost;
+        return this.cost;
     }
 }

@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 import org.mcsg.survivalgames.Game.GameMode;
@@ -422,18 +423,23 @@ public class GameManager {
     }
 
 
-    public void createKit(String name, PlayerInventory inventory) {
-        Kit kit = new Kit();
+    public void createKit(final String name, final PlayerInventory inventory) {
+        final Kit kit = new Kit();
         kit.setName(name);
         kit.setCost(0);
         kit.setIcon(inventory.getItemInMainHand());
-        KitInventory kitInventory = new KitInventory();
+        final KitInventory kitInventory = new KitInventory();
         kitInventory.setMainHand(inventory.getItemInMainHand());
-        kitInventory.setOffHand((inventory.getItemInOffHand()));
+        kitInventory.setOffHand(inventory.getItemInOffHand());
         kitInventory.setChest(inventory.getChestplate());
         kitInventory.setFeet(inventory.getBoots());
         kitInventory.setLegs(inventory.getLeggings());
         kitInventory.setHead(inventory.getHelmet());
+        int i = 0;
+        for(final ItemStack stack : inventory.getContents()){
+            kitInventory.addContent(i,stack);
+            i++;
+        }
         kit.setKitInventory(kitInventory);
         GameManager.instance.kits.add(kit);
         SettingsManager.getInstance().saveKits();

@@ -2,7 +2,9 @@ package org.mcsg.survivalgames.util;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,7 @@ import java.util.Map;
  */
 
 public class KitInventory implements ConfigurationSerializable {
-    private ItemStack[] contents = new ItemStack[36];
+    private final List<ItemStack> contents = new ArrayList<>(36);
     private ItemStack head = null;
     private ItemStack chest = null;
     private ItemStack legs = null;
@@ -22,17 +24,18 @@ public class KitInventory implements ConfigurationSerializable {
     private ItemStack offHand = null;
     private ItemStack mainHand = null;
 
-    public static KitInventory deserialize(Map<String, Object> map){
-        KitInventory inv = new KitInventory();
+    @SuppressWarnings("unchecked")
+    public static KitInventory deserialize(final Map<String, Object> map){
+        final KitInventory inv = new KitInventory();
         inv.setHead(creatItemStack(map.get("head")));
         inv.setChest(creatItemStack(map.get("chest")));
         inv.setFeet(creatItemStack(map.get("feet")));
         inv.setLegs(creatItemStack(map.get("legs")));
         inv.setMainHand(creatItemStack(map.get("mainHand")));
         inv.setOffHand(creatItemStack(map.get("offHand")));
-        List<ItemStack> contents = (List<ItemStack>) map.get("contents");
+        final List<ItemStack> contents = (List<ItemStack>) map.get("contents");
         int i = 0;
-        for (ItemStack item : contents) {
+        for (final ItemStack item : contents) {
             if (item != null) {
                 inv.addContent(i, item);
                 i++;
@@ -40,109 +43,138 @@ public class KitInventory implements ConfigurationSerializable {
         }
         return inv;
     }
-
-    public static ItemStack creatItemStack(Object object) {
-        if (object == null) return null;
-        if (object instanceof ItemStack)
+    @SuppressWarnings("unchecked")
+    private static ItemStack creatItemStack(final Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (object instanceof ItemStack) {
             return (ItemStack) object;
+        }
         if (object instanceof Map) {
-            Map map = (Map) object;
+            final Map map = (Map) object;
             return ItemStack.deserialize(map);
         }
         return null;
     }
 
     public ItemStack getHead() {
-        if (head != null) {
+        if (this.head != null) {
             return this.head.clone();
-        } else return null;
+        } else {
+            return null;
+        }
 
     }
 
     public void setHead(final ItemStack head) {
-        if (head != null)
+        if (head != null) {
             this.head = head.clone();
+        }
     }
 
     public ItemStack getChest() {
-        if (chest != null) {
+        if (this.chest != null) {
             return this.chest.clone();
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public void setChest(final ItemStack chest) {
-        if (chest != null)
+        if (chest != null) {
             this.chest = chest.clone();
+        }
     }
 
     public ItemStack getLegs() {
-        if (legs != null) {
+        if (this.legs != null) {
             return this.legs.clone();
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public void setLegs(final ItemStack legs) {
-        if (legs != null)
+        if (legs != null) {
             this.legs = legs.clone();
+        }
     }
 
     public ItemStack getFeet() {
-        if (feet != null) {
+        if (this.feet != null) {
             return this.feet.clone();
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public void setFeet(final ItemStack feet) {
-        if (feet != null)
+        if (feet != null) {
             this.feet = feet.clone();
+        }
     }
 
     public ItemStack getOffHand() {
-        if (offHand != null) {
+        if (this.offHand != null) {
             return this.offHand.clone();
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public void setOffHand(final ItemStack offHand) {
-        if (offHand != null)
+        if (offHand != null) {
             this.offHand = offHand.clone();
+        }
     }
 
     public ItemStack getMainHand() {
-        if (mainHand != null) {
+        if (this.mainHand != null) {
             return this.mainHand.clone();
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     public void setMainHand(final ItemStack mainHand) {
-        if (mainHand != null)
+        if (mainHand != null) {
             this.mainHand = mainHand.clone();
+        }
     }
 
-    public void addContent(int pos, ItemStack i) {
-        contents[pos] = i.clone();
+    public void addContent(final int pos, final ItemStack i) {
+        if(this.contents.size() < pos){
+            while(this.contents.size() < pos){
+                this.contents.add(null);
+            }
+        }
+        this.contents.add(pos,i);
     }
 
-    public ItemStack removeContent(int pos) {
-        ItemStack i = contents[pos].clone();
-        contents[pos] = null;
-        return i;
-    }
+    public void removeContent(final int pos) {
+        this.contents.add(pos,null);
 
+    }
+    public List<ItemStack> getContentsAsList(){
+        return this.contents;
+    }
     public ItemStack[] getContents(){
-        return contents;
+        final ItemStack[] out  = new ItemStack[this.contents.size()];
+        this.contents.toArray(out);
+        return out;
     }
 
     @Override
-    public Map<String, Object> serialize() {
-        Map<String, Object> out = new HashMap<>();
-        out.put("head",head);
-        out.put("chest",chest);
-        out.put("feet",feet);
-        out.put("legs",legs);
-        out.put("mainHand", mainHand);
-        out.put("offHand", offHand);
-        out.put("contents",contents);
+    public @NotNull Map<String, Object> serialize() {
+        final Map<String, Object> out = new HashMap<>();
+        out.put("head",this.head);
+        out.put("chest",this.chest);
+        out.put("feet",this.feet);
+        out.put("legs",this.legs);
+        out.put("mainHand", this.mainHand);
+        out.put("offHand", this.offHand);
+        out.put("contents",this.contents);
         return out;
     }
 }
