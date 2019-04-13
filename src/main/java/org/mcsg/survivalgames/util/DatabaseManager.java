@@ -32,9 +32,9 @@ public class DatabaseManager {
     }
 
 
-    public void setup(Plugin p){
+    public boolean setup(Plugin p) {
         log = p.getLogger();
-        connect();
+        return connect();
     }
 
 
@@ -43,24 +43,25 @@ public class DatabaseManager {
         return conn;
     }
 
-    @Deprecated
-    public boolean connectToDB(String host, int port, String db, String user, String pass) {
-        Properties props = new Properties();
-        props.put("user", user);
-        props.put("password", pass);
-        return connectToDB(host, port, db, props);
-    }
-
     public boolean connectToDB(String host, int port, String db, Properties props) {
+        String url = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + db, props);
+            url = "jdbc:mysql://" + host + ":" + port + "/" + db;
+            conn = DriverManager.getConnection(url, props);
             return true;
         } catch (ClassNotFoundException e) {
+            log.warning("Couldn't start MySQL Driver. URL :" + url);
             log.warning("Couldn't start MySQL Driver. Stopping...\n" + e.getMessage());
 
             return false;
         } catch (SQLException e) {
+            log.warning("Couldn't start MySQL Driver. URL :" + url);
+            log.warning("Couldn't connect to MySQL database. Stopping...\n" + e.getMessage());
+            return false;
+        } catch (NullPointerException e) {
+            log.warning("Couldn't start MySQL Driver. URL :" + url);
+            log.warning("Couldn't start MySQL Driver. Properties :" + props);
             log.warning("Couldn't connect to MySQL database. Stopping...\n" + e.getMessage());
             return false;
         }
@@ -116,7 +117,9 @@ public class DatabaseManager {
         ConfigurationSection dbprops = c.getConfigurationSection("sql.properties");
         if (dbprops != null) {
             for (Map.Entry<String, Object> prop : dbprops.getValues(false).entrySet()) {
-                props.put(prop.getKey(), prop.getValue());
+                if (prop.getValue() != null) {
+                    props.put(prop.getKey(), prop.getValue());
+                }
             }
         }
         return this.connectToDB(host, port, db, props);

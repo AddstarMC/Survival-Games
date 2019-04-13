@@ -118,7 +118,28 @@ public class SurvivalGames extends JavaPlugin {
     //	if(SettingsManager.getInstance().getConfig().getBoolean("debug", false))
     //		debug(gameid, String.valueOf(a));
     //}
-    
+
+    private void setUpStatsManager() {
+        try {
+            final FileConfiguration c = SettingsManager.getInstance().getConfig();
+            if (c.getBoolean("stats.enabled")) {
+                if (DatabaseManager.getInstance().setup(SurvivalGames.this.p)) {
+                    dbcon = false;
+                    logger.severe("!!!Failed to connect to the database. Please check the settings and try again!!!");
+                    return;
+                }
+            }
+            QueueManager.getInstance().setup();
+            StatsManager.getInstance().setup(SurvivalGames.this.p, c.getBoolean("stats.enabled"));
+            dbcon = true;
+        } catch (final Exception e) {
+            dbcon = false;
+            e.printStackTrace();
+            logger.severe("!!!Failed to connect to the database. Please check the settings and try again!!!");
+            return;
+        }
+    }
+
     class Startup implements Runnable {
         public void run() {
             final PluginManager pm = SurvivalGames.this.getServer().getPluginManager();
@@ -130,22 +151,9 @@ public class SurvivalGames extends JavaPlugin {
             gameManager.setup(SurvivalGames.this.p);
             SurvivalGames.this.lobbySignManager = new LobbySignManager();
             SurvivalGames.this.lobbySignManager.loadSigns();
-            
-            try { // try loading everything that uses SQL.
-                final FileConfiguration c = SettingsManager.getInstance().getConfig();
-                if (c.getBoolean("stats.enabled")) DatabaseManager.getInstance().setup(SurvivalGames.this.p);
-                QueueManager.getInstance().setup();
-                StatsManager.getInstance().setup(SurvivalGames.this.p, c.getBoolean("stats.enabled"));
-                dbcon = true;
-            } catch (final Exception e) {
-                dbcon = false;
-                e.printStackTrace();
-                logger.severe("!!!Failed to connect to the database. Please check the settings and try again!!!");
-                return;
-            } finally {
-                LobbyManager.createInstance(SurvivalGames.this.lobbySignManager);
-            }
-            
+            setUpStatsManager();
+            LobbyManager.createInstance(SurvivalGames.this.lobbySignManager);
+
             ChestRatioStorage.getInstance().setup();
             HookManager.getInstance().setup();
             pm.registerEvents(new PlaceEvent(), SurvivalGames.this.p);
@@ -166,7 +174,8 @@ public class SurvivalGames extends JavaPlugin {
             pm.registerEvents(new RespawnEvent(), SurvivalGames.this.p);
             pm.registerEvents(new DropItemEvent(), SurvivalGames.this.p);
             pm.registerEvents(new ProjectileShoot(), SurvivalGames.this.p);
-            
+            pm.registerEvents(new ProjectileLaunch(), SurvivalGames.this.p);
+
             for (final Player p : Bukkit.getOnlinePlayers()) {
                 if (GameManager.getInstance().getBlockGameId(p.getLocation()) != -1) {
                     p.teleport(SettingsManager.getInstance().getLobbySpawn());
@@ -174,4 +183,5 @@ public class SurvivalGames extends JavaPlugin {
             }
         }
     }
+
 }

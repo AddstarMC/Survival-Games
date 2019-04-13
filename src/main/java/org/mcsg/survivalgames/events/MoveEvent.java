@@ -18,9 +18,6 @@ public class MoveEvent implements Listener{
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
     public void frozenSpawnHandler(PlayerMoveEvent e) {
-        /*  Optimization for single game world. No longer works since support for multiple worlds was added
-         *if(e.getPlayer().getWorld()!=SettingsManager.getGameWorld())
-            return;*/
         if(GameManager.getInstance().getPlayerGameId(e.getPlayer()) == -1){
             playerpos.remove(e.getPlayer().getUniqueId());
             return;

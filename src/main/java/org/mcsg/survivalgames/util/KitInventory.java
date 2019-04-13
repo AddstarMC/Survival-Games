@@ -2,6 +2,7 @@ package org.mcsg.survivalgames.util;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Map;
  */
 
 public class KitInventory implements ConfigurationSerializable {
-    private final List<ItemStack> contents = new ArrayList<>(36);
+    private final Map<Integer, ItemStack> contents = new HashMap<>();
     private ItemStack head = null;
     private ItemStack chest = null;
     private ItemStack legs = null;
@@ -33,13 +34,19 @@ public class KitInventory implements ConfigurationSerializable {
         inv.setLegs(creatItemStack(map.get("legs")));
         inv.setMainHand(creatItemStack(map.get("mainHand")));
         inv.setOffHand(creatItemStack(map.get("offHand")));
-        final List<ItemStack> contents = (List<ItemStack>) map.get("contents");
-        int i = 0;
-        for (final ItemStack item : contents) {
-            if (item != null) {
-                inv.addContent(i, item);
-                i++;
+        Object contents = map.get("contents");
+        if (contents instanceof List) {
+            final List<ItemStack> listContents = (List<ItemStack>) contents;
+            int i = 0;
+            for (final ItemStack item : listContents) {
+                if (item != null) {
+                    inv.addContent(i, item);
+                    i++;
+                }
             }
+        } else if (contents instanceof Map) {
+            final Map<Integer, ItemStack> mapContents = (Map<Integer, ItemStack>) contents;
+            inv.getContentsAsMap().putAll(mapContents);
         }
         return inv;
     }
@@ -144,24 +151,22 @@ public class KitInventory implements ConfigurationSerializable {
     }
 
     public void addContent(final int pos, final ItemStack i) {
-        if(this.contents.size() < pos){
-            while(this.contents.size() < pos){
-                this.contents.add(null);
-            }
-        }
-        this.contents.add(pos,i);
+        this.contents.put(pos, i);
     }
 
     public void removeContent(final int pos) {
-        this.contents.add(pos,null);
+        this.contents.remove(pos);
 
     }
-    public List<ItemStack> getContentsAsList(){
+
+    public Map<Integer, ItemStack> getContentsAsMap() {
         return this.contents;
     }
     public ItemStack[] getContents(){
-        final ItemStack[] out  = new ItemStack[this.contents.size()];
-        this.contents.toArray(out);
+        final ItemStack[] out = new ItemStack[9];
+        for (Map.Entry<Integer, ItemStack> e : contents.entrySet()) {
+            out[e.getKey()] = e.getValue();
+        }
         return out;
     }
 
@@ -176,5 +181,16 @@ public class KitInventory implements ConfigurationSerializable {
         out.put("offHand", this.offHand);
         out.put("contents",this.contents);
         return out;
+    }
+
+    public PlayerInventory fillInventory(PlayerInventory inv) {
+        inv.setBoots(this.feet);
+        inv.setLeggings(this.legs);
+        inv.setChestplate(this.chest);
+        inv.setHelmet(this.head);
+        for (Map.Entry<Integer, ItemStack> e : this.contents.entrySet()) {
+            inv.setItem(e.getKey(), e.getValue());
+        }
+        return inv;
     }
 }

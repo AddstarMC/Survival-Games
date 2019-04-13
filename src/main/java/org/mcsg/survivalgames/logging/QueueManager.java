@@ -126,7 +126,7 @@ public class QueueManager {
             ArrayList<Entity> removelist = new ArrayList<>();
 
             for (Entity e : SettingsManager.getGameWorld(id).getEntities()) {
-                if ((!(e instanceof Player)) && (!(e instanceof HumanEntity))) {
+				if ((!(e instanceof Player))) {
                     if (GameManager.getInstance().getBlockGameId(e.getLocation()) == id) {
                         removelist.add(e);
                     }

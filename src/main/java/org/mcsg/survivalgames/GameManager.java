@@ -153,14 +153,8 @@ public class GameManager {
             if (k != null) {
                 final PlayerInventory inv = p.getInventory();
                 final KitInventory kitInv = k.getKitInventory();
-                inv.setBoots(kitInv.getFeet());
-                inv.setChestplate(kitInv.getChest());
-                inv.setLeggings(kitInv.getLegs());
-                inv.setItemInMainHand(kitInv.getMainHand());
-                inv.setItemInOffHand(kitInv.getOffHand());
-                inv.setHelmet(kitInv.getHead());
-                inv.setContents(kitInv.getContents());
-                }
+                kitInv.fillInventory(inv);
+            }
         }
         p.updateInventory();
     }
@@ -436,8 +430,10 @@ public class GameManager {
         kitInventory.setLegs(inventory.getLeggings());
         kitInventory.setHead(inventory.getHelmet());
         int i = 0;
-        for(final ItemStack stack : inventory.getContents()){
-            kitInventory.addContent(i,stack);
+        while (i < 9) {
+            if (inventory.getItem(i) != null) {
+                kitInventory.addContent(i, inventory.getItem(i));
+            }
             i++;
         }
         kit.setKitInventory(kitInventory);
