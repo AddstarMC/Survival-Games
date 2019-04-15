@@ -49,7 +49,11 @@ public class DatabaseManager {
             Class.forName("com.mysql.jdbc.Driver");
             url = "jdbc:mysql://" + host + ":" + port + "/" + db;
             conn = DriverManager.getConnection(url, props);
-            return true;
+            if(conn.isValid(30)) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (ClassNotFoundException e) {
             log.warning("Couldn't start MySQL Driver. URL :" + url);
             log.warning("Couldn't start MySQL Driver. Stopping...\n" + e.getMessage());

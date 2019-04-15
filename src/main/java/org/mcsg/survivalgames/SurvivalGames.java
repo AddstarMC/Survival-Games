@@ -35,7 +35,6 @@ public class SurvivalGames extends JavaPlugin {
     private static boolean disabling;
     private static boolean debug;
     SurvivalGames p = this;
-    private Metrics metrics;
     private LobbySignManager lobbySignManager;
 
     private GameManager gameManager;
@@ -91,7 +90,7 @@ public class SurvivalGames extends JavaPlugin {
         plugin = this;
         logger = this.p.getLogger();
         datafolder = this.p.getDataFolder();
-        this.metrics = new Metrics(this);
+        new Metrics(this);
         //ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Startup(), 10);
         ConfigurationSerialization.registerClass(KitInventory.class);
@@ -151,9 +150,8 @@ public class SurvivalGames extends JavaPlugin {
             gameManager.setup(SurvivalGames.this.p);
             SurvivalGames.this.lobbySignManager = new LobbySignManager();
             SurvivalGames.this.lobbySignManager.loadSigns();
-            setUpStatsManager();
+            Bukkit.getScheduler().runTaskAsynchronously(p, SurvivalGames.this::setUpStatsManager);
             LobbyManager.createInstance(SurvivalGames.this.lobbySignManager);
-
             ChestRatioStorage.getInstance().setup();
             HookManager.getInstance().setup();
             pm.registerEvents(new PlaceEvent(), SurvivalGames.this.p);

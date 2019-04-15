@@ -3,15 +3,13 @@ package org.mcsg.survivalgames;
 import java.util.*;
 import java.util.logging.Level;
 
-import com.google.common.collect.Multimap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,10 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.mcsg.survivalgames.MessageManager.PrefixType;
 import org.mcsg.survivalgames.api.PlayerJoinArenaEvent;
 import org.mcsg.survivalgames.api.PlayerKilledEvent;
@@ -39,7 +34,7 @@ public class Game {
     
     private final ArrayList<Player> activePlayers = new ArrayList<>();
     private final ArrayList<Player> inactivePlayers = new ArrayList<>();
-    private final ArrayList<String> spectators = new ArrayList<>();
+    private final ArrayList<UUID> spectators = new ArrayList<>();
     private final ArrayList<Player> queue = new ArrayList<>();
     private final ArrayList<Integer> tasks = new ArrayList<>();
     private final List<Kit> kits = new ArrayList<>();
@@ -78,7 +73,12 @@ public class Game {
         this.gameID = gameid;
         this.name = "Arena " + this.gameID;
         this.reloadConfig();
-        this.setup();
+        ConfigurationSection section = this.system.getConfigurationSection("sg-system.arena."+this.gameID);
+        if(section != null) {
+            this.setup(section);
+        } else {
+            SurvivalGames.logger.warning(this.gameID + " cannot be found as a section of sg-system.arena - please check your config.");
+        }
     }
     
     public void reloadConfig() {
@@ -86,38 +86,38 @@ public class Game {
         this.system = SettingsManager.getInstance().getSystemConfig();
     }
     
-    public void setup() {
+    public void setup(ConfigurationSection section) {
         this.mode = GameMode.LOADING;
-        final int x = this.system.getInt("sg-system.arenas." + this.gameID + ".x1");
-        final int y = this.system.getInt("sg-system.arenas." + this.gameID + ".y1");
-        final int z = this.system.getInt("sg-system.arenas." + this.gameID + ".z1");
+        final int x = section.getInt("x1");
+        final int y = section.getInt("y1");
+        final int z = section.getInt( "z1");
         
-        final int x1 = this.system.getInt("sg-system.arenas." + this.gameID + ".x2");
-        final int y1 = this.system.getInt("sg-system.arenas." + this.gameID + ".y2");
-        final int z1 = this.system.getInt("sg-system.arenas." + this.gameID + ".z2");
+        final int x1 = section.getInt("x2");
+        final int y1 = section.getInt("y2");
+        final int z1 = section.getInt("z2");
         
         final Location max = new Location(SettingsManager.getGameWorld(this.gameID), Math.max(x, x1), Math.max(y, y1), Math.max(z, z1));
         final Location min = new Location(SettingsManager.getGameWorld(this.gameID), Math.min(x, x1), Math.min(y, y1), Math.min(z, z1));
         
-        this.name = this.system.getString("sg-system.arenas." + this.gameID + ".name", this.name);
+        this.name = section.getString("name", this.name);
         
         this.arena = new Arena(min, max);
         
-        final double dmx = this.system.getDouble("sg-system.arenas." + this.gameID + ".deathmatch.x", 0);
-        final double dmy = this.system.getDouble("sg-system.arenas." + this.gameID + ".deathmatch.y", 65);
-        final double dmz = this.system.getDouble("sg-system.arenas." + this.gameID + ".deathmatch.z", 0);
+        final double dmx = section.getDouble("deathmatch.x", 0);
+        final double dmy = section.getDouble( "deathmatch.y", 65);
+        final double dmz = section.getDouble("deathmatch.z", 0);
         this.dmspawn = new Location(SettingsManager.getGameWorld(this.gameID), dmx, dmy, dmz);
         
-        this.dmradius = this.system.getInt("sg-system.arenas." + this.gameID + ".deathmatch.radius", 26);
+        this.dmradius = section.getInt(".deathmatch.radius", 26);
         
-        final String winw = this.system.getString("sg-system.arenas." + this.gameID + ".win.world", "games");
-        final double winx = this.system.getDouble("sg-system.arenas." + this.gameID + ".win.x", 0);
-        final double winy = this.system.getDouble("sg-system.arenas." + this.gameID + ".win.y", 65);
-        final double winz = this.system.getDouble("sg-system.arenas." + this.gameID + ".win.z", 0);
-        final float winyaw = this.system.getInt("sg-system.arenas." + this.gameID + ".win.yaw", 0);
-        final float winp = this.system.getInt("sg-system.arenas." + this.gameID + ".win.pitch", 0);
+        final String winw = section.getString("win.world", "games");
+        final double winx = section.getDouble("win.x", 0);
+        final double winy = section.getDouble("win.y", 65);
+        final double winz = section.getDouble("win.z", 0);
+        final float winyaw = section.getInt("win.yaw", 0);
+        final float winp = section.getInt("win.pitch", 0);
         this.winloc = new Location(Bukkit.getWorld(winw), winx, winy, winz, winyaw, winp);
-        final List<String> kitNames = this.system.getStringList("sg-system.arenas." + this.gameID + ".kits");
+        final List<String> kitNames = section.getStringList("kits");
         this.kits.clear();
         if (!kitNames.isEmpty()) {
             SurvivalGames.debug(1, "Kits List found...");
@@ -255,7 +255,6 @@ public class Game {
         if ((this.vote + 0.0) / (this.getActivePlayers() + 0.0) >= (this.config.getInt("auto-start-vote") + 0.0) / 100 && this.getActivePlayers() > 1) {
             this.countdown(this.config.getInt("auto-start-time"));
             for (final Player p : this.activePlayers) {
-                //p.sendMessage(ChatColor.LIGHT_PURPLE + "Game Starting in " + c.getInt("auto-start-time"));
                 this.msgmgr.sendMessage(PrefixType.INFO, "Game starting in " + this.config.getInt("auto-start-time") + "!", p);
                 this.scoreBoard.playerLiving(pl);
             }
@@ -277,7 +276,7 @@ public class Game {
         for (final Player p : this.activePlayers) {
             this.msgmgr.sendFMessage(type, msg, p, vars);
         }
-        for (final String ps : this.spectators) {
+        for (final UUID ps : this.spectators) {
             final Player p = Bukkit.getServer().getPlayer(ps);
             if (p != null) {
                 this.msgmgr.sendFMessage(type, msg, p, vars);
@@ -636,7 +635,7 @@ public class Game {
     public void clearSpecs() {
         
         for (int a = 0; a < this.spectators.size(); a = 0) {
-            this.removeSpectator(Bukkit.getPlayerExact(this.spectators.get(0)));
+            this.removeSpectator(Bukkit.getPlayer(this.spectators.get(0)));
         }
         this.spectators.clear();
         this.nextspec.clear();
@@ -671,7 +670,7 @@ public class Game {
         p.setWalkSpeed(0.2F);
         p.setFlySpeed(0.2F);
         p.setCollidable(true);
-        this.spectators.remove(p.getName());
+        this.spectators.remove(p.getUniqueId());
         this.nextspec.remove(p);
         this.msgFall(PrefixType.INFO, "game.spectatorleave", "player-" + p.getDisplayName(), "spectators-" + this.spectators.size());
     }
@@ -846,7 +845,7 @@ public class Game {
         
         this.msgFall(PrefixType.INFO, "game.spectatorjoin", "player-" + p.getDisplayName(), "spectators-" + (this.spectators.size() + 1));
         
-        this.spectators.add(p.getName());
+        this.spectators.add(p.getUniqueId());
         
         this.msgmgr.sendMessage(PrefixType.INFO, "You are now spectating the game!.", p);
         this.msgmgr.sendMessage(PrefixType.INFO, "Use the items in your quickbar to control spectating.", p);
@@ -940,7 +939,7 @@ public class Game {
         if (p.isInsideVehicle()) {
             p.leaveVehicle();
         }
-        if (this.spectators.contains(p)) this.removeSpectator(p);
+        if (this.spectators.contains(p.getUniqueId())) this.removeSpectator(p);
         if (this.mode == GameMode.WAITING || this.mode == GameMode.STARTING) {
             if (this.activePlayers.size() < SettingsManager.getInstance().getSpawnCount(this.gameID)) {
                 this.msgmgr.sendMessage(PrefixType.INFO, "Joining Arena '" + this.name + "'", p);
@@ -1127,7 +1126,7 @@ public class Game {
     }
     
     public boolean isSpectator(final Player p) {
-        return this.spectators.contains(p.getName());
+        return this.spectators.contains(p.getUniqueId());
     }
     
     public boolean isInQueue(final Player p) {
