@@ -122,7 +122,7 @@ public class SurvivalGames extends JavaPlugin {
         try {
             final FileConfiguration c = SettingsManager.getInstance().getConfig();
             if (c.getBoolean("stats.enabled")) {
-                if (DatabaseManager.getInstance().setup(SurvivalGames.this.p)) {
+                if (!DatabaseManager.getInstance().setup(SurvivalGames.this.p)) {
                     dbcon = false;
                     logger.severe("!!!Failed to connect to the database. Please check the settings and try again!!!");
                     return;
