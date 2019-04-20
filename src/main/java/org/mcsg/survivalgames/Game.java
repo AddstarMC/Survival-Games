@@ -73,11 +73,11 @@ public class Game {
         this.gameID = gameid;
         this.name = "Arena " + this.gameID;
         this.reloadConfig();
-        ConfigurationSection section = this.system.getConfigurationSection("sg-system.arena."+this.gameID);
+        ConfigurationSection section = this.system.getConfigurationSection("sg-system.arenas."+this.gameID);
         if(section != null) {
             this.setup(section);
         } else {
-            SurvivalGames.logger.warning(this.gameID + " cannot be found as a section of sg-system.arena - please check your config.");
+            SurvivalGames.logger.warning("Arena " + this.gameID + " cannot be found as a section of sg-system.arenas - please check your config.");
         }
     }
     
@@ -922,7 +922,7 @@ public class Game {
             return false;
         }
         if (!p.hasPermission("sg.arena.join." + this.gameID)) {
-            SurvivalGames.debug(this.gameID, "permission needed to join arena: " + "sg.arena.join." + this.gameID);
+            SurvivalGames.debug(this.gameID, "permission needed to join arena: sg.arena.join." + this.gameID);
             this.msgmgr.sendFMessage(PrefixType.WARNING, "game.nopermission", p, "arena-" + this.gameID);
             return false;
         }
