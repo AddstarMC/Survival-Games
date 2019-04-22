@@ -27,14 +27,14 @@ import org.mcsg.survivalgames.util.KitInventory;
 
 public class SurvivalGames extends JavaPlugin {
     public static Logger logger;
-    public static boolean dbcon;
-    public static boolean config_todate;
-    public static int config_version = 3;
+    static boolean dbcon;
+    static boolean config_todate;
+    static int config_version = 3;
     public static SurvivalGames plugin;
     private static File datafolder;
     private static boolean disabling;
     private static boolean debug;
-    SurvivalGames p = this;
+    private SurvivalGames p = this;
     private LobbySignManager lobbySignManager;
 
     private GameManager gameManager;
@@ -96,11 +96,11 @@ public class SurvivalGames extends JavaPlugin {
         ConfigurationSerialization.registerClass(KitInventory.class);
     }
     
-    public void setCommands() {
+    private void setCommands() {
         this.getCommand("survivalgames").setExecutor(new CommandHandler(this.p));
     }
     
-    public WorldEditPlugin getWorldEdit() {
+    WorldEditPlugin getWorldEdit() {
         final Plugin worldEdit = this.getServer().getPluginManager().getPlugin("WorldEdit");
         if (worldEdit instanceof WorldEditPlugin) {
             return (WorldEditPlugin) worldEdit;
@@ -135,7 +135,6 @@ public class SurvivalGames extends JavaPlugin {
             dbcon = false;
             e.printStackTrace();
             logger.severe("!!!Failed to connect to the database. Please check the settings and try again!!!");
-            return;
         }
     }
 

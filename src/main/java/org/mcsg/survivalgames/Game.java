@@ -1074,6 +1074,12 @@ public class Game {
             if (im == null) {
                 im = Bukkit.getItemFactory().getItemMeta(i1.getType());
             }
+            if(im == null){
+                //item has no ability to hold meta.
+                i1 = new ItemStack(Material.WHITE_WOOL, 1);
+                im = Bukkit.getItemFactory().getItemMeta(Material.WHITE_WOOL);
+                SurvivalGames.logger.warning("A kit has a null or illegal icon fix Config for: " + k.getName());
+            }
             im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + k.getName());
             i1.setItemMeta(im);
             i.setItem(9 * a + b, i1);
