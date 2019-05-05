@@ -25,7 +25,8 @@ public class PlayerStatsSession {
     int position = 0;
     int pppoints = 0;
 
-    private ArrayList<UUID> killed = new ArrayList<>();
+    // Keep track of UUID/DisplayName for killed players (because player might be offline)
+    private HashMap<UUID, String> killed = new HashMap();
 
     private HashMap<Integer, Integer> kslist = new HashMap<>();
 
@@ -47,7 +48,7 @@ public class PlayerStatsSession {
     }
 
     public int addKill(Player p){
-        killed.add(p.getUniqueId());
+        killed.put(p.getUniqueId(), p.getDisplayName());
         kills++;
         checkKS();
         lastkill = new Date().getTime();
@@ -115,18 +116,19 @@ public class PlayerStatsSession {
 
     public String createQuery(){
         calcPoints();
-        String query= "INSERT INTO "+SettingsManager.getSqlPrefix()+"playerstats VALUES(NULL,";
-        query = query + gameno+","+/*SettingsManager.getInstance().getConfig().getString("sql.server-prefix")+*/arenaid+",'"+prealname+"',"+points+","+position+","+kills+","+death+",";
-        String killeds = "'";
-        for (UUID u: killed) {
-        	Player p = Bukkit.getPlayer(u);
-            killeds = killeds + ((killeds.length()>2)?":":"")+p.getDisplayName();
-        }
-        // killeds = killeds.replaceFirst(":", "");
-        query = query + killeds +"',"+time;
-        query = query + ","+kslist.get(1)+ ","+kslist.get(2)+ ","+kslist.get(3)+ ","+kslist.get(4)+ ","+kslist.get(5)+")";
+        String killeds = "";
 
-       // System.out.println(query);
+        // Build the list of killed player names
+        for (UUID u: killed.keySet()) {
+            String name = killed.get(u);
+            killeds = killeds + ((killeds.length()>2)?":":"") + name;
+        }
+
+        String query = "INSERT INTO " + SettingsManager.getSqlPrefix() + "playerstats VALUES(NULL,"
+            + gameno + "," + arenaid + ",'" + prealname + "'," + points + "," + position + "," + kills + "," + death
+            + ",'" + killeds + "'," + time
+            +  "," + kslist.get(1) + "," + kslist.get(2) + "," + kslist.get(3) + "," + kslist.get(4) + "," + kslist.get(5) + ")";
+
         return query;
     }
 }
