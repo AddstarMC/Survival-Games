@@ -65,6 +65,7 @@ public class CommandHandler implements CommandExecutor {
         this.commands.put("kit", new Kit());
         this.commands.put("test", new Test());
         this.commands.put("listkit", new ListKits());
+		this.commands.put("queue", new Queue());
 
 	}
 

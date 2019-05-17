@@ -159,11 +159,6 @@ public class QueueManager {
         }
 	}
 
-
-
-
-
-
 	class Rollback implements Runnable{
 
 		int id, totalRollback, iteration;
@@ -180,8 +175,6 @@ public class QueueManager {
 			game = GameManager.getInstance().getGame(id);
 			this.shutdown = shutdown;
 		}
-
-
 
 		public void run(){
 
@@ -230,6 +223,8 @@ public class QueueManager {
 
 
 	}
+
+	public ArrayList<SgBlockData> getQueue(int id){
+		 return queue.get(id);
+	}
 }
-
-
