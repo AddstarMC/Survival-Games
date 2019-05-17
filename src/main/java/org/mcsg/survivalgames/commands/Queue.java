@@ -70,9 +70,10 @@ public class Queue implements SubCommand {
                     SgBlockData bd = q.get(x);
                     Material newmat = bd.getNewBlockData().getMaterial();
                     Material oldmat = bd.getPrevBlockData().getMaterial();
+                    int itemcount = bd.getItems() == null ? 0 : bd.getItems().length;
 
                     sender.sendMessage(ChatColor.YELLOW + " " + String.format("%03d", x) + ": "
-                            + ChatColor.AQUA + newmat + "(" + bd.getItems().length + ")"
+                            + ChatColor.AQUA + newmat + "(" + itemcount + ")"
                             + " / " + ChatColor.RED + oldmat);
                 }
                 break;
