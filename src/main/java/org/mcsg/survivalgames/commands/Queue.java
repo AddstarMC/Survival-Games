@@ -61,12 +61,17 @@ public class Queue implements SubCommand {
                 // Show info about each item in the list
                 MessageManager.getInstance().sendMessage(PrefixType.INFO, "Queue contents for arena " + id + ":", sender);
                 ArrayList<SgBlockData> q = qm.getQueue(id);
+                if ((q == null) || q.size() == 0) {
+                    sender.sendMessage(ChatColor.YELLOW + " - Queue is empty");
+                    return true;
+                }
+
                 for (int x = 0; x < q.size(); x++) {
                     SgBlockData bd = q.get(x);
                     Material newmat = bd.getNewBlockData().getMaterial();
                     Material oldmat = bd.getPrevBlockData().getMaterial();
 
-                    sender.sendMessage(ChatColor.YELLOW + "  " + x + ": "
+                    sender.sendMessage(ChatColor.YELLOW + " " + String.format("%03d", x) + ": "
                             + ChatColor.AQUA + newmat + "(" + bd.getItems().length + ")"
                             + " / " + ChatColor.RED + oldmat);
                 }

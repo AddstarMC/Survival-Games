@@ -99,6 +99,7 @@ public class CommandHandler implements CommandExecutor {
         this.helpinfo.put("reload", CommandGroup.Admin);
         this.helpinfo.put("test", CommandGroup.Admin);
         this.helpinfo.put("listkit", CommandGroup.Admin);
+		this.helpinfo.put("queue", CommandGroup.Admin);
 
 	}
 
