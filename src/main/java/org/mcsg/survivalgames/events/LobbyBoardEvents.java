@@ -2,6 +2,7 @@ package org.mcsg.survivalgames.events;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -37,7 +38,7 @@ public class LobbyBoardEvents implements Listener {
 		
 		// We only care about signs
 		final Material blockType = block.getType();
-        if (!(blockType == Material.SIGN || blockType == Material.WALL_SIGN || blockType == Material.SKELETON_SKULL))
+        if (!(Tag.SIGNS.isTagged(blockType) || blockType == Material.SKELETON_SKULL))
 			return;
 		
 		// See if a lobby sign at the blocks location exists

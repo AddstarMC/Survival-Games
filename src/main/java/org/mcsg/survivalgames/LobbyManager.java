@@ -57,7 +57,7 @@ public class LobbyManager {
 			if (!(sign instanceof LobbySignWinner))
 				continue;
 			
-			((LobbySignWinner)sign).setWinner(winner.getDisplayName());
+			((LobbySignWinner)sign).setWinner(winner.getUniqueId());
 			sign.update();
 		}
 

@@ -69,6 +69,7 @@ public class SurvivalGames extends JavaPlugin {
     }
     
     public void onDisable() {
+        LobbyManager.lobbychunks.forEach(chunk -> chunk.removePluginChunkTicket(SurvivalGames.plugin));
         disabling = false;
         final PluginDescriptionFile pdfFile = this.p.getDescription();
         SettingsManager.getInstance().saveSpawns();
@@ -90,7 +91,7 @@ public class SurvivalGames extends JavaPlugin {
         plugin = this;
         logger = this.p.getLogger();
         datafolder = this.p.getDataFolder();
-        new Metrics(this);
+        new Metrics(plugin,1050);
         //ensure that all worlds are loaded. Fixes some issues with Multiverse loading after this plugin had started
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Startup(), 10);
         ConfigurationSerialization.registerClass(KitInventory.class);

@@ -18,7 +18,6 @@ import org.mcsg.survivalgames.MessageManager;
 
 public class LobbySignWinner extends LobbySign {
 	
-	private String m_lastWinnerName = null;
 	private UUID lastWinnerUUID = null;
 
 	public LobbySignWinner(Sign sign, int gameId) {
@@ -32,7 +31,6 @@ public class LobbySignWinner extends LobbySign {
 	@Override
 	public void save(FileConfiguration config) {
 		super.save(config);
-		config.set("lobby.sign.winnerName", m_lastWinnerName);
 		if (lastWinnerUUID != null)
 			config.set("lobby.sign.winnerUUID", lastWinnerUUID.toString());
 	}
@@ -40,13 +38,9 @@ public class LobbySignWinner extends LobbySign {
 	@Override
 	public void load(FileConfiguration config) {
 		super.load(config);
-		m_lastWinnerName = config.getString("lobby.sign.winnerName", null);
 		String uuid = config.getString("lobby.sign.winnerUUID", null);
 		if (uuid != null) {
 			lastWinnerUUID = UUID.fromString(uuid);
-		} else {
-			//noinspection deprecation //todo
-			lastWinnerUUID = Bukkit.getOfflinePlayer(m_lastWinnerName).getUniqueId();
 		}
 	}
 	
@@ -98,9 +92,8 @@ public class LobbySignWinner extends LobbySign {
 		return lines;
 	}
 	
-	public void setWinner(String winner) {
-		m_lastWinnerName = winner;
-		
+	public void setWinner(UUID winner) {
+		lastWinnerUUID = winner;
 		FileConfiguration config = YamlConfiguration.loadConfiguration(this.getSaveFile());
 		this.save(config);
 		try {

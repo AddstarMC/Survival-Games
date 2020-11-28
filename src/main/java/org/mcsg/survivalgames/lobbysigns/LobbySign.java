@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public abstract class LobbySign {
 	
 	public Sign getSign() {
 		
-		if (location.getBlock().getType() != Material.WALL_SIGN) {
+		if (Tag.WALL_SIGNS.isTagged(location.getBlock().getType())) {
             SurvivalGames.log(0, Level.WARNING, "Lobby [" + gameId + "] " + type + " sign is not a sign! " + location.getX() + ", " + location.getY() + ", " + location.getZ());
 			return null;
 		}

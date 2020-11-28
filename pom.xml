@@ -9,7 +9,7 @@
         <plugin.version>${project.version}-${build.number}</plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>${spigot.api.version}.2-R0.1-SNAPSHOT</spigot.version>
-        <spigot.api.version>1.13</spigot.api.version>
+        <spigot.api.version>1.16</spigot.api.version>
 	</properties>
     <scm>
         <connection>scm:git:git@github.com:AddstarMC/Survival-Games.git</connection>
@@ -71,8 +71,8 @@
 	<dependencies>
 		<!-- We use Spigot now, not Bukkit -->
 		<dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
             <version>${spigot.version}</version>
             <scope>provided</scope>
 		</dependency>
