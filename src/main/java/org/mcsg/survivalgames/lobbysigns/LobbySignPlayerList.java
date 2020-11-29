@@ -39,7 +39,9 @@ public class LobbySignPlayerList extends LobbySign {
 	@Override
 	public void update() {
 		Sign sign = getSign();		
-		
+		if(sign == null) {
+			return;
+		}
 		for (int lineIndex = 0; lineIndex < 4; ++lineIndex) {
 			sign.setLine(lineIndex, "");
 		}

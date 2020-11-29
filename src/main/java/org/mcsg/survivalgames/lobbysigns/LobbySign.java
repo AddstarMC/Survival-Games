@@ -10,6 +10,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.mcsg.survivalgames.Game;
 import org.mcsg.survivalgames.GameManager;
 import org.mcsg.survivalgames.SurvivalGames;
@@ -39,10 +40,11 @@ public abstract class LobbySign {
 	public Location getLocation() {
 		return location;
 	}
-	
-	public Sign getSign() {
+
+
+	@Nullable public Sign getSign() {
 		
-		if (Tag.WALL_SIGNS.isTagged(location.getBlock().getType())) {
+		if (Tag.SIGNS.isTagged(location.getBlock().getType())) {
             SurvivalGames.log(0, Level.WARNING, "Lobby [" + gameId + "] " + type + " sign is not a sign! " + location.getX() + ", " + location.getY() + ", " + location.getZ());
 			return null;
 		}
