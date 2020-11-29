@@ -84,7 +84,7 @@ public class GameScoreboard {
 		}
 		
 		// Create the objective
-        this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy", "");
+        this.sidebarObjective = this.scoreboard.registerNewObjective("survivalGames-" + this.gameID, "dummy", "SG(0/0)");
 		this.sidebarObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		// Create the living team
