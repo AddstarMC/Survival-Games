@@ -57,12 +57,14 @@ public class LobbySignWinnerSign extends LobbySign {
         // Change the player head to the last known winner
         Block block = this.getLocation().getBlock();
         BlockState state = block.getState();
-        
+
         if (!(state instanceof Sign)) {
             return;
         }
-        
         Sign sign = getSign();
+        if(sign == null){
+            return;
+        }
         sign.setLine(3, "" + ChatColor.DARK_GREEN + m_lastWinnerName);
         sign.update();
     }

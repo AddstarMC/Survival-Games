@@ -44,15 +44,10 @@ public abstract class LobbySign {
 
 	@Nullable public Sign getSign() {
 		
-		if (Tag.SIGNS.isTagged(location.getBlock().getType())) {
+		if (!Tag.SIGNS.isTagged(location.getBlock().getType())) {
 			SurvivalGames.log(0, Level.WARNING, "Lobby [" + gameId + "] " + type + " sign is not a sign! Material ("+location.getBlock().getType()+") "+  + location.getX() + ", " + location.getY() + ", " + location.getZ());
-			Material mat = location.getBlock().getType();
-			if(mat.equals(Material.OAK_WALL_SIGN) ||mat.equals(Material.OAK_SIGN) ) { //
-				return (Sign)location.getBlock().getState();
-			}
 			return null;
 		}
-		
 		return (Sign)location.getBlock().getState();
 	}
 	

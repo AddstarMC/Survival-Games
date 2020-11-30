@@ -27,6 +27,9 @@ public class LobbySignPlayers extends LobbySign {
 		else if (getGame().getActivePlayers() == 2) { col = ChatColor.DARK_RED; }
 
 		Sign sign = getSign();
+		if(sign == null){
+			return;
+		}
 		sign.setLine(2, "" + col + getGame().getActivePlayers() + ChatColor.BLACK + "/" + ChatColor.DARK_PURPLE + SettingsManager.getInstance().getSpawnCount(gameId));
 		sign.update();
 	}
