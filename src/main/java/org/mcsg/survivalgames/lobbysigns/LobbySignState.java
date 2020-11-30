@@ -60,6 +60,9 @@ public class LobbySignState extends LobbySign {
 	public void update() {
 		Sign sign = getSign();		
 		GameMode gameMode = getGame().getGameMode();
+		if(sign == null) {
+		    return;
+        }
 		sign.setLine(2, "" + Game.GetColorPrefix(gameMode) + ChatColor.BOLD + gameMode.toString());
 		sign.update();
 	}
