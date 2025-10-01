@@ -1,6 +1,6 @@
 package org.mcsg.survivalgames.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -33,11 +33,11 @@ public class ItemReader {
             ENCIDS.put(name, e);
         }
 
-        ENCIDS.put("protect", Enchantment.PROTECTION_ENVIRONMENTAL);
-        ENCIDS.put("protection", Enchantment.PROTECTION_ENVIRONMENTAL);
-        ENCIDS.put("protectionfire", Enchantment.PROTECTION_FIRE);
-        ENCIDS.put("sharpness", Enchantment.DAMAGE_ALL);
-        ENCIDS.put("dmg", Enchantment.DAMAGE_ALL);
+        ENCIDS.put("protect", Enchantment.PROTECTION);
+        ENCIDS.put("protection", Enchantment.PROTECTION);
+        ENCIDS.put("protectionfire", Enchantment.FIRE_PROTECTION);
+        ENCIDS.put("sharpness", Enchantment.SHARPNESS);
+        ENCIDS.put("dmg", Enchantment.SHARPNESS);
         ENCIDS.put("fire", Enchantment.FIRE_ASPECT);
         for (final Enchantment val : Enchantment.values()) {
             ENCIDS.put(val.getKey().getKey(), val);

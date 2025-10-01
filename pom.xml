@@ -7,9 +7,9 @@
 	<properties>
         <build.number />
         <plugin.version>${project.version}-${build.number}</plugin.version>
+        <paper.version>1.21.8-R0.1-SNAPSHOT</paper.version>
+        <paper.api.version>1.21</paper.api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>${spigot.api.version}.2-R0.1-SNAPSHOT</spigot.version>
-        <spigot.api.version>1.16</spigot.api.version>
 	</properties>
     <scm>
         <connection>scm:git:git@github.com:AddstarMC/Survival-Games.git</connection>
@@ -30,17 +30,17 @@
         </developer>
     </developers>
 	<repositories>
-        <!-- Spigot repo -->
+        <!-- Paper repo -->
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
 
         <!-- For Vault -->
 		<repository>
             <id>vault-repo</id>
             <name>Public Releases</name>
-            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+            <url>https://nexus.hc.to/content/repositories/pub_releases/</url>
 		</repository>
 
 		<!-- Addstar repo -->
@@ -62,26 +62,27 @@
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
+
 		<!-- WorldEdit, WorldGuard, etc -->
 		<repository>
-			<id>sk89q-mvn2</id>
-			<url>http://maven.sk89q.com/repo</url>
+			<id>enginehub</id>
+			<url>https://maven.enginehub.org/repo/</url>
 		</repository>
 	</repositories>
 	<dependencies>
 		<!-- We use Spigot now, not Bukkit -->
-		<dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>${spigot.version}</version>
+            <version>${paper.version}</version>
             <scope>provided</scope>
-		</dependency>
+        </dependency>
 
 		<!-- WorldEdit -->
 		<dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.1.0</version>
+            <version>7.2.5</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -117,26 +118,33 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>19.0.0</version>
+            <version>26.0.2</version>
             <scope>compile</scope>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    </dependencies>
 	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
 				<configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>21</release>
+                    <compilerArgs>
+                        <arg>-proc:none</arg>
+                    </compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.2</version>
 				<configuration>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
@@ -146,7 +154,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.0</version>
                 <configuration>
                     <relocations>
                         <relocation>

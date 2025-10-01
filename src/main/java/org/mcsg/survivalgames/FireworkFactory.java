@@ -19,7 +19,7 @@ public class FireworkFactory {
 	 */
     public static void LaunchFirework(final Location spawnLocation, final FireworkEffect.Type type, final int power, final ArrayList<Color> colors, final ArrayList<Color> fadecolors, final boolean flicker, final boolean trail, final int launchdelay, final int detonatedelay) {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(SurvivalGames.plugin, () -> {
-			final Firework firework = (Firework) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.FIREWORK);
+			final Firework firework = (Firework) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.FIREWORK_ROCKET);
 			final FireworkMeta metadata = firework.getFireworkMeta();
 
 			final Builder builder = FireworkEffect.builder();

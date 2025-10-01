@@ -2,7 +2,7 @@ name: SurvivalGames
 version: ${plugin.version}
 main: org.mcsg.survivalgames.SurvivalGames
 authors: [Narimm, Addstar, Double0Negative]
-api-version: ${spigot.api.version}
+api-version: ${paper.api.version}
 description: Fully Automated Hunger Games Plugin!
 load: POSTWORLD
 depend: [WorldEdit]

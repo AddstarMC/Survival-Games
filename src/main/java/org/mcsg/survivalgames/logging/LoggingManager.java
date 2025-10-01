@@ -26,10 +26,7 @@ public class LoggingManager implements  Listener{
 
 	private static LoggingManager instance = new LoggingManager();
 
-
-
 	private LoggingManager(){
-
 		i.put("BCHANGE",1);
 		i.put("BPLACE", 1);
 		i.put("BFADE", 1);
@@ -39,21 +36,18 @@ public class LoggingManager implements  Listener{
 		i.put("BREDSTONE",1);
 		i.put("LDECAY",1);
 		i.put("BPISTION", 1);
-
-
 	}
 
 	public static LoggingManager getInstance(){
 		return instance;
 	}
 
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockBreakEvent e){
 		if(e.isCancelled())return;
+
         logBlockDestroyed(e.getBlock());
 		i.put("BCHANGE", i.get("BCHANGE")+1);
-		//    Sur(1);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockPlaceEvent e){
@@ -61,9 +55,6 @@ public class LoggingManager implements  Listener{
 
 		logBlockCreated(e.getBlock());
 		i.put("BPLACE", i.get("BPLACE")+1);
-
-		//    System.out.println(2);
-
 	}
 	/* @EventHandler(priority = EventPriority.MONITOR)
     public void blockChanged(BlockPhysicsEvent e){
@@ -72,12 +63,10 @@ public class LoggingManager implements  Listener{
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockFadeEvent e){
 		if(e.isCancelled())return;
+        if(e.getBlock().getType() == Material.GRASS_BLOCK)return; // dont allow grass to fade
 
         logBlockDestroyed(e.getBlock());
 		i.put("BFADE", i.get("BFADE")+1);
-
-		//    System.out.println(3);
-
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -86,12 +75,8 @@ public class LoggingManager implements  Listener{
 
 		for(Block b :e.blockList()){
             logBlockDestroyed(b);
-			//        System.out.println(4);
-
 		}
-
 		i.put("BBLOW", i.get("BBLOW")+1);
-
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -100,10 +85,6 @@ public class LoggingManager implements  Listener{
 
 		logBlockCreated(e.getBlock());
 		i.put("BSTARTFIRE", i.get("BSTARTFIRE")+1);
-
-		//     System.out.println(5);
-
-
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockBurnEvent e){
@@ -111,9 +92,6 @@ public class LoggingManager implements  Listener{
 
         logBlockDestroyed(e.getBlock());
 		i.put("BBURN", i.get("BBURN")+1);
-
-		//    System.out.println(6);
-
 	}
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -121,8 +99,6 @@ public class LoggingManager implements  Listener{
 		if(e.isCancelled())return;
 
 		logBlockCreated(e.getBlock());
-		//    System.out.println(7);
-
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void blockChanged(BlockFormEvent e){
@@ -145,9 +121,6 @@ public class LoggingManager implements  Listener{
 
         logBlockDestroyed(e.getBlock());
 		i.put("LDECAY", i.get("LDECAY")+1);
-
-		//    System.out.println(9);
-
 	}
 
 	public void blockChange(BlockPistonExtendEvent e){
@@ -157,7 +130,6 @@ public class LoggingManager implements  Listener{
 			logBlockCreated(b);
 		}
 		i.put("BPISTION", i.get("BPISTION")+1);
-
 	}
 
 	public void logBlockCreated(Block b){
@@ -187,7 +159,8 @@ public class LoggingManager implements  Listener{
 			return ;
         if (b.getType() == Material.FIRE)
 			return;
-		QueueManager.getInstance().add(
+
+        QueueManager.getInstance().add(
                 new SgBlockData(
 						GameManager.getInstance().getBlockGameId(b.getLocation()),
 						b.getWorld().getName(),

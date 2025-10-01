@@ -73,7 +73,7 @@ public class Queue implements SubCommand {
                     int itemcount = bd.getItems() == null ? 0 : bd.getItems().length;
 
                     sender.sendMessage(ChatColor.YELLOW + " " + String.format("%03d", x) + ": "
-                            + ChatColor.AQUA + newmat + "(" + itemcount + ")"
+                            + ChatColor.GREEN + newmat + "(" + itemcount + ")"
                             + " / " + ChatColor.RED + oldmat);
                 }
                 break;

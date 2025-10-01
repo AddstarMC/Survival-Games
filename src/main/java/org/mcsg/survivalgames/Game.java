@@ -354,7 +354,7 @@ public class Game {
             }
             this.startTime = new Date().getTime();
             for (final Player pl : this.activePlayers) {
-                pl.setHealth(pl.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                pl.setHealth(pl.getAttribute(Attribute.MAX_HEALTH).getDefaultValue());
                 this.msgmgr.sendFMessage(PrefixType.INFO, "game.goodluck", pl);
                 this.scoreBoard.playerLiving(pl);
             }
@@ -566,7 +566,7 @@ public class Game {
         LobbyManager.getInstance().updateWall(this.gameID);
         LobbyManager.getInstance().gameEnd(this.gameID, win);
         
-        win.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+        win.setHealth(p.getAttribute(Attribute.MAX_HEALTH).getDefaultValue());
         win.setFoodLevel(20);
         win.setFireTicks(0);
         win.setFallDistance(0);
@@ -655,7 +655,7 @@ public class Game {
         p.setFlying(false);
         p.setAllowFlight(false);
         p.setFallDistance(0);
-        p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+        p.setHealth(p.getAttribute(Attribute.MAX_HEALTH).getDefaultValue());
         p.setFoodLevel(20);
         p.setSaturation(20);
         p.setGameMode(org.bukkit.GameMode.SURVIVAL);
